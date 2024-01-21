@@ -1,0 +1,695 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		1D4A35072B51D10F00012205 /* DietiDeals24App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D4A35062B51D10F00012205 /* DietiDeals24App.swift */; };
+		1D4A35092B51D10F00012205 /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D4A35082B51D10F00012205 /* SignUpView.swift */; };
+		1D4A350B2B51D11000012205 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1D4A350A2B51D11000012205 /* Assets.xcassets */; };
+		1D4A350E2B51D11000012205 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1D4A350D2B51D11000012205 /* Preview Assets.xcassets */; };
+		1D4A35182B51D11000012205 /* DietiDeals24Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D4A35172B51D11000012205 /* DietiDeals24Tests.swift */; };
+		1D4A35222B51D11000012205 /* DietiDeals24UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D4A35212B51D11000012205 /* DietiDeals24UITests.swift */; };
+		1D4A35242B51D11000012205 /* DietiDeals24UITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D4A35232B51D11000012205 /* DietiDeals24UITestsLaunchTests.swift */; };
+		1D4A35372B51D69500012205 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D4A35362B51D69500012205 /* User.swift */; };
+		1D4A353A2B51D81600012205 /* GoogleSignInAuthenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D4A35392B51D81600012205 /* GoogleSignInAuthenticator.swift */; };
+		1D4A353C2B51D86500012205 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 1D4A353B2B51D86500012205 /* GoogleSignIn */; };
+		1D4A353E2B51D86500012205 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 1D4A353D2B51D86500012205 /* GoogleSignInSwift */; };
+		1D4A35402B51EB7E00012205 /* AuthenticationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D4A353F2B51EB7E00012205 /* AuthenticationViewModel.swift */; };
+		1D4A35422B51FC1400012205 /* UserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D4A35412B51FC1400012205 /* UserViewModel.swift */; };
+		1D4A35452B5433FD00012205 /* FacebookLogin in Frameworks */ = {isa = PBXBuildFile; productRef = 1D4A35442B5433FD00012205 /* FacebookLogin */; };
+		1DD6AF6A2B5D796C00D489EE /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DD6AF692B5D796C00D489EE /* HomeView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		1D4A35142B51D11000012205 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1D4A34FB2B51D10F00012205 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1D4A35022B51D10F00012205;
+			remoteInfo = DietiDeals24;
+		};
+		1D4A351E2B51D11000012205 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1D4A34FB2B51D10F00012205 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1D4A35022B51D10F00012205;
+			remoteInfo = DietiDeals24;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		1D4A35032B51D10F00012205 /* DietiDeals24.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DietiDeals24.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1D4A35062B51D10F00012205 /* DietiDeals24App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DietiDeals24App.swift; sourceTree = "<group>"; };
+		1D4A35082B51D10F00012205 /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
+		1D4A350A2B51D11000012205 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		1D4A350D2B51D11000012205 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		1D4A35132B51D11000012205 /* DietiDeals24Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DietiDeals24Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		1D4A35172B51D11000012205 /* DietiDeals24Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DietiDeals24Tests.swift; sourceTree = "<group>"; };
+		1D4A351D2B51D11000012205 /* DietiDeals24UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DietiDeals24UITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		1D4A35212B51D11000012205 /* DietiDeals24UITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DietiDeals24UITests.swift; sourceTree = "<group>"; };
+		1D4A35232B51D11000012205 /* DietiDeals24UITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DietiDeals24UITestsLaunchTests.swift; sourceTree = "<group>"; };
+		1D4A35362B51D69500012205 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		1D4A35382B51D71400012205 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		1D4A35392B51D81600012205 /* GoogleSignInAuthenticator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleSignInAuthenticator.swift; sourceTree = "<group>"; };
+		1D4A353F2B51EB7E00012205 /* AuthenticationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationViewModel.swift; sourceTree = "<group>"; };
+		1D4A35412B51FC1400012205 /* UserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewModel.swift; sourceTree = "<group>"; };
+		1DD6AF692B5D796C00D489EE /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		1D4A35002B51D10F00012205 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1D4A353C2B51D86500012205 /* GoogleSignIn in Frameworks */,
+				1D4A353E2B51D86500012205 /* GoogleSignInSwift in Frameworks */,
+				1D4A35452B5433FD00012205 /* FacebookLogin in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1D4A35102B51D11000012205 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1D4A351A2B51D11000012205 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		1D4A34FA2B51D10F00012205 = {
+			isa = PBXGroup;
+			children = (
+				1D4A35052B51D10F00012205 /* DietiDeals24 */,
+				1D4A35162B51D11000012205 /* DietiDeals24Tests */,
+				1D4A35202B51D11000012205 /* DietiDeals24UITests */,
+				1D4A35042B51D10F00012205 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		1D4A35042B51D10F00012205 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1D4A35032B51D10F00012205 /* DietiDeals24.app */,
+				1D4A35132B51D11000012205 /* DietiDeals24Tests.xctest */,
+				1D4A351D2B51D11000012205 /* DietiDeals24UITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		1D4A35052B51D10F00012205 /* DietiDeals24 */ = {
+			isa = PBXGroup;
+			children = (
+				1D4A35382B51D71400012205 /* Info.plist */,
+				1D4A35322B51D20600012205 /* ViewModel */,
+				1D4A35312B51D1FF00012205 /* View */,
+				1D4A35302B51D1F600012205 /* Model */,
+				1D4A35062B51D10F00012205 /* DietiDeals24App.swift */,
+				1D4A350A2B51D11000012205 /* Assets.xcassets */,
+				1D4A350C2B51D11000012205 /* Preview Content */,
+			);
+			path = DietiDeals24;
+			sourceTree = "<group>";
+		};
+		1D4A350C2B51D11000012205 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				1D4A350D2B51D11000012205 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		1D4A35162B51D11000012205 /* DietiDeals24Tests */ = {
+			isa = PBXGroup;
+			children = (
+				1D4A35172B51D11000012205 /* DietiDeals24Tests.swift */,
+			);
+			path = DietiDeals24Tests;
+			sourceTree = "<group>";
+		};
+		1D4A35202B51D11000012205 /* DietiDeals24UITests */ = {
+			isa = PBXGroup;
+			children = (
+				1D4A35212B51D11000012205 /* DietiDeals24UITests.swift */,
+				1D4A35232B51D11000012205 /* DietiDeals24UITestsLaunchTests.swift */,
+			);
+			path = DietiDeals24UITests;
+			sourceTree = "<group>";
+		};
+		1D4A35302B51D1F600012205 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				1D4A35362B51D69500012205 /* User.swift */,
+				1D4A35392B51D81600012205 /* GoogleSignInAuthenticator.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		1D4A35312B51D1FF00012205 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				1D4A35082B51D10F00012205 /* SignUpView.swift */,
+				1DD6AF692B5D796C00D489EE /* HomeView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		1D4A35322B51D20600012205 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				1D4A353F2B51EB7E00012205 /* AuthenticationViewModel.swift */,
+				1D4A35412B51FC1400012205 /* UserViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		1D4A35022B51D10F00012205 /* DietiDeals24 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1D4A35272B51D11000012205 /* Build configuration list for PBXNativeTarget "DietiDeals24" */;
+			buildPhases = (
+				1D4A34FF2B51D10F00012205 /* Sources */,
+				1D4A35002B51D10F00012205 /* Frameworks */,
+				1D4A35012B51D10F00012205 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = DietiDeals24;
+			packageProductDependencies = (
+				1D4A353B2B51D86500012205 /* GoogleSignIn */,
+				1D4A353D2B51D86500012205 /* GoogleSignInSwift */,
+				1D4A35442B5433FD00012205 /* FacebookLogin */,
+			);
+			productName = DietiDeals24;
+			productReference = 1D4A35032B51D10F00012205 /* DietiDeals24.app */;
+			productType = "com.apple.product-type.application";
+		};
+		1D4A35122B51D11000012205 /* DietiDeals24Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1D4A352A2B51D11000012205 /* Build configuration list for PBXNativeTarget "DietiDeals24Tests" */;
+			buildPhases = (
+				1D4A350F2B51D11000012205 /* Sources */,
+				1D4A35102B51D11000012205 /* Frameworks */,
+				1D4A35112B51D11000012205 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				1D4A35152B51D11000012205 /* PBXTargetDependency */,
+			);
+			name = DietiDeals24Tests;
+			productName = DietiDeals24Tests;
+			productReference = 1D4A35132B51D11000012205 /* DietiDeals24Tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		1D4A351C2B51D11000012205 /* DietiDeals24UITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1D4A352D2B51D11000012205 /* Build configuration list for PBXNativeTarget "DietiDeals24UITests" */;
+			buildPhases = (
+				1D4A35192B51D11000012205 /* Sources */,
+				1D4A351A2B51D11000012205 /* Frameworks */,
+				1D4A351B2B51D11000012205 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				1D4A351F2B51D11000012205 /* PBXTargetDependency */,
+			);
+			name = DietiDeals24UITests;
+			productName = DietiDeals24UITests;
+			productReference = 1D4A351D2B51D11000012205 /* DietiDeals24UITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		1D4A34FB2B51D10F00012205 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1510;
+				LastUpgradeCheck = 1510;
+				TargetAttributes = {
+					1D4A35022B51D10F00012205 = {
+						CreatedOnToolsVersion = 15.1;
+					};
+					1D4A35122B51D11000012205 = {
+						CreatedOnToolsVersion = 15.1;
+						TestTargetID = 1D4A35022B51D10F00012205;
+					};
+					1D4A351C2B51D11000012205 = {
+						CreatedOnToolsVersion = 15.1;
+						TestTargetID = 1D4A35022B51D10F00012205;
+					};
+				};
+			};
+			buildConfigurationList = 1D4A34FE2B51D10F00012205 /* Build configuration list for PBXProject "DietiDeals24" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 1D4A34FA2B51D10F00012205;
+			packageReferences = (
+				1D4A35332B51D2B400012205 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
+				1D4A35432B5433FD00012205 /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */,
+			);
+			productRefGroup = 1D4A35042B51D10F00012205 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				1D4A35022B51D10F00012205 /* DietiDeals24 */,
+				1D4A35122B51D11000012205 /* DietiDeals24Tests */,
+				1D4A351C2B51D11000012205 /* DietiDeals24UITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		1D4A35012B51D10F00012205 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1D4A350E2B51D11000012205 /* Preview Assets.xcassets in Resources */,
+				1D4A350B2B51D11000012205 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1D4A35112B51D11000012205 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1D4A351B2B51D11000012205 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		1D4A34FF2B51D10F00012205 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1D4A353A2B51D81600012205 /* GoogleSignInAuthenticator.swift in Sources */,
+				1DD6AF6A2B5D796C00D489EE /* HomeView.swift in Sources */,
+				1D4A35422B51FC1400012205 /* UserViewModel.swift in Sources */,
+				1D4A35402B51EB7E00012205 /* AuthenticationViewModel.swift in Sources */,
+				1D4A35092B51D10F00012205 /* SignUpView.swift in Sources */,
+				1D4A35072B51D10F00012205 /* DietiDeals24App.swift in Sources */,
+				1D4A35372B51D69500012205 /* User.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1D4A350F2B51D11000012205 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1D4A35182B51D11000012205 /* DietiDeals24Tests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1D4A35192B51D11000012205 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1D4A35242B51D11000012205 /* DietiDeals24UITestsLaunchTests.swift in Sources */,
+				1D4A35222B51D11000012205 /* DietiDeals24UITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		1D4A35152B51D11000012205 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1D4A35022B51D10F00012205 /* DietiDeals24 */;
+			targetProxy = 1D4A35142B51D11000012205 /* PBXContainerItemProxy */;
+		};
+		1D4A351F2B51D11000012205 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1D4A35022B51D10F00012205 /* DietiDeals24 */;
+			targetProxy = 1D4A351E2B51D11000012205 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		1D4A35252B51D11000012205 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		1D4A35262B51D11000012205 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		1D4A35282B51D11000012205 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"DietiDeals24/Preview Content\"";
+				DEVELOPMENT_TEAM = 7YCDK4684M;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = DietiDeals24/Info.plist;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = developer.tony.DietiDeals24;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		1D4A35292B51D11000012205 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"DietiDeals24/Preview Content\"";
+				DEVELOPMENT_TEAM = 7YCDK4684M;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = DietiDeals24/Info.plist;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = developer.tony.DietiDeals24;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		1D4A352B2B51D11000012205 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 7YCDK4684M;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = developer.academy.DietiDeals24Tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DietiDeals24.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/DietiDeals24";
+			};
+			name = Debug;
+		};
+		1D4A352C2B51D11000012205 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 7YCDK4684M;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = developer.academy.DietiDeals24Tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DietiDeals24.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/DietiDeals24";
+			};
+			name = Release;
+		};
+		1D4A352E2B51D11000012205 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 7YCDK4684M;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = developer.academy.DietiDeals24UITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = DietiDeals24;
+			};
+			name = Debug;
+		};
+		1D4A352F2B51D11000012205 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 7YCDK4684M;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = developer.academy.DietiDeals24UITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = DietiDeals24;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1D4A34FE2B51D10F00012205 /* Build configuration list for PBXProject "DietiDeals24" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1D4A35252B51D11000012205 /* Debug */,
+				1D4A35262B51D11000012205 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1D4A35272B51D11000012205 /* Build configuration list for PBXNativeTarget "DietiDeals24" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1D4A35282B51D11000012205 /* Debug */,
+				1D4A35292B51D11000012205 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1D4A352A2B51D11000012205 /* Build configuration list for PBXNativeTarget "DietiDeals24Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1D4A352B2B51D11000012205 /* Debug */,
+				1D4A352C2B51D11000012205 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1D4A352D2B51D11000012205 /* Build configuration list for PBXNativeTarget "DietiDeals24UITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1D4A352E2B51D11000012205 /* Debug */,
+				1D4A352F2B51D11000012205 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		1D4A35332B51D2B400012205 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/google/GoogleSignIn-iOS";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.0.0;
+			};
+		};
+		1D4A35432B5433FD00012205 /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/facebook/facebook-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 14.1.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		1D4A353B2B51D86500012205 /* GoogleSignIn */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1D4A35332B51D2B400012205 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignIn;
+		};
+		1D4A353D2B51D86500012205 /* GoogleSignInSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1D4A35332B51D2B400012205 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignInSwift;
+		};
+		1D4A35442B5433FD00012205 /* FacebookLogin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1D4A35432B5433FD00012205 /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */;
+			productName = FacebookLogin;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 1D4A34FB2B51D10F00012205 /* Project object */;
+}
