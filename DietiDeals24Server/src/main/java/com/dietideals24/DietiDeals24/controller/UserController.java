@@ -55,4 +55,10 @@ public class UserController {
         userService.deleteUser(userId);
         return new ResponseEntity<>("User successfully deleted!", HttpStatus.OK);
     }
+
+    @GetMapping("/login")
+    public ResponseEntity<User> login(@RequestBody User user2) {
+        User user = userService.login(user2.getEmail(), user2.getPassword());
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
 }

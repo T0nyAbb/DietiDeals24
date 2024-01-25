@@ -44,4 +44,19 @@ public class UserServiceImplementation implements UserService {
     public void deleteUser(Long userId) {
         userRepository.deleteById(userId);
     }
+
+    @Override
+    public User login(String email, String password) {
+        List<User> list = getAllUsers();
+        User optionalUser = null;
+        for(User user: list){
+            if(user.getEmail().equals(email) && user.getPassword().equals(password)) {
+                optionalUser = user;
+                System.out.println("dentro l'if");
+            }
+        }
+        return optionalUser;
+    }
+
+
 }
