@@ -21,7 +21,11 @@
 		1D4A35402B51EB7E00012205 /* AuthenticationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D4A353F2B51EB7E00012205 /* AuthenticationViewModel.swift */; };
 		1D4A35422B51FC1400012205 /* UserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D4A35412B51FC1400012205 /* UserViewModel.swift */; };
 		1D4A35452B5433FD00012205 /* FacebookLogin in Frameworks */ = {isa = PBXBuildFile; productRef = 1D4A35442B5433FD00012205 /* FacebookLogin */; };
-		1DD6AF6A2B5D796C00D489EE /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DD6AF692B5D796C00D489EE /* HomeView.swift */; };
+		1D63A4D02B5ED99000D283DE /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D63A4CF2B5ED99000D283DE /* ProfileView.swift */; };
+		1D63A4D22B5ED9A600D283DE /* NotificationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D63A4D12B5ED9A600D283DE /* NotificationsView.swift */; };
+		1D63A4D42B5ED9BA00D283DE /* AuctionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D63A4D32B5ED9BA00D283DE /* AuctionsView.swift */; };
+		1D63A4D62B5EDC0000D283DE /* MyAuctionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D63A4D52B5EDC0000D283DE /* MyAuctionsView.swift */; };
+		1DD6AF6A2B5D796C00D489EE /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DD6AF692B5D796C00D489EE /* MainView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,7 +61,12 @@
 		1D4A35392B51D81600012205 /* GoogleSignInAuthenticator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleSignInAuthenticator.swift; sourceTree = "<group>"; };
 		1D4A353F2B51EB7E00012205 /* AuthenticationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationViewModel.swift; sourceTree = "<group>"; };
 		1D4A35412B51FC1400012205 /* UserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewModel.swift; sourceTree = "<group>"; };
-		1DD6AF692B5D796C00D489EE /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		1D63A4CF2B5ED99000D283DE /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		1D63A4D12B5ED9A600D283DE /* NotificationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsView.swift; sourceTree = "<group>"; };
+		1D63A4D32B5ED9BA00D283DE /* AuctionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuctionsView.swift; sourceTree = "<group>"; };
+		1D63A4D52B5EDC0000D283DE /* MyAuctionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyAuctionsView.swift; sourceTree = "<group>"; };
+		1DB1F7892B657870003E0EB8 /* DietiDeals24.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DietiDeals24.entitlements; sourceTree = "<group>"; };
+		1DD6AF692B5D796C00D489EE /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,6 +120,7 @@
 		1D4A35052B51D10F00012205 /* DietiDeals24 */ = {
 			isa = PBXGroup;
 			children = (
+				1DB1F7892B657870003E0EB8 /* DietiDeals24.entitlements */,
 				1D4A35382B51D71400012205 /* Info.plist */,
 				1D4A35322B51D20600012205 /* ViewModel */,
 				1D4A35312B51D1FF00012205 /* View */,
@@ -160,7 +170,11 @@
 			isa = PBXGroup;
 			children = (
 				1D4A35082B51D10F00012205 /* SignUpView.swift */,
-				1DD6AF692B5D796C00D489EE /* HomeView.swift */,
+				1DD6AF692B5D796C00D489EE /* MainView.swift */,
+				1D63A4CF2B5ED99000D283DE /* ProfileView.swift */,
+				1D63A4D12B5ED9A600D283DE /* NotificationsView.swift */,
+				1D63A4D32B5ED9BA00D283DE /* AuctionsView.swift */,
+				1D63A4D52B5EDC0000D283DE /* MyAuctionsView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -313,13 +327,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1D63A4D62B5EDC0000D283DE /* MyAuctionsView.swift in Sources */,
+				1D63A4D02B5ED99000D283DE /* ProfileView.swift in Sources */,
 				1D4A353A2B51D81600012205 /* GoogleSignInAuthenticator.swift in Sources */,
-				1DD6AF6A2B5D796C00D489EE /* HomeView.swift in Sources */,
+				1DD6AF6A2B5D796C00D489EE /* MainView.swift in Sources */,
 				1D4A35422B51FC1400012205 /* UserViewModel.swift in Sources */,
+				1D63A4D42B5ED9BA00D283DE /* AuctionsView.swift in Sources */,
 				1D4A35402B51EB7E00012205 /* AuthenticationViewModel.swift in Sources */,
 				1D4A35092B51D10F00012205 /* SignUpView.swift in Sources */,
 				1D4A35072B51D10F00012205 /* DietiDeals24App.swift in Sources */,
 				1D4A35372B51D69500012205 /* User.swift in Sources */,
+				1D63A4D22B5ED9A600D283DE /* NotificationsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -408,7 +426,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -465,7 +483,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -480,6 +498,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = DietiDeals24/DietiDeals24.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"DietiDeals24/Preview Content\"";
@@ -511,6 +530,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = DietiDeals24/DietiDeals24.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"DietiDeals24/Preview Content\"";
