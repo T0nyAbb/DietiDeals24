@@ -13,7 +13,7 @@ class UserViewModel: ObservableObject {
     @EnvironmentObject var authViewModel: AuthenticationViewModel
     @Published var name: String = ""
     @Published var profilePicUrl: String = ""
-    @Published var isLogged: Bool = false
+    @Published var isGoogleLogged: Bool = false
     @Published var errorMessage: String = ""
     @Published var email: String = ""
     @Published var fbName: String = ""
@@ -21,6 +21,10 @@ class UserViewModel: ObservableObject {
     @Published var fbIsLogged: Bool = false
     @Published var fbEmail: String = ""
     @Published var logged: Bool = false
+    @Published var appleName: String = ""
+    @Published var appleIsLogged: Bool = false
+    @Published var appleEmail: String = ""
+    
     
     
     
@@ -39,12 +43,12 @@ class UserViewModel: ObservableObject {
             let email = user.profile!.email
             self.name = name ?? ""
             self.profilePicUrl = profilePicUrl
-            self.isLogged = true
+            self.isGoogleLogged = true
             self.logged = true
             self.email = email
         }else{
-            self.isLogged = false
-            if !self.fbIsLogged {
+            self.isGoogleLogged = false
+            if !self.fbIsLogged && !self.appleIsLogged {
                 self.logged = false
             }
 //            self.name = "Not Logged In"
@@ -60,6 +64,26 @@ class UserViewModel: ObservableObject {
             
             self.checkStatus()
         }
+    }
+    
+    func checkAppleLogin() {
+        guard
+            let email = UserDefaults.standard.string(forKey: "AppleEmail"),
+            let name = UserDefaults.standard.string(forKey: "AppleName"),
+            let surname = UserDefaults.standard.string(forKey: "AppleSurname")
+        else { return }
+        print("Checking apple login")
+        self.appleEmail = email
+        self.appleName = name.appending(" ").appending(surname)
+        self.appleIsLogged = true
+        self.logged = true
+    }
+    
+    func appleSignOut() {
+        self.logged = false
+        self.appleIsLogged = false
+        self.appleName = ""
+        self.appleEmail = ""
     }
     
     func userDetails() -> some View {
@@ -101,7 +125,7 @@ class UserViewModel: ObservableObject {
         if self.fbIsLogged {
             self.logged = true
         }
-        if !self.isLogged && !self.fbIsLogged {
+        if !self.isGoogleLogged && !self.fbIsLogged && !self.appleIsLogged {
             self.logged = false
         }
     }
@@ -112,6 +136,14 @@ class UserViewModel: ObservableObject {
     
     func setFbPic(pic: String) {
         self.fbProfilePicUrl = pic
+    }
+    
+    func getAppleEmail() -> Text {
+        return Text(self.appleEmail)
+    }
+    
+    func getAppleName() -> Text {
+        return Text(self.appleName)
     }
     
     
@@ -207,22 +239,6 @@ struct FBLog: UIViewRepresentable {
                                                self.parent.userVm.setFbPic(pic: "https://graph.facebook.com/\(id)/picture?type=large&redirect=true&width=100&height=100")
                                            }
                                            self.parent.userVm.setFbIsLogged(isLogged: true)
-                                           
-                                           
-                                           if let pictureURL = data["url"] as? String { //image url of your image
-                                               print("printing url: ")
-                                                print(pictureURL)
-//                                                  if let url = URL(string: pictureURL) {
-//                                                      print(url)
-//
-//                                                          if let data = try? Data(contentsOf: url) { //here you get image data from url
-//
-//                                                             //generate image from data and assign it to your profile imageview
-//                                                             let uiImage = UIImage(data: data)
-//                                                              let image = Image(uiImage: uiImage!)
-//                                                          }
-//                                                  }
-                                           }
                                      }
                                  }
                              }
