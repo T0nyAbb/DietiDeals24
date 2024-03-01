@@ -4,14 +4,17 @@ import com.dietideals24.DietiDeals24.entity.User;
 import com.dietideals24.DietiDeals24.repository.UserRepository;
 import com.dietideals24.DietiDeals24.service.UserService;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
-@Service
+@Service("mainUserService")
 @AllArgsConstructor
 public class UserServiceImplementation implements UserService {
+
+    @Autowired
     private UserRepository userRepository;
 
     @Override
@@ -20,9 +23,8 @@ public class UserServiceImplementation implements UserService {
     }
 
     @Override
-    public User getUserById(Long userId) {
-        Optional<User> optionalUser = userRepository.findById(userId);
-        return optionalUser.get();
+    public Optional<User> getUserById(Long userId) {
+        return userRepository.findById(userId);
     }
 
     @Override

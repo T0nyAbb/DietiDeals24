@@ -17,26 +17,26 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
-    @Column(nullable = true)
+    @Column
     private String firstName;
-
-    @Column(nullable = true)
+    @Column
     private String lastName;
-
     @Column(nullable = false, unique = true)
     private String email;
-
-    @Column(nullable = true)
+    @Column
     private String password;
-
-    @Column(nullable = true)
+    @Column
     private String bio;
-
-    @Column(nullable = true)
+    @Column
     private String sitoweb;
-
-    @Column(nullable = true)
+    @Column
     private String social;
-
+    @Column
+    private String Google;
+    @Column
+    private String Facebook;
+    @Column
+    private String Apple;
+    @Column
+    private String profilePicture;
 }

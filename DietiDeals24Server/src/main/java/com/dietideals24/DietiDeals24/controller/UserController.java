@@ -3,17 +3,22 @@ package com.dietideals24.DietiDeals24.controller;
 import com.dietideals24.DietiDeals24.service.UserService;
 import com.dietideals24.DietiDeals24.entity.User;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @AllArgsConstructor
 @RequestMapping("api/users")
 public class UserController {
 
+    @Autowired
+    @Qualifier("mainUserService")
     private UserService userService;
 
     //Create user REST API
@@ -26,9 +31,9 @@ public class UserController {
     //Get user REST API
     //http://localhost:8080/api/users/1
     @GetMapping("{id}")
-    public ResponseEntity<User> getUserById(@PathVariable("id") Long userId) {
-        User user = userService.getUserById(userId);
-        return new ResponseEntity<>(user, HttpStatus.OK);
+    public User getUserById(@PathVariable("id") Long userId) {
+        Optional<User> user = userService.getUserById(userId);
+        return user.get();
     }
 
     //Get all users REST API
@@ -40,8 +45,8 @@ public class UserController {
     }
 
     //Update user REST API
-    @PutMapping("{id}")
     //http://localhost:8080/api/users/1
+    @PutMapping("{id}")
     public ResponseEntity<User> updateUser(@PathVariable("id") Long userId,
                                            @RequestBody User user) {
         user.setId(userId);
