@@ -30,15 +30,15 @@ public class User {
     @Column
     private String bio;
     @Column
-    private String sitoweb;
+    private String website;
     @Column
-    private String social;
+    private String social;  
     @Column
-    private String Google;
+    private String google;
     @Column
-    private String Facebook;
+    private String facebook;
     @Column
-    private String Apple;
+    private String apple;
     @Column
     private String profilePicture;
 

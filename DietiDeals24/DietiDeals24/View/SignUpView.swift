@@ -31,56 +31,47 @@ struct SignUpView: View {
     var body: some View {
         NavigationStack {
             VStack {
-                Spacer()
                 VStack {
-                    VStack {
-                               Image(systemName: "person.circle")
-                                   .resizable()
-                                   .aspectRatio(contentMode: .fit)
-                                   .frame(width: 100, height: 100)
-                                   .padding(.bottom, 30)
-
-                               TextField("Email", text: $email)
-                                   .textFieldStyle(RoundedBorderTextFieldStyle())
-                                   .autocorrectionDisabled()
-                                   .textInputAutocapitalization(.never)
-                                   .padding(.horizontal, 20)
-                                   .padding(.bottom, 20)
-
-                               SecureField("Password", text: $password)
-                                   .textFieldStyle(RoundedBorderTextFieldStyle())
-                                   .autocorrectionDisabled()
-                                   .textInputAutocapitalization(.never)
-                                   .padding(.horizontal, 20)
-                                   .padding(.bottom, 30)
-
-                               Button("Login") {
-                                   Task {
-                                       do {
-                                           user = try await loginVm.login(email: email, password: password)
-                                       } catch {
-                                           print("error")
-                                       }
-                                   }
-                                   
-                                   
-                               }
-                               .padding()
-                               .background(Color.blue)
-                               .foregroundColor(.white)
-                               .cornerRadius(10)
-                        VStack {
-                            Text(user?.username ?? "Username")
-                                .font(.title2)
-                                .bold()
-                            HStack {
-                                Text(user?.firstName ?? "FirstName")
-                                Text(user?.lastName ?? "LastName")
+                    Image(systemName: "person.circle")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 100, height: 100)
+                        .padding(.bottom, 30)
+                    
+                    TextField("Email", text: $email)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .autocorrectionDisabled()
+                        .textInputAutocapitalization(.never)
+                        .padding(.horizontal, 20)
+                        .padding(.bottom, 20)
+                    
+                    SecureField("Password", text: $password)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .autocorrectionDisabled()
+                        .textInputAutocapitalization(.never)
+                        .padding(.horizontal, 20)
+                        .padding(.bottom, 30)
+                    
+                    Button {
+                        Task {
+                            do {
+                                user = try await loginVm.login(email: email, password: password)
+                            } catch {
+                                print("error")
                             }
                         }
+                        
+                        
+                    } label: {
+                        Text("Login")
+                            .frame(width: 360, height: 45)
+                            .background(Color.blue)
+                            .foregroundColor(.white)
+                            .cornerRadius(10)
+                        
+                    }
+                    Divider()
                         .padding()
-                           }
-                    
                     HStack {
                         SignInWithAppleButton(.signIn) { request in
                             request.requestedScopes = [.fullName, .email]
@@ -122,14 +113,9 @@ struct SignUpView: View {
                         .frame(height: 55)
                     FBLog(loginVm: self.loginVm)
                         .frame(height: 45)
-                    VStack {
-                        
-                        
-                    }
-                    
                 }
                 .padding()
-                VStack {
+                ZStack {
                     if(GIDSignIn.sharedInstance.currentUser != nil){
                         Text("")
                             .padding()

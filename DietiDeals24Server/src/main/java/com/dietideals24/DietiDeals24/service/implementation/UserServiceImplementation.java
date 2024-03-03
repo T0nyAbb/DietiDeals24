@@ -41,7 +41,7 @@ public class UserServiceImplementation implements UserService {
         existingUser.setUsername(user.getUsername());
         existingUser.setPassword(user.getPassword());
         existingUser.setBio(user.getBio());
-        existingUser.setSitoweb(user.getSitoweb());
+        existingUser.setWebsite(user.getWebsite());
         existingUser.setApple(user.getApple());
         existingUser.setGoogle(user.getGoogle());
         existingUser.setFacebook(user.getFacebook());
