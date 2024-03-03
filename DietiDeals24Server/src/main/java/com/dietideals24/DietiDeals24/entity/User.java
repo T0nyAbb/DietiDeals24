@@ -39,4 +39,5 @@ public class User {
     private String Apple;
     @Column
     private String profilePicture;
+
 }

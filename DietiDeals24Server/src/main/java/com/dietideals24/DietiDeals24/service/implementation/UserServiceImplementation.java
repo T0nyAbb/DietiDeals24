@@ -38,6 +38,11 @@ public class UserServiceImplementation implements UserService {
         existingUser.setFirstName(user.getFirstName());
         existingUser.setLastName(user.getLastName());
         existingUser.setEmail(user.getEmail());
+        existingUser.setUsername(user.getUsername());
+        existingUser.setPassword(user.getPassword());
+        existingUser.setBio(user.getBio());
+        existingUser.setWebSites(user.getWebSites());
+        existingUser.setSocials(user.getSocials());
         User updatedUser = userRepository.save(existingUser);
         return updatedUser;
     }

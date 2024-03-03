@@ -14,12 +14,15 @@ import FBSDKLoginKit
 
 
 struct SignUpView: View {
-    @ObservedObject var userVm: UserViewModel
+    @ObservedObject var loginVm: LoginViewModel
     @EnvironmentObject var authViewModel: AuthenticationViewModel
     @ObservedObject var vm = GoogleSignInButtonViewModel()
     @State var manager = LoginManager()
-    @State var log = UserViewModel.shared.logged
-    @State var appleLogged: Bool = UserViewModel.shared.appleIsLogged
+    @State var log = LoginViewModel.shared.logged
+    @State var appleLogged: Bool = LoginViewModel.shared.appleIsLogged
+    @State var email: String = ""
+    @State var password: String = ""
+    @State var user: User?
     @Environment(\.colorScheme) var colorScheme
     
     
@@ -30,6 +33,54 @@ struct SignUpView: View {
             VStack {
                 Spacer()
                 VStack {
+                    VStack {
+                               Image(systemName: "person.circle")
+                                   .resizable()
+                                   .aspectRatio(contentMode: .fit)
+                                   .frame(width: 100, height: 100)
+                                   .padding(.bottom, 30)
+
+                               TextField("Email", text: $email)
+                                   .textFieldStyle(RoundedBorderTextFieldStyle())
+                                   .autocorrectionDisabled()
+                                   .textInputAutocapitalization(.never)
+                                   .padding(.horizontal, 20)
+                                   .padding(.bottom, 20)
+
+                               SecureField("Password", text: $password)
+                                   .textFieldStyle(RoundedBorderTextFieldStyle())
+                                   .autocorrectionDisabled()
+                                   .textInputAutocapitalization(.never)
+                                   .padding(.horizontal, 20)
+                                   .padding(.bottom, 30)
+
+                               Button("Login") {
+                                   Task {
+                                       do {
+                                           user = try await loginVm.login(email: email, password: password)
+                                       } catch {
+                                           print("error")
+                                       }
+                                   }
+                                   
+                                   
+                               }
+                               .padding()
+                               .background(Color.blue)
+                               .foregroundColor(.white)
+                               .cornerRadius(10)
+                        VStack {
+                            Text(user?.username ?? "Username")
+                                .font(.title2)
+                                .bold()
+                            HStack {
+                                Text(user?.firstName ?? "FirstName")
+                                Text(user?.lastName ?? "LastName")
+                            }
+                        }
+                        .padding()
+                           }
+                    
                     HStack {
                         SignInWithAppleButton(.signIn) { request in
                             request.requestedScopes = [.fullName, .email]
@@ -37,7 +88,7 @@ struct SignUpView: View {
                             switch result {
                             case .success(let authResults):
                                 print("Authorisation successful")
-                                if let email = UserDefaults.standard.string(forKey: "AppleEmail") {
+                                if let appleEmail = UserDefaults.standard.string(forKey: "AppleEmail") {
                                     self.appleLogged = true
                                 }
                                 switch authResults.credential {
@@ -52,7 +103,7 @@ struct SignUpView: View {
                                     print(appleIdCredentials.fullName?.givenName)
                                     print(appleIdCredentials.fullName?.familyName)
                                     print(appleIdCredentials.user)
-                                    userVm.checkAppleLogin()
+                                    loginVm.checkAppleLogin()
                                     self.appleLogged = true
                                 default:
                                     print(authResults)
@@ -69,7 +120,7 @@ struct SignUpView: View {
                         .accessibilityIdentifier("GoogleSignInButton")
                         .accessibility(hint: Text("Sign in with Google button."))
                         .frame(height: 55)
-                    FBLog(userVm: self.userVm)
+                    FBLog(loginVm: self.loginVm)
                         .frame(height: 45)
                     VStack {
                         
@@ -83,14 +134,14 @@ struct SignUpView: View {
                         Text("")
                             .padding()
                             .onAppear {
-                                userVm.checkStatus()
+                                loginVm.checkStatus()
                                 self.log = true
                             }
                     } else if AccessToken.isCurrentAccessTokenActive {
                         Text("")
                             .padding()
                             .onAppear {
-                                userVm.setFbIsLogged(isLogged: true)
+                                loginVm.setFbIsLogged(isLogged: true)
                                 self.log = true
                             }
                     }
@@ -112,10 +163,10 @@ struct SignUpView: View {
                 
             }
             .navigationDestination(isPresented: $log) {
-                MainView(userVm: userVm)
+                MainView(loginVm: loginVm)
                     .environmentObject(authViewModel)
                     .onDisappear {
-                        self.appleLogged = userVm.appleIsLogged
+                        self.appleLogged = loginVm.appleIsLogged
                     }
             }
         }
@@ -127,5 +178,5 @@ struct SignUpView: View {
 
 
 #Preview {
-    SignUpView(userVm: UserViewModel.shared)
+    SignUpView(loginVm: LoginViewModel.shared)
 }
