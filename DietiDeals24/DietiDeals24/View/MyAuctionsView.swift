@@ -8,17 +8,50 @@
 import SwiftUI
 
 struct MyAuctionsView: View {
+    
+    var userVm: UserViewModel
+    
+    @State private var user: User?
+    
     var body: some View {
         NavigationView {
             VStack {
-                Text("My Auctions View")
-                    .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
+                    Text(user?.username ?? "Username")
+                        .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
+                        .bold()
+                    HStack {
+                        Text(user?.firstName ?? "FirstName")
+                        Text(user?.lastName ?? "LastName")
+                    
+                    
+                }
             }
             .navigationTitle("My Auctions")
+            .task {
+                do {
+                    user = try await userVm.getUser()
+                } catch UserError.invalidURL {
+                    print("Invalid URL")
+                } catch UserError.invalidResponse {
+                    print("Invalid response")
+                } catch UserError.invalidData {
+                    print("Invalid data")
+                } catch {
+                    print("Generic error")
+                }
+            }
+            .refreshable {
+                do {
+                    user = try await userVm.getUser()
+                } catch {
+                    print("Error")
+                }
+                
+            }
         }
     }
 }
 
 #Preview {
-    MyAuctionsView()
+    MyAuctionsView(userVm: UserViewModel())
 }

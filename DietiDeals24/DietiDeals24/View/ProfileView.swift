@@ -12,26 +12,26 @@ import AuthenticationServices
 import FBSDKLoginKit
 
 struct ProfileView: View {
-    @StateObject var userVm: UserViewModel
+    @StateObject var loginVm: LoginViewModel
     @EnvironmentObject var authViewModel: AuthenticationViewModel
     @ObservedObject var vm = GoogleSignInButtonViewModel()
     @State var fbLogged: Bool = AccessToken.isCurrentAccessTokenActive
     @State var googleLogged: Bool = GIDSignIn.sharedInstance.currentUser != nil
     @Environment(\.dismiss) var dismiss
     @State var loggedOut: Bool = false
-    @State var appleLogged: Bool = UserViewModel.shared.appleIsLogged
+    @State var appleLogged: Bool = LoginViewModel.shared.appleIsLogged
     
     
     var body: some View {
             NavigationView {
                 VStack {
                     if fbLogged {
-                        userVm.getfbImage()
+                        loginVm.getfbImage()
                             .clipShape(/*@START_MENU_TOKEN@*/Circle()/*@END_MENU_TOKEN@*/)
-                        Text(userVm.getfbUserName())
-                        Text(userVm.fbEmail)
+                        Text(loginVm.getfbUserName())
+                        Text(loginVm.fbEmail)
                             .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
-                        FBLog(userVm: userVm)
+                        FBLog(loginVm: loginVm)
                             .frame(height: 45)
                         if !AccessToken.isCurrentAccessTokenActive {
                             let _ = print("logged out from fb")
@@ -41,26 +41,27 @@ struct ProfileView: View {
                     }
                     else if googleLogged {
                         
-                        userVm.userDetails()
+                        loginVm.userDetails()
                             .clipShape(/*@START_MENU_TOKEN@*/Circle()/*@END_MENU_TOKEN@*/)
-                        userVm.userName()
-                        userVm.getEmail()
+                        loginVm.userName()
+                        loginVm.getEmail()
                             .padding()
                         Button(action: {
                             authViewModel.signOut()
                             loggedOut = true
+                            dismiss()
                         }) {
                             Text("Sign Out")
                         }
                     }
                     
                     else if appleLogged {
-                        userVm.getAppleName()
-                        userVm.getAppleEmail()
+                        loginVm.getAppleName()
+                        loginVm.getAppleEmail()
                             .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
                             .padding()
                         Button(action: {
-                            userVm.appleSignOut()
+                            loginVm.appleSignOut()
                             loggedOut = true
                             dismiss()
                         }) {
@@ -78,5 +79,5 @@ struct ProfileView: View {
 }
 
 #Preview {
-    ProfileView(userVm: UserViewModel.shared)
+    ProfileView(loginVm: LoginViewModel.shared)
 }

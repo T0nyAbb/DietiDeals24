@@ -12,7 +12,7 @@ import AuthenticationServices
 import FBSDKLoginKit
 
 struct MainView: View {
-    @ObservedObject var userVm: UserViewModel
+    @ObservedObject var loginVm: LoginViewModel
     
     @State private var selection = 1
 
@@ -32,13 +32,13 @@ struct MainView: View {
                       Text("Notifications")
                   }
                   .tag(2)
-             MyAuctionsView()
+             MyAuctionsView(userVm: UserViewModel())
                   .tabItem {
                       Image(systemName: "bookmark.fill")
                       Text("My Auctions")
                   }
                   .tag(3)
-            ProfileView(userVm: userVm)
+            ProfileView(loginVm: loginVm)
                 .tabItem {
                     Image(systemName: "person.fill")
                     Text("Profile")
@@ -50,5 +50,5 @@ struct MainView: View {
 }
 
 #Preview {
-    MainView(userVm: UserViewModel.shared)
+    MainView(loginVm: LoginViewModel.shared)
 }

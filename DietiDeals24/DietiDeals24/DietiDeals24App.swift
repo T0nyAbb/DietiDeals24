@@ -12,11 +12,11 @@ import FBSDKCoreKit
 @main
 struct DietiDeals24App: App {
     @StateObject var authViewModel: AuthenticationViewModel = AuthenticationViewModel()
-    @StateObject var userVm: UserViewModel = UserViewModel.shared
+    @StateObject var loginVm: LoginViewModel = LoginViewModel.shared
     var body: some Scene {
         WindowGroup {
             NavigationView {
-                SignUpView(userVm: userVm)
+                SignUpView(loginVm: loginVm)
                     .onAppear {
                         ApplicationDelegate.shared.application(UIApplication.shared, didFinishLaunchingWithOptions: nil)
                     }

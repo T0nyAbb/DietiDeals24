@@ -19,8 +19,12 @@
 		1D4A353C2B51D86500012205 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 1D4A353B2B51D86500012205 /* GoogleSignIn */; };
 		1D4A353E2B51D86500012205 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 1D4A353D2B51D86500012205 /* GoogleSignInSwift */; };
 		1D4A35402B51EB7E00012205 /* AuthenticationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D4A353F2B51EB7E00012205 /* AuthenticationViewModel.swift */; };
-		1D4A35422B51FC1400012205 /* UserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D4A35412B51FC1400012205 /* UserViewModel.swift */; };
+		1D4A35422B51FC1400012205 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D4A35412B51FC1400012205 /* LoginViewModel.swift */; };
 		1D4A35452B5433FD00012205 /* FacebookLogin in Frameworks */ = {isa = PBXBuildFile; productRef = 1D4A35442B5433FD00012205 /* FacebookLogin */; };
+		1D606CAB2B6FF310002BA4F7 /* UserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D606CAA2B6FF310002BA4F7 /* UserViewModel.swift */; };
+		1D606CAD2B6FF589002BA4F7 /* UserError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D606CAC2B6FF589002BA4F7 /* UserError.swift */; };
+		1D606CAF2B700557002BA4F7 /* LoginRequestBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D606CAE2B700557002BA4F7 /* LoginRequestBody.swift */; };
+		1D606CB12B7006A5002BA4F7 /* LoginFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D606CB02B7006A5002BA4F7 /* LoginFormView.swift */; };
 		1D63A4D02B5ED99000D283DE /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D63A4CF2B5ED99000D283DE /* ProfileView.swift */; };
 		1D63A4D22B5ED9A600D283DE /* NotificationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D63A4D12B5ED9A600D283DE /* NotificationsView.swift */; };
 		1D63A4D42B5ED9BA00D283DE /* AuctionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D63A4D32B5ED9BA00D283DE /* AuctionsView.swift */; };
@@ -60,7 +64,11 @@
 		1D4A35382B51D71400012205 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		1D4A35392B51D81600012205 /* GoogleSignInAuthenticator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleSignInAuthenticator.swift; sourceTree = "<group>"; };
 		1D4A353F2B51EB7E00012205 /* AuthenticationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationViewModel.swift; sourceTree = "<group>"; };
-		1D4A35412B51FC1400012205 /* UserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewModel.swift; sourceTree = "<group>"; };
+		1D4A35412B51FC1400012205 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
+		1D606CAA2B6FF310002BA4F7 /* UserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewModel.swift; sourceTree = "<group>"; };
+		1D606CAC2B6FF589002BA4F7 /* UserError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserError.swift; sourceTree = "<group>"; };
+		1D606CAE2B700557002BA4F7 /* LoginRequestBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRequestBody.swift; sourceTree = "<group>"; };
+		1D606CB02B7006A5002BA4F7 /* LoginFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginFormView.swift; sourceTree = "<group>"; };
 		1D63A4CF2B5ED99000D283DE /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		1D63A4D12B5ED9A600D283DE /* NotificationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsView.swift; sourceTree = "<group>"; };
 		1D63A4D32B5ED9BA00D283DE /* AuctionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuctionsView.swift; sourceTree = "<group>"; };
@@ -128,6 +136,7 @@
 				1D4A35062B51D10F00012205 /* DietiDeals24App.swift */,
 				1D4A350A2B51D11000012205 /* Assets.xcassets */,
 				1D4A350C2B51D11000012205 /* Preview Content */,
+				1D606CAC2B6FF589002BA4F7 /* UserError.swift */,
 			);
 			path = DietiDeals24;
 			sourceTree = "<group>";
@@ -162,6 +171,7 @@
 			children = (
 				1D4A35362B51D69500012205 /* User.swift */,
 				1D4A35392B51D81600012205 /* GoogleSignInAuthenticator.swift */,
+				1D606CAE2B700557002BA4F7 /* LoginRequestBody.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -175,6 +185,7 @@
 				1D63A4D12B5ED9A600D283DE /* NotificationsView.swift */,
 				1D63A4D32B5ED9BA00D283DE /* AuctionsView.swift */,
 				1D63A4D52B5EDC0000D283DE /* MyAuctionsView.swift */,
+				1D606CB02B7006A5002BA4F7 /* LoginFormView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -183,7 +194,8 @@
 			isa = PBXGroup;
 			children = (
 				1D4A353F2B51EB7E00012205 /* AuthenticationViewModel.swift */,
-				1D4A35412B51FC1400012205 /* UserViewModel.swift */,
+				1D4A35412B51FC1400012205 /* LoginViewModel.swift */,
+				1D606CAA2B6FF310002BA4F7 /* UserViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -328,14 +340,18 @@
 			buildActionMask = 2147483647;
 			files = (
 				1D63A4D62B5EDC0000D283DE /* MyAuctionsView.swift in Sources */,
+				1D606CAB2B6FF310002BA4F7 /* UserViewModel.swift in Sources */,
+				1D606CB12B7006A5002BA4F7 /* LoginFormView.swift in Sources */,
 				1D63A4D02B5ED99000D283DE /* ProfileView.swift in Sources */,
 				1D4A353A2B51D81600012205 /* GoogleSignInAuthenticator.swift in Sources */,
 				1DD6AF6A2B5D796C00D489EE /* MainView.swift in Sources */,
-				1D4A35422B51FC1400012205 /* UserViewModel.swift in Sources */,
+				1D4A35422B51FC1400012205 /* LoginViewModel.swift in Sources */,
 				1D63A4D42B5ED9BA00D283DE /* AuctionsView.swift in Sources */,
 				1D4A35402B51EB7E00012205 /* AuthenticationViewModel.swift in Sources */,
 				1D4A35092B51D10F00012205 /* SignUpView.swift in Sources */,
+				1D606CAF2B700557002BA4F7 /* LoginRequestBody.swift in Sources */,
 				1D4A35072B51D10F00012205 /* DietiDeals24App.swift in Sources */,
+				1D606CAD2B6FF589002BA4F7 /* UserError.swift in Sources */,
 				1D4A35372B51D69500012205 /* User.swift in Sources */,
 				1D63A4D22B5ED9A600D283DE /* NotificationsView.swift in Sources */,
 			);

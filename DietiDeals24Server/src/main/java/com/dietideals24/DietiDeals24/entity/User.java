@@ -27,6 +27,9 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
+    @Column(unique = true)
+    private String username;
+
     @Column(nullable = true)
     private String password;
 
@@ -34,9 +37,9 @@ public class User {
     private String bio;
 
     @Column(nullable = true)
-    private String sitoweb;
+    private String webSites;
 
     @Column(nullable = true)
-    private String social;
+    private String socials;
 
 }

@@ -7,17 +7,29 @@
 
 import Foundation
 
-class User {
-    var email: String
-    var password: String
-    var username: String
+struct User: Codable {
+    let firstName: String?
+    let lastName: String?
+    let email: String?
+    let username: String?
+    let password: String?
+    let bio: String?
+    let webSites: String?
+    let socials: String?
     
     
-    init(email: String, password: String, username: String) {
+    init(firstName: String?, lastName: String?, email: String, username: String?, password: String?, bio: String?, webSites: String?, socials: String?) {
+        self.firstName = firstName
+        self.lastName = lastName
         self.email = email
-        self.password = password
         self.username = username
+        self.password = password
+        self.bio = bio
+        self.webSites = webSites
+        self.socials = socials
     }
+    
+    
     
     
 }
