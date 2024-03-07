@@ -5,6 +5,9 @@ import com.dietideals24.DietiDeals24.repository.UserRepository;
 import com.dietideals24.DietiDeals24.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,10 +15,10 @@ import java.util.Optional;
 
 @Service("mainUserService")
 @AllArgsConstructor
-public class UserServiceImplementation implements UserService {
+public class UserServiceImplementation implements UserDetailsService, UserService {
 
     @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Override
     public User createUser(User user) {
@@ -23,8 +26,8 @@ public class UserServiceImplementation implements UserService {
     }
 
     @Override
-    public Optional<User> getUserById(Long userId) {
-        return userRepository.findById(userId);
+    public User getUserById(Long id){
+        return userRepository.findUserById(id);
     }
 
     @Override
@@ -37,7 +40,6 @@ public class UserServiceImplementation implements UserService {
         User existingUser = userRepository.findById(user.getId()).get();
         existingUser.setFirstName(user.getFirstName());
         existingUser.setLastName(user.getLastName());
-        existingUser.setEmail(user.getEmail());
         existingUser.setUsername(user.getUsername());
         existingUser.setPassword(user.getPassword());
         existingUser.setBio(user.getBio());
@@ -56,17 +58,7 @@ public class UserServiceImplementation implements UserService {
     }
 
     @Override
-    public User login(String email, String password) {
-        List<User> list = getAllUsers();
-        User optionalUser = null;
-        for(User user: list){
-            if(user.getEmail().equals(email) && user.getPassword().equals(password)) {
-                optionalUser = user;
-                System.out.println("dentro l'if");
-            }
-        }
-        return optionalUser;
+    public UserDetails loadUserByUsername (String email) throws UsernameNotFoundException {
+        return userRepository.findByUsername(email).orElseThrow(()-> new UsernameNotFoundException("User not found"));
     }
-
-
 }

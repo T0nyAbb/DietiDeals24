@@ -14,28 +14,28 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("api/i_auction")
+@RequestMapping
 public class InverseAuctionController {
 
     @Autowired
     @Qualifier("mainInverseAuctionService")
     private InverseAuctionService inverseAuctionService;
     //Posta un'asta inversa
-    @PostMapping
+    @PostMapping("/api/i_auction")
     public ResponseEntity<InverseAuction> createInverseAuction (@RequestBody InverseAuction inverseAuction){
         InverseAuction savedInverseAuction = inverseAuctionService.createInverseAuction(inverseAuction);
         return new ResponseEntity<>(savedInverseAuction, HttpStatus.CREATED);
     }
 
     //Ottiene una lista di tutte le aste inverse
-    @GetMapping
+    @GetMapping("/api/i_auctions")
     public ResponseEntity<List<InverseAuction>> getAll() {
         List<InverseAuction> inverseAuctions = inverseAuctionService.getAllUsers();
         return new ResponseEntity<>(inverseAuctions, HttpStatus.OK);
     }
 
     //Ottiene una singola asta inversa in base all'id specificato
-    @GetMapping ("{id}")
+    @GetMapping ("/i_auction/{id}")
     public ResponseEntity<InverseAuction> getInverseAuctionById(@PathVariable Long id) {
         InverseAuction inverseAuction = inverseAuctionService.getInverseAuctionById(id);
         return new ResponseEntity<>(inverseAuction, HttpStatus.OK);
