@@ -20,24 +20,28 @@ public class InverseAuctionController {
     @Autowired
     @Qualifier("mainInverseAuctionService")
     private InverseAuctionService inverseAuctionService;
+
     //Posta un'asta inversa
-    @PostMapping("/api/i_auction")
+    @PostMapping("/api/inverse_auction")
     public ResponseEntity<InverseAuction> createInverseAuction (@RequestBody InverseAuction inverseAuction){
         InverseAuction savedInverseAuction = inverseAuctionService.createInverseAuction(inverseAuction);
         return new ResponseEntity<>(savedInverseAuction, HttpStatus.CREATED);
     }
 
     //Ottiene una lista di tutte le aste inverse
-    @GetMapping("/api/i_auctions")
-    public ResponseEntity<List<InverseAuction>> getAll() {
-        List<InverseAuction> inverseAuctions = inverseAuctionService.getAllUsers();
+    @GetMapping("/api/inverse_auctions")
+    public ResponseEntity<List<InverseAuction>> getAllInverseAuctions() {
+        List<InverseAuction> inverseAuctions = inverseAuctionService.getAllInverseAuctions();
         return new ResponseEntity<>(inverseAuctions, HttpStatus.OK);
     }
 
     //Ottiene una singola asta inversa in base all'id specificato
-    @GetMapping ("/i_auction/{id}")
+    @GetMapping ("/api/inverse_auction/{id}")
     public ResponseEntity<InverseAuction> getInverseAuctionById(@PathVariable Long id) {
         InverseAuction inverseAuction = inverseAuctionService.getInverseAuctionById(id);
+        if(inverseAuction == null)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
         return new ResponseEntity<>(inverseAuction, HttpStatus.OK);
     }
 

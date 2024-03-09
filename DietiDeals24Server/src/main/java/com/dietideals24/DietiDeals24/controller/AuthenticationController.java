@@ -17,11 +17,13 @@ public class AuthenticationController {
         this.authService = authService;
     }
 
+    //Registra un nuovo utente
     @PostMapping("/api/register")
     public ResponseEntity<AuthenticationResponse> register(@RequestBody User request){
         return ResponseEntity.ok(authService.register(request));
     }
 
+    //Effettua l'accesso per un dato utente
     @PostMapping("/api/login")
     public ResponseEntity<AuthenticationResponse> login (@RequestBody User request){
         return ResponseEntity.ok(authService.authenticate(request));

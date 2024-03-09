@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface InverseAuctionRepository extends JpaRepository <InverseAuction, Long> {
+    InverseAuction getInverseAuctionById(Long id);
 }

@@ -18,22 +18,20 @@ public class EnglishAuction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @Column
+    @Column(nullable = false)
     private String title;
-    @Column(nullable = true)
-    private String description;
-    @Column(nullable = true)
-    private String category;
     @Column
+    private String description;
+    @Column
+    private String category;
+    @Column(nullable = false)
     private long sellerId;
     @Column
     private String urlPicture;
-    @Column
+    @Column(nullable = false)
     private int startingPrice;
     @Column
     private int timer;
     @Column
     private int rise;
-    @Column
-    private String bidder;
 }

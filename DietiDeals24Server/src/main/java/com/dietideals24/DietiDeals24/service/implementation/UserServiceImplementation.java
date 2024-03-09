@@ -27,7 +27,7 @@ public class UserServiceImplementation implements UserDetailsService, UserServic
 
     @Override
     public User getUserById(Long id){
-        return userRepository.findUserById(id);
+        return userRepository.getUserById(id);
     }
 
     @Override
@@ -38,16 +38,22 @@ public class UserServiceImplementation implements UserDetailsService, UserServic
     @Override
     public User updateUser(User user) {
         User existingUser = userRepository.findById(user.getId()).get();
+
         existingUser.setFirstName(user.getFirstName());
         existingUser.setLastName(user.getLastName());
         existingUser.setUsername(user.getUsername());
         existingUser.setPassword(user.getPassword());
         existingUser.setBio(user.getBio());
         existingUser.setWebsite(user.getWebsite());
-        existingUser.setApple(user.getApple());
+        existingUser.setSocial(user.getSocial());
         existingUser.setGoogle(user.getGoogle());
         existingUser.setFacebook(user.getFacebook());
+        existingUser.setApple(user.getApple());
         existingUser.setProfilePicture(user.getProfilePicture());
+        existingUser.setIban(user.getIban());
+        existingUser.setVatNumber(user.getVatNumber());
+        existingUser.setNationalInsuranceNumber(user.getNationalInsuranceNumber());
+
         User updatedUser = userRepository.save(existingUser);
         return updatedUser;
     }
@@ -58,7 +64,7 @@ public class UserServiceImplementation implements UserDetailsService, UserServic
     }
 
     @Override
-    public UserDetails loadUserByUsername (String email) throws UsernameNotFoundException {
-        return userRepository.findByUsername(email).orElseThrow(()-> new UsernameNotFoundException("User not found"));
+    public UserDetails loadUserByUsername (String username) throws UsernameNotFoundException {
+        return userRepository.findByUsername(username).orElseThrow(()-> new UsernameNotFoundException("User not found"));
     }
 }

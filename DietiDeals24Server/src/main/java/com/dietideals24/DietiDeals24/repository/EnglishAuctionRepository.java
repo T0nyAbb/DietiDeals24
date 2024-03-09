@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface EnglishAuctionRepository extends JpaRepository<EnglishAuction, Long> {
+
+    EnglishAuction getEnglishAuctionById(Long id);
 }

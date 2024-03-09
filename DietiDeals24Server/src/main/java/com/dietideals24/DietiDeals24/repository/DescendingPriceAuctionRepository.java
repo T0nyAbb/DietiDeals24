@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface DescendingPriceAuctionRepository extends JpaRepository<DescendingPriceAuction, Long> {
+
+    DescendingPriceAuction getDescendingPriceAuctionById (Long id);
 }

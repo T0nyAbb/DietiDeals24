@@ -20,5 +20,5 @@ public interface UserService {
 
     void deleteUser(Long userId);
 
-    UserDetails loadUserByUsername (String email) throws UsernameNotFoundException;
+    UserDetails loadUserByUsername (String username) throws UsernameNotFoundException;
 }

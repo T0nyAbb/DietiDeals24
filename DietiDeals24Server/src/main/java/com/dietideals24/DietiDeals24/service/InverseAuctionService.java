@@ -10,7 +10,7 @@ public interface InverseAuctionService {
 
     InverseAuction createInverseAuction (InverseAuction inverseauction);
 
-    List<InverseAuction> getAllUsers();
+    List<InverseAuction> getAllInverseAuctions();
 
     InverseAuction getInverseAuctionById(Long id);
 }

@@ -27,8 +27,7 @@ public class UserController {
         return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
     }
 
-    //Get user REST API
-    //http://localhost:8080/api/users/1
+    //Restituisce un'utente dato un id
     @GetMapping("/api/user/{id}")
     public ResponseEntity<User> getUserById(@PathVariable("id") Long userId) {
         User user = userService.getUserById(userId);
@@ -39,8 +38,7 @@ public class UserController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-    //Get all users REST API
-    //http://localhost:8080/api/users
+    //Restituisce la lista di tutti gli utenti
     @GetMapping("/api/users")
     public ResponseEntity<List<User>> getAllUsers(){
         List<User> users = userService.getAllUsers();
@@ -50,8 +48,7 @@ public class UserController {
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
-    //Update user REST API
-    //http://localhost:8080/api/users/1
+    //Aggiorna  le informazioni di un'utente dato un id
     @PutMapping("/api/user/{id}")
     public ResponseEntity<User> updateUser(@PathVariable("id") Long userId,
                                            @RequestBody User user) {
@@ -60,7 +57,7 @@ public class UserController {
         return new ResponseEntity<>(updatedUser, HttpStatus.OK);
     }
 
-    //Delete User REST API
+    //Elimina un'utente dato un id
     @DeleteMapping("/api/user/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable("id") Long userId) {
         userService.deleteUser(userId);

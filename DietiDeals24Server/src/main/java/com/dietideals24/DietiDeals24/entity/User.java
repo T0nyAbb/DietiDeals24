@@ -45,15 +45,18 @@ public class User implements UserDetails {
     private String apple;
     @Column
     private String profilePicture;
-    @Enumerated(value = EnumType.STRING)
-    private Role role;
-
-    //Attributi aggiuntivi account venditore
-
     @Column
     private String iban;
+
+    //Attributi aggiuntivi account venditore
     @Column
-    private String altro; //DA AGGIUNGERE IL RESTO
+    private String vatNumber; //Partita IVA
+    @Column
+    private String nationalInsuranceNumber; //Codice fiscale
+
+    //Ruolo
+    @Enumerated(value = EnumType.STRING)
+    private Role role;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

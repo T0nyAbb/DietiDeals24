@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface FixedTimeAuctionRepository extends JpaRepository<FixedTimeAuction, Long> {
+    FixedTimeAuction getFixedTimeAuctionById(Long id);
 }

@@ -31,7 +31,16 @@ public class AuthenticationService {
         user.setLastName(request.getLastName());
         user.setUsername(request.getUsername());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-
+        user.setBio(request.getBio());
+        user.setWebsite(request.getWebsite());
+        user.setSocial(request.getSocial());
+        user.setGoogle(request.getGoogle());
+        user.setFacebook(request.getFacebook());
+        user.setApple(request.getApple());
+        user.setProfilePicture(request.getProfilePicture());
+        user.setIban(request.getIban());
+        user.setVatNumber(request.getVatNumber());
+        user.setNationalInsuranceNumber(request.getNationalInsuranceNumber());
         user.setRole(request.getRole());
 
         user = repository.save(user);
