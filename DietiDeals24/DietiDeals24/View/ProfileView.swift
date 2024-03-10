@@ -43,8 +43,8 @@ struct ProfileView: View {
                         
                         loginVm.userDetails()
                             .clipShape(/*@START_MENU_TOKEN@*/Circle()/*@END_MENU_TOKEN@*/)
-                        loginVm.userName()
-                        loginVm.getEmail()
+                        loginVm.getGoogleUserName()
+                        loginVm.getGoogleEmail()
                             .padding()
                         Button(action: {
                             authViewModel.signOut()
@@ -62,6 +62,19 @@ struct ProfileView: View {
                             .padding()
                         Button(action: {
                             loginVm.appleSignOut()
+                            loggedOut = true
+                            dismiss()
+                        }) {
+                            Text("Sign Out")
+                        }
+                    }
+                    else if loginVm.logged {
+                        loginVm.getName()
+                        loginVm.getEmail()
+                            .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
+                            .padding()
+                        Button(action: {
+                            loginVm.signOut()
                             loggedOut = true
                             dismiss()
                         }) {

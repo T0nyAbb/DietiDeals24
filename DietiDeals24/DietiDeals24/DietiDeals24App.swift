@@ -16,7 +16,7 @@ struct DietiDeals24App: App {
     var body: some Scene {
         WindowGroup {
             NavigationView {
-                SignUpView(loginVm: loginVm)
+                LoginView(loginVm: loginVm)
                     .onAppear {
                         ApplicationDelegate.shared.application(UIApplication.shared, didFinishLaunchingWithOptions: nil)
                     }

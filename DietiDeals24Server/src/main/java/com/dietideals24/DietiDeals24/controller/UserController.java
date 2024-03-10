@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @AllArgsConstructor
@@ -35,6 +36,17 @@ public class UserController {
         if(user == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+    //Restituisce un'utente dato un id
+    @PostMapping("/api/user/{username}")
+    public ResponseEntity<User> getUserByUsername(@PathVariable("username") String username) {
+        Optional<User> optionalUser = userService.getUserByUsername(username);
+
+        if(optionalUser.isEmpty())
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        User user = optionalUser.get();
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 

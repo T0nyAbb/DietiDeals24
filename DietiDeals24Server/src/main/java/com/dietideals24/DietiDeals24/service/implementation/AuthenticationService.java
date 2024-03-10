@@ -1,6 +1,7 @@
 package com.dietideals24.DietiDeals24.service.implementation;
 
 import com.dietideals24.DietiDeals24.entity.AuthenticationResponse;
+import com.dietideals24.DietiDeals24.entity.Role;
 import com.dietideals24.DietiDeals24.entity.User;
 import com.dietideals24.DietiDeals24.repository.UserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -41,7 +42,10 @@ public class AuthenticationService {
         user.setIban(request.getIban());
         user.setVatNumber(request.getVatNumber());
         user.setNationalInsuranceNumber(request.getNationalInsuranceNumber());
-        user.setRole(request.getRole());
+        if(request.getRole() == null)
+            user.setRole(Role.USER);
+        else
+            user.setRole(request.getRole());
 
         user = repository.save(user);
 

@@ -32,7 +32,7 @@ struct MainView: View {
                       Text("Notifications")
                   }
                   .tag(2)
-             MyAuctionsView(userVm: UserViewModel())
+            MyAuctionsView(userVm: UserViewModel(), loginVm: LoginViewModel.shared)
                   .tabItem {
                       Image(systemName: "bookmark.fill")
                       Text("My Auctions")
@@ -44,6 +44,9 @@ struct MainView: View {
                     Text("Profile")
                 }
                 .tag(4)
+        }
+        .onAppear {
+            
         }
         .navigationBarBackButtonHidden()
     }

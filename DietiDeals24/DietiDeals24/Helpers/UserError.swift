@@ -11,4 +11,5 @@ enum UserError: Error {
     case invalidURL
     case invalidResponse
     case invalidData
+    case tokenNotFound
 }

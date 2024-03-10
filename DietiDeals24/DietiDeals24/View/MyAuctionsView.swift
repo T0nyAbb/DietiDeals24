@@ -10,7 +10,7 @@ import SwiftUI
 struct MyAuctionsView: View {
     
     var userVm: UserViewModel
-    
+    @ObservedObject var loginVm: LoginViewModel
     @State private var user: User?
     
     var body: some View {
@@ -29,7 +29,7 @@ struct MyAuctionsView: View {
             .navigationTitle("My Auctions")
             .task {
                 do {
-                    user = try await userVm.getUser()
+                    user = try await userVm.getUserByEmail(username: loginVm.email)
                 } catch UserError.invalidURL {
                     print("Invalid URL")
                 } catch UserError.invalidResponse {
@@ -42,7 +42,7 @@ struct MyAuctionsView: View {
             }
             .refreshable {
                 do {
-                    user = try await userVm.getUser()
+                    user = try await userVm.getUserByEmail(username: loginVm.email)
                 } catch {
                     print("Error")
                 }
@@ -53,5 +53,5 @@ struct MyAuctionsView: View {
 }
 
 #Preview {
-    MyAuctionsView(userVm: UserViewModel())
+    MyAuctionsView(userVm: UserViewModel(), loginVm: LoginViewModel.shared)
 }

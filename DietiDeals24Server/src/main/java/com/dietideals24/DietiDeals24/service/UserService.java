@@ -14,6 +14,8 @@ public interface UserService {
 
     User getUserById (Long id);
 
+    Optional<User> getUserByUsername(String username);
+
     List<User> getAllUsers();
 
     User updateUser(User user);

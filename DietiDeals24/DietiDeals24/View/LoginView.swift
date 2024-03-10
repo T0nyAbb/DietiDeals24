@@ -1,5 +1,5 @@
 //
-//  SignUpView.swift
+//  LoginView.swift
 //  DietiDeals24
 //
 //  Created by Antonio Abbatiello on 12/01/24.
@@ -13,16 +13,17 @@ import FBSDKLoginKit
 
 
 
-struct SignUpView: View {
+struct LoginView: View {
     @ObservedObject var loginVm: LoginViewModel
     @EnvironmentObject var authViewModel: AuthenticationViewModel
     @ObservedObject var vm = GoogleSignInButtonViewModel()
-    @State var manager = LoginManager()
     @State var log = LoginViewModel.shared.logged
     @State var appleLogged: Bool = LoginViewModel.shared.appleIsLogged
     @State var email: String = ""
     @State var password: String = ""
     @State var user: User?
+    @State var token: Token?
+    @State var animateButton = false
     @Environment(\.colorScheme) var colorScheme
     
     
@@ -55,9 +56,9 @@ struct SignUpView: View {
                     Button {
                         Task {
                             do {
-                                user = try await loginVm.login(email: email, password: password)
+                                token = try await loginVm.login(username: email, password: password)
                             } catch {
-                                print("error")
+                                print(error.localizedDescription)
                             }
                         }
                         
@@ -115,17 +116,39 @@ struct SignUpView: View {
                         .frame(height: 45)
                 }
                 .padding()
+                VStack {
+                    Spacer()
+                    NavigationLink {
+                        SignupView()
+                    } label: {
+                        Text("Sign Up")
+                            .font(.title2)
+                            .bold()
+                            .foregroundColor(.white)
+                    }
+                    .frame(height: 50)
+                    .frame(maxWidth: .infinity) // how to make a button fill all the space available horizontaly
+                    .background(
+                            LinearGradient(colors: [.blue, .teal], startPoint: .topLeading, endPoint: .bottomTrailing)
+                                .hueRotation(.degrees(animateButton ? 45 : 0))
+                                .onAppear {
+                                    withAnimation(.easeInOut(duration: 3).repeatForever(autoreverses: true)) {
+                                        animateButton.toggle()
+                                    }
+                                }
+                    )
+                    .cornerRadius(20)
+                    .padding()
+                }
                 ZStack {
                     if(GIDSignIn.sharedInstance.currentUser != nil){
                         Text("")
-                            .padding()
                             .onAppear {
                                 loginVm.checkStatus()
                                 self.log = true
                             }
                     } else if AccessToken.isCurrentAccessTokenActive {
                         Text("")
-                            .padding()
                             .onAppear {
                                 loginVm.setFbIsLogged(isLogged: true)
                                 self.log = true
@@ -133,14 +156,16 @@ struct SignUpView: View {
                     }
                     else if appleLogged {
                         Text("")
-                            .padding()
                             .onAppear {
                                 self.log = true
                             }
                         
                     }
-                    else {
+                    else if token != nil {
                         Text("")
+                            .onAppear {
+                                self.log = true
+                            }
                     }
                     
                     
@@ -153,6 +178,8 @@ struct SignUpView: View {
                     .environmentObject(authViewModel)
                     .onDisappear {
                         self.appleLogged = loginVm.appleIsLogged
+                        self.email = ""
+                        self.password = ""
                     }
             }
         }
@@ -164,5 +191,6 @@ struct SignUpView: View {
 
 
 #Preview {
-    SignUpView(loginVm: LoginViewModel.shared)
+    LoginView(loginVm: LoginViewModel.shared)
+        .environmentObject(AuthenticationViewModel())
 }

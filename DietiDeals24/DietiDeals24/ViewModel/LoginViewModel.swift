@@ -11,6 +11,7 @@ import FBSDKLoginKit
 
 
 class LoginViewModel: ObservableObject {
+    var userVm = UserViewModel()
     @EnvironmentObject var authViewModel: AuthenticationViewModel
     @Published var googleName: String = ""
     @Published var profilePicUrl: String = ""
@@ -27,7 +28,9 @@ class LoginViewModel: ObservableObject {
     @Published var appleEmail: String = ""
     @Published var name: String = ""
     @Published var email: String = ""
-    @Published var password: String = ""
+    @Published var user: User?
+
+    
     
     
     
@@ -49,11 +52,9 @@ class LoginViewModel: ObservableObject {
             self.isGoogleLogged = true
             self.logged = true
             self.googleEmail = email
-        }else{
+        } else {
             self.isGoogleLogged = false
-            if !self.fbIsLogged && !self.appleIsLogged {
-                self.logged = false
-            }
+            self.logged = false
 //            self.name = "Not Logged In"
 //            self.profilePicUrl =  ""
         }
@@ -94,11 +95,11 @@ class LoginViewModel: ObservableObject {
                 .frame(width: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/, height: 100)
     }
     
-    func userName() -> Text {
+    func getGoogleUserName() -> Text {
         return Text(self.googleName)
     }
     
-    func getEmail() -> Text {
+    func getGoogleEmail() -> Text {
         return Text(self.googleEmail)
     }
     
@@ -115,7 +116,7 @@ class LoginViewModel: ObservableObject {
         return self.fbName
     }
     
-    func fbGetEmail() -> String {
+    func getFbEmail() -> String {
         return self.fbEmail
     }
     
@@ -149,16 +150,83 @@ class LoginViewModel: ObservableObject {
         return Text(self.appleName)
     }
     
+    func getEmail() -> Text {
+        return Text(self.email)
+    }
+    
+    func getName() -> Text {
+        return Text(self.name)
+    }
+    
     // Example async login function
-    func login(email: String, password: String) async throws -> User {
+    func login(username: String, password: String) async throws -> Token {
         // Construct the URL for your login endpoint
-        guard let url = URL(string: "http://localhost:8080/users/login") else {
+        guard let url = URL(string: "http://localhost:8080/api/login") else {
             throw NSError(domain: "Invalid URL", code: 0, userInfo: nil)
         }
-        print("called login func with email: \(email) passw: \(password)")
+        print("called login func with username: \(username) passw: \(password)")
 
         // Create the login request body
-        let requestBody = LoginRequestBody(email: email, password: password)
+        let requestBody = LoginRequestBody(username: username, password: password)
+
+        // Serialize the request body to JSON
+        guard let jsonData = try? JSONEncoder().encode(requestBody) else {
+            print("encoding error")
+            throw NSError(domain: "JSON Encoding Error", code: 0, userInfo: nil)
+        }
+
+        // Create the URLRequest
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.httpBody = jsonData
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        guard let token = UserDefaults.standard.string(forKey: "SignUpToken") else {
+            print("Token not found")
+            throw UserError.tokenNotFound
+        }
+        let auth = "Bearer ".appending(token)
+        request.setValue(auth, forHTTPHeaderField: "Authorization")
+        print(auth)
+        do {
+            // Perform the login request asynchronously
+            let (data, response) = try await URLSession.shared.data(for: request)
+
+            // Handle the response
+            if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 {
+                // Decode the user information from the response data
+                let token = try JSONDecoder().decode(Token.self, from: data)
+                UserDefaults.standard.setValue(token.token, forKey: "LoginToken")
+                print("login successful!")
+                self.user = try await userVm.getUserByEmail(username: username)
+                self.email = user!.username
+                let lastName = (user?.lastName)! as String
+                self.name = (user?.firstName?.appending(" \(lastName)"))!
+                self.logged = true
+                return token
+            } else {
+                // Handle unsuccessful login (non-200 status code)
+                print("unsuccesful login")
+                throw NSError(domain: "Login Failed", code: 0, userInfo: nil)
+                
+            }
+        } catch {
+            // Handle any errors that occurred during the request
+            print("generic error")
+            throw error
+            
+        }
+    }
+    
+    
+    func signUp(user: User) async throws -> Token {
+        // Construct the URL for your login endpoint
+        guard let url = URL(string: "http://localhost:8080/api/register") else {
+            throw NSError(domain: "Invalid URL", code: 0, userInfo: nil)
+        }
+        print("called signup func with username: \(user.username) passw: \(user.password)")
+
+        // Create the signup request body
+        let requestBody = user
 
         // Serialize the request body to JSON
         guard let jsonData = try? JSONEncoder().encode(requestBody) else {
@@ -179,11 +247,14 @@ class LoginViewModel: ObservableObject {
             // Handle the response
             if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 {
                 // Decode the user information from the response data
-                let user = try JSONDecoder().decode(User.self, from: data)
-                return user
+                let token = try JSONDecoder().decode(Token.self, from: data)
+                
+                UserDefaults.standard.setValue(token.token, forKey: "SignUpToken")
+                print("Received token: \(token)")
+                return token
             } else {
                 // Handle unsuccessful login (non-200 status code)
-                print("unsuccesful login")
+                print("unsuccesful registration")
                 throw NSError(domain: "Login Failed", code: 0, userInfo: nil)
                 
             }
@@ -193,10 +264,18 @@ class LoginViewModel: ObservableObject {
             throw error
             
         }
+        
     }
     
+    func signOut() {
+        self.logged = false
+        self.name = ""
+        self.email = ""
+    }
     
-    
+    func checkLogin() {
+        
+    }
     
     
     
@@ -220,7 +299,7 @@ struct FBLog: UIViewRepresentable {
     
     func makeUIView(context: Context) -> FBLoginButton {
         let button = FBLoginButton()
-        button.permissions = ["public_profile", "email"]
+        button.permissions = ["public_profile", "username"]
         button.delegate = context.coordinator
         
         return button
@@ -250,7 +329,7 @@ struct FBLog: UIViewRepresentable {
             }
             
             if !result!.isCancelled {
-                let requestMe = GraphRequest.init(graphPath: "me", parameters: ["fields" : "id,name,email,picture.type(large)"])
+                let requestMe = GraphRequest.init(graphPath: "me", parameters: ["fields" : "id,name,username,picture.type(large)"])
                 
                    let connection = GraphRequestConnection()
 
@@ -270,7 +349,7 @@ struct FBLog: UIViewRepresentable {
                                        {
                                            print("printing data: ")
                                            print(data)
-                                           if let email: String = dictData["email"] as? String
+                                           if let email: String = dictData["username"] as? String
                                            {
                                                
                                                print(self.parent.loginVm.googleEmail)

@@ -36,6 +36,11 @@ public class UserServiceImplementation implements UserDetailsService, UserServic
     }
 
     @Override
+    public Optional<User> getUserByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
+
+    @Override
     public User updateUser(User user) {
         User existingUser = userRepository.findById(user.getId()).get();
 
