@@ -17,23 +17,11 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "fixedtimeauction")
 
-public class FixedTimeAuction {
+public class FixedTimeAuction extends Auction{
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-    @Column(nullable = false)
-    private String title;
-    @Column
-    private String description;
-    @Column
-    private String category;
-    @Column(nullable = false)
-    private long sellerId;
-    @Column
-    private String urlPicture;
     @Column(nullable = false)
     private int minimumPrice;
+
     @Column(nullable = false)
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy'T'HH:mm:ss[.SSS][.SS][.S]")
     private LocalDateTime expiryDate;

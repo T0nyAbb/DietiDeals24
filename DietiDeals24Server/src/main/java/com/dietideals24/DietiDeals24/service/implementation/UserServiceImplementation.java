@@ -21,11 +21,6 @@ public class UserServiceImplementation implements UserDetailsService, UserServic
     private final UserRepository userRepository;
 
     @Override
-    public User createUser(User user) {
-        return userRepository.save(user);
-    }
-
-    @Override
     public User getUserById(Long id){
         return userRepository.getUserById(id);
     }

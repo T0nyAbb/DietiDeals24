@@ -21,13 +21,6 @@ public class UserController {
     @Qualifier("mainUserService")
     private UserService userService;
 
-    //Create user REST API
-    @PostMapping("/api/user")
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        User savedUser = userService.createUser(user);
-        return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
-    }
-
     //Restituisce un'utente dato un id
     @GetMapping("/api/user/{id}")
     public ResponseEntity<User> getUserById(@PathVariable("id") Long userId) {
@@ -39,11 +32,10 @@ public class UserController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-    //Restituisce un'utente dato un id
+    //Restituisce un'utente dato un username(email) [FRONTEND]
     @PostMapping("/api/user/{username}")
     public ResponseEntity<User> getUserByUsername(@PathVariable("username") String username) {
         Optional<User> optionalUser = userService.getUserByUsername(username);
-
         if(optionalUser.isEmpty())
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         User user = optionalUser.get();

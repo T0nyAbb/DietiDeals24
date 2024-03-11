@@ -10,7 +10,6 @@ import java.util.Optional;
 
 @Service
 public interface UserService {
-    User createUser(User user);
 
     User getUserById (Long id);
 

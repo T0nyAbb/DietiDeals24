@@ -13,25 +13,14 @@ import lombok.Setter;
 @Entity
 @Table(name = "descendingpriceauction")
 
-public class DescendingPriceAuction {
+public class DescendingPriceAuction extends Auction{
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-    @Column(nullable = false)
-    private String title;
-    @Column
-    private String description;
-    @Column
-    private String category;
-    @Column(nullable = false)
-    private long sellerId;
-    @Column
-    private String urlPicture;
-    @Column(nullable = false)
-    private int startingPrice;
     @Column
     private int timer;
+
     @Column
     private int reduction;
+
+    @Column
+    private int minimumPrice;
 }

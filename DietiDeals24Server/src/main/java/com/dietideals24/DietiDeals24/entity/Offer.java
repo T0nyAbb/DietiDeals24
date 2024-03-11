@@ -1,10 +1,7 @@
 package com.dietideals24.DietiDeals24.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
@@ -16,12 +13,16 @@ public class Offer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int offerId;
-    @Column
-    private int bidderId;
-    @Column
+    private long offerId;
+    @Column (nullable = false)
+    private long bidderId;
+    @Column (nullable = false)
     private int offer;
-    @Column
-    private int auctionId;
+    @Column (nullable = false)
+    private long auctionId;
+
+    //Tipo di asta
+    @Enumerated(value = EnumType.STRING)
+    private Type type;
 
 }
