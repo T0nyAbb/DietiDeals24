@@ -1,6 +1,7 @@
 package com.dietideals24.DietiDeals24.controller;
 
 import com.dietideals24.DietiDeals24.entity.InverseAuction;
+import com.dietideals24.DietiDeals24.service.AuctionService;
 import com.dietideals24.DietiDeals24.service.InverseAuctionService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,8 @@ public class InverseAuctionController {
     @Autowired
     @Qualifier("mainInverseAuctionService")
     private InverseAuctionService inverseAuctionService;
+    @Autowired
+    private AuctionService auctionService;
 
     //Posta un'asta inversa
     @PostMapping("/api/inverse_auction")
@@ -35,14 +38,18 @@ public class InverseAuctionController {
         return new ResponseEntity<>(inverseAuctions, HttpStatus.OK);
     }
 
-    //Ottiene una singola asta inversa in base all'id specificato
-    @GetMapping ("/api/inverse_auction/{id}")
-    public ResponseEntity<InverseAuction> getInverseAuctionById(@PathVariable Long id) {
-        InverseAuction inverseAuction = inverseAuctionService.getInverseAuctionById(id);
-        if(inverseAuction == null)
+    //Modifica un'asta inversa esistente
+    @PutMapping("/api/inverse_auction/{id}")
+    public ResponseEntity<InverseAuction> updateInverseAuction (@PathVariable ("id") Long id,
+                                                                @RequestBody InverseAuction inverseAuction){
+
+        InverseAuction checkExists = (InverseAuction) auctionService.getAuctionById(id);
+        if(checkExists == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        inverseAuction.setId(id);
+        inverseAuction = inverseAuctionService.updateInverseAuction(inverseAuction);
 
         return new ResponseEntity<>(inverseAuction, HttpStatus.OK);
     }
-
 }

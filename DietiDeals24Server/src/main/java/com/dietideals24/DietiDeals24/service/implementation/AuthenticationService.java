@@ -35,6 +35,7 @@ public class AuthenticationService {
         user.setBio(request.getBio());
         user.setWebsite(request.getWebsite());
         user.setSocial(request.getSocial());
+        user.setGeographicArea(request.getGeographicArea());
         user.setGoogle(request.getGoogle());
         user.setFacebook(request.getFacebook());
         user.setApple(request.getApple());

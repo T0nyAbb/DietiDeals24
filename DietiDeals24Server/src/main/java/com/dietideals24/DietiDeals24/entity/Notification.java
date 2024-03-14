@@ -16,11 +16,11 @@ public class Notification {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int notificationId;
+    private long notificationId;
     @Column
-    private int auctionId;
+    private long auctionId;
     @Column
-    private int receiverId;
+    private long receiverId;
     @Column
     private String body;
 }

@@ -17,14 +17,17 @@ public class OfferController {
     @Autowired
     @Qualifier("mainOfferService")
     private OfferService offerService;
-    private DescendingPriceAuctionService descendingPriceAuctionService;
-    private EnglishAuctionService englishAuctionService;
-    private FixedTimeAuctionService fixedTimeAuctionService;
-    private InverseAuctionService inverseAuctionService;
+    @Autowired
+    private AuctionService auctionService;
 
     //Posta un'offerta per un'asta
     @PostMapping("/api/offer")
     public ResponseEntity<Offer> makeOffer(@RequestBody Offer offer) {
+
+        Auction auction = auctionService.getAuctionById(offer.getAuctionId());
+        if(!auction.isActive())
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+
         Offer savedOffer = offerService.makeOffer(offer);
         return new ResponseEntity<>(savedOffer, HttpStatus.CREATED);
     }
@@ -42,26 +45,13 @@ public class OfferController {
 
     //Recupera un'asta in base all'offerId
     @GetMapping("/api/auction_by_offer/{id}")
-    public <T> T getAuctionByOfferId(@PathVariable("id") Long id){
+    public ResponseEntity<Auction> getAuctionByOfferId(@PathVariable("id") Long id){
         Offer offer = offerService.getOfferById(id);
 
-        return switch (offer.getType()) {
-            case DescendingPriceAuction -> {
-                DescendingPriceAuction descendingPriceAuction = descendingPriceAuctionService.getDescendingPriceAuctionById(offer.getAuctionId());
-                yield (T) new ResponseEntity<>(descendingPriceAuction, HttpStatus.OK);
-            }
-            case EnglishAuction -> {
-                EnglishAuction englishAuction = englishAuctionService.getEnglishAuctionById(offer.getAuctionId());
-                yield (T) new ResponseEntity<>(englishAuction, HttpStatus.OK);
-            }
-            case FixedTimeAuction -> {
-                FixedTimeAuction fixedTimeAuction = fixedTimeAuctionService.getFixedTimeAuctionById(offer.getAuctionId());
-                yield (T) new ResponseEntity<>(fixedTimeAuction, HttpStatus.OK);
-            }
-            case InverseAuction -> {
-                InverseAuction inverseAuction = inverseAuctionService.getInverseAuctionById(offer.getAuctionId());
-                yield (T) new ResponseEntity<>(inverseAuction, HttpStatus.OK);
-            }
-        };
+        if (offer == null)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        Auction auction = auctionService.getAuctionById(offer.getAuctionId());
+        return new ResponseEntity<>(auction, HttpStatus.OK);
     }
 }

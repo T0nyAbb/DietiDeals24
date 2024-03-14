@@ -12,5 +12,5 @@ public interface EnglishAuctionService {
 
     List<EnglishAuction> getAllEnglishAuctions();
 
-    EnglishAuction getEnglishAuctionById(Long id);
+    EnglishAuction updateEnglishAuction(EnglishAuction englishAuction);
 }

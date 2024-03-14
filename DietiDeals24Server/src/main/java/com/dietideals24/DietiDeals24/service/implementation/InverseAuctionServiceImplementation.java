@@ -27,7 +27,7 @@ public class InverseAuctionServiceImplementation implements InverseAuctionServic
     }
 
     @Override
-    public InverseAuction getInverseAuctionById(Long id) {
-        return inverseAuctionRepository.getInverseAuctionById(id);
+    public InverseAuction updateInverseAuction(InverseAuction inverseAuction) {
+        return inverseAuctionRepository.save(inverseAuction);
     }
 }

@@ -12,5 +12,5 @@ public interface InverseAuctionService {
 
     List<InverseAuction> getAllInverseAuctions();
 
-    InverseAuction getInverseAuctionById(Long id);
+    InverseAuction updateInverseAuction(InverseAuction inverseAuction);
 }

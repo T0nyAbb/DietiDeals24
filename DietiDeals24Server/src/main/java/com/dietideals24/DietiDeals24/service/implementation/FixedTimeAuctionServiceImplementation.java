@@ -25,7 +25,7 @@ public class FixedTimeAuctionServiceImplementation implements FixedTimeAuctionSe
     }
 
     @Override
-    public FixedTimeAuction getFixedTimeAuctionById(Long id) {
-        return fixedTimeAuctionRepository.getFixedTimeAuctionById(id);
+    public FixedTimeAuction updateFixedTimeAuction(FixedTimeAuction fixedTimeAuction) {
+        return fixedTimeAuctionRepository.save(fixedTimeAuction);
     }
 }

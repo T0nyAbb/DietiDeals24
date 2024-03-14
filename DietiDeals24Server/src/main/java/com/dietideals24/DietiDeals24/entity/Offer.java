@@ -17,12 +17,7 @@ public class Offer {
     @Column (nullable = false)
     private long bidderId;
     @Column (nullable = false)
-    private int offer;
+    private double bidAmount;
     @Column (nullable = false)
     private long auctionId;
-
-    //Tipo di asta
-    @Enumerated(value = EnumType.STRING)
-    private Type type;
-
 }

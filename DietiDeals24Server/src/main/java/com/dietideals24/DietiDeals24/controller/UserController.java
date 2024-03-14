@@ -32,7 +32,7 @@ public class UserController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-    //Restituisce un'utente dato un username(email) [FRONTEND]
+    //Restituisce un'utente dato un username(email) >>[REQUISITO FRONTEND]<<
     @PostMapping("/api/user/{username}")
     public ResponseEntity<User> getUserByUsername(@PathVariable("username") String username) {
         Optional<User> optionalUser = userService.getUserByUsername(username);

@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -20,8 +19,7 @@ import java.time.LocalDateTime;
 public class FixedTimeAuction extends Auction{
 
     @Column(nullable = false)
-    private int minimumPrice;
-
+    private long minimumPrice = 0;
     @Column(nullable = false)
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy'T'HH:mm:ss[.SSS][.SS][.S]")
     private LocalDateTime expiryDate;

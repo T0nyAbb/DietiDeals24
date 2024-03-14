@@ -16,6 +16,7 @@ public class DescendingPriceAuctionServiceImplementation implements DescendingPr
 
     @Override
     public DescendingPriceAuction createDescendingPriceAuction(DescendingPriceAuction descendingPriceAuction) {
+        descendingPriceAuction.setTimerAmount(descendingPriceAuction.getTimer());
         return descendingPriceAuctionRepository.save(descendingPriceAuction);
     }
 
@@ -25,8 +26,8 @@ public class DescendingPriceAuctionServiceImplementation implements DescendingPr
     }
 
     @Override
-    public DescendingPriceAuction getDescendingPriceAuctionById(Long id) {
-        return descendingPriceAuctionRepository.getDescendingPriceAuctionById(id);
+    public DescendingPriceAuction updateDescendingPriceAuction(DescendingPriceAuction descendingPriceAuction) {
+        return descendingPriceAuctionRepository.save(descendingPriceAuction);
     }
 }
 

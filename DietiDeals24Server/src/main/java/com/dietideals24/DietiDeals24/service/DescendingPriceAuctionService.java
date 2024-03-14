@@ -12,5 +12,5 @@ public interface DescendingPriceAuctionService {
 
     List<DescendingPriceAuction> getAllDescendingPriceAuctions();
 
-    DescendingPriceAuction getDescendingPriceAuctionById(Long id);
+    DescendingPriceAuction updateDescendingPriceAuction(DescendingPriceAuction descendingPriceAuction);
 }

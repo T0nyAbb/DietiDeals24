@@ -12,5 +12,5 @@ public interface FixedTimeAuctionService {
 
     List<FixedTimeAuction> getAllFixedTimeAuctions();
 
-    FixedTimeAuction getFixedTimeAuctionById(Long id);
+    FixedTimeAuction updateFixedTimeAuction(FixedTimeAuction fixedTimeAuction);
 }

@@ -8,5 +8,15 @@ import java.util.List;
 @Service
 public interface AuctionService {
 
+    Auction getAuctionById (Long id);
+
     List<Auction> searchByKeyword(String keyword);
+
+    List<Auction> searchByCategory(String category);
+
+    List<Auction> getAllAuctions();
+
+    List<Auction> getAllAuctionsById(Long sellerId);
+
+    void deleteAuction(Long id);
 }

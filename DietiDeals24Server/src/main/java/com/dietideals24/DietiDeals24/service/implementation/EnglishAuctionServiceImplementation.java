@@ -16,6 +16,7 @@ public class EnglishAuctionServiceImplementation implements EnglishAuctionServic
 
     @Override
     public EnglishAuction createEnglishAuction(EnglishAuction englishAuction) {
+        englishAuction.setTimerAmount(englishAuction.getTimer());
         return englishAuctionRepository.save(englishAuction);
     }
 
@@ -25,7 +26,7 @@ public class EnglishAuctionServiceImplementation implements EnglishAuctionServic
     }
 
     @Override
-    public EnglishAuction getEnglishAuctionById(Long id) {
-        return englishAuctionRepository.getEnglishAuctionById(id);
+    public EnglishAuction updateEnglishAuction(EnglishAuction englishAuction) {
+        return englishAuctionRepository.save(englishAuction);
     }
 }

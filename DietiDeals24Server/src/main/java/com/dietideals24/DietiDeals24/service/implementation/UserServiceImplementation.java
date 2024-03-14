@@ -46,6 +46,7 @@ public class UserServiceImplementation implements UserDetailsService, UserServic
         existingUser.setBio(user.getBio());
         existingUser.setWebsite(user.getWebsite());
         existingUser.setSocial(user.getSocial());
+        existingUser.setGeographicArea(user.getGeographicArea());
         existingUser.setGoogle(user.getGoogle());
         existingUser.setFacebook(user.getFacebook());
         existingUser.setApple(user.getApple());

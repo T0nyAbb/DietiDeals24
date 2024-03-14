@@ -1,6 +1,7 @@
 package com.dietideals24.DietiDeals24.controller;
 
 import com.dietideals24.DietiDeals24.entity.EnglishAuction;
+import com.dietideals24.DietiDeals24.service.AuctionService;
 import com.dietideals24.DietiDeals24.service.EnglishAuctionService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,8 @@ public class EnglishAuctionController {
     @Autowired
     @Qualifier("mainEnglishAuctionService")
     private EnglishAuctionService englishAuctionService;
+    @Autowired
+    private AuctionService auctionService;
 
     //Posta un'asta all'inglese
     @PostMapping("/api/english_auction")
@@ -34,12 +37,17 @@ public class EnglishAuctionController {
         return new ResponseEntity<>(englishAuctions, HttpStatus.OK);
     }
 
-    //Ottiene una singola asta all'inglese in base all'id specificato
-    @GetMapping("/api/english_auction/{id}")
-    public ResponseEntity<EnglishAuction> getEnglishAuctionById(@PathVariable Long id) {
-        EnglishAuction englishAuction = englishAuctionService.getEnglishAuctionById(id);
-        if(englishAuction == null)
+    //Modifica un'asta inglese esistente
+    @PutMapping("/api/english_auction/{id}")
+    public ResponseEntity<EnglishAuction> updateEnglishAuction (@PathVariable ("id") Long id,
+                                                                @RequestBody EnglishAuction englishAuction){
+
+        EnglishAuction checkExists = (EnglishAuction) auctionService.getAuctionById(id);
+        if(checkExists == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        englishAuction.setId(id);
+        englishAuction = englishAuctionService.updateEnglishAuction(englishAuction);
 
         return new ResponseEntity<>(englishAuction, HttpStatus.OK);
     }

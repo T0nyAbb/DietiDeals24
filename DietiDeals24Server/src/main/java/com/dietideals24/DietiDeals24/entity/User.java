@@ -31,19 +31,21 @@ public class User implements UserDetails {
     private String username;
     @Column
     private String password;
-    @Column
+    @Column(length = 4096)
     private String bio;
     @Column
     private String website;
     @Column
-    private String social;  
+    private String social;
+    @Column
+    private String geographicArea;
     @Column
     private String google;
     @Column
     private String facebook;
     @Column
     private String apple;
-    @Column
+    @Column(length = 4096)
     private String profilePicture;
     @Column
     private String iban;
