@@ -20,7 +20,7 @@ public class DescendingPriceAuction extends Auction{
 
     @Column(nullable = false)
     private long startingPrice;
-    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy'T'HH:mm:ss[.SSS][.SS][.S]")
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
     @Column(nullable = false)
     private LocalDateTime startingDate;
     @Column(nullable = false)

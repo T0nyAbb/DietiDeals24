@@ -14,7 +14,7 @@ import FBSDKLoginKit
 
 
 struct LoginView: View {
-    @ObservedObject var loginVm: LoginViewModel
+    @StateObject var loginVm: LoginViewModel
     @EnvironmentObject var authViewModel: AuthenticationViewModel
     @ObservedObject var vm = GoogleSignInButtonViewModel()
     @State var log = LoginViewModel.shared.logged
@@ -24,7 +24,9 @@ struct LoginView: View {
     @State var user: User?
     @State var token: Token?
     @State var animateButton = false
+    @State var showPassword = false
     @Environment(\.colorScheme) var colorScheme
+
     
     
     
@@ -33,25 +35,57 @@ struct LoginView: View {
         NavigationStack {
             VStack {
                 VStack {
-                    Image(systemName: "person.circle")
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 100, height: 100)
-                        .padding(.bottom, 30)
+//                    Image(systemName: "person.circle")
+//                        .resizable()
+//                        .aspectRatio(contentMode: .fit)
+//                        .frame(width: 75, height: 75)
+//                        .padding(.bottom, 30)
                     
-                    TextField("Email", text: $email)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                        .autocorrectionDisabled()
-                        .textInputAutocapitalization(.never)
-                        .padding(.horizontal, 20)
-                        .padding(.bottom, 20)
+                    TextField("Email",
+                              text: $email ,
+                              prompt: Text("Email").foregroundColor(.gray)
+                    )
+                    .keyboardType(.emailAddress)
+                    .textContentType(.emailAddress)
+                    .textInputAutocapitalization(.never)
+                    .autocorrectionDisabled()
+                    .padding(10)
+                    .overlay {
+                        RoundedRectangle(cornerRadius: 10)
+                            .stroke(.gray, lineWidth: 2)
+                    }
                     
-                    SecureField("Password", text: $password)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                        .autocorrectionDisabled()
-                        .textInputAutocapitalization(.never)
-                        .padding(.horizontal, 20)
-                        .padding(.bottom, 30)
+                    HStack {
+                        Group {
+                            if showPassword {
+                                TextField("Password", // how to create a secure text field
+                                          text: $password,
+                                          prompt: Text("Password").foregroundColor(.gray)) // How to change the color of the TextField Placeholder
+                                .autocorrectionDisabled()
+                                .textInputAutocapitalization(.never)
+                            } else {
+                                SecureField("Password", // how to create a secure text field
+                                            text: $password,
+                                            prompt: Text("Password").foregroundColor(.gray)) // How to change the color of the TextField Placeholder
+                                .autocorrectionDisabled()
+                                .textInputAutocapitalization(.never)
+                            }
+                        }
+                        .padding(10)
+                        .overlay {
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke(.gray, lineWidth: 2) // How to add rounded corner to a TextField and change it colour
+                        }
+                        
+                        Button {
+                            showPassword.toggle()
+                        } label: {
+                            Image(systemName: showPassword ? "eye" : "eye.slash")
+                                .foregroundColor(.blue) // how to change image based in a State variable
+                        }
+                        
+                    }
+                        .padding(.vertical)
                     
                     Button {
                         Task {
@@ -91,9 +125,19 @@ struct LoginView: View {
                                         UserDefaults.standard.setValue(appleIdCredentials.fullName?.familyName, forKey: "AppleSurname")
                                         UserDefaults.standard.setValue(appleIdCredentials.user, forKey: "AppleUser")
                                     }
+                                    let firstName: String = (appleIdCredentials.fullName?.givenName)!
+                                    let lastName: String = (appleIdCredentials.fullName?.familyName)!
+                                    let username: String = appleIdCredentials.email!
                                     print(appleIdCredentials.email)
                                     print(appleIdCredentials.fullName?.givenName)
                                     print(appleIdCredentials.fullName?.familyName)
+                                    Task {
+                                        do {
+                                            token = try await loginVm.signUp(user: .init(id: nil, firstName: firstName, lastName: lastName, username: username, password: nil, bio: nil, website: nil, social: nil, geographicArea: nil, google: nil, facebook: nil, apple: username, profilePicture: nil, iban: nil, vatNumber: nil, nationalInsuranceNumber: nil))
+                                        } catch {
+                                            print(error.localizedDescription)
+                                        }
+                                    }
                                     print(appleIdCredentials.user)
                                     loginVm.checkAppleLogin()
                                     self.appleLogged = true
@@ -118,6 +162,9 @@ struct LoginView: View {
                 .padding()
                 VStack {
                     Spacer()
+                    Text("Don't have an account?")
+                        .font(.callout)
+                        .foregroundStyle(.gray)
                     NavigationLink {
                         SignupView()
                     } label: {
@@ -132,14 +179,15 @@ struct LoginView: View {
                             LinearGradient(colors: [.blue, .teal], startPoint: .topLeading, endPoint: .bottomTrailing)
                                 .hueRotation(.degrees(animateButton ? 45 : 0))
                                 .onAppear {
-                                    withAnimation(.easeInOut(duration: 3).repeatForever(autoreverses: true)) {
+                                    withAnimation(.easeInOut(duration: 2).repeatForever(autoreverses: true)) {
                                         animateButton.toggle()
                                     }
                                 }
                     )
-                    .cornerRadius(20)
+                    .cornerRadius(10)
                     .padding()
                 }
+                .navigationTitle("Login")
                 ZStack {
                     if(GIDSignIn.sharedInstance.currentUser != nil){
                         Text("")
@@ -161,7 +209,7 @@ struct LoginView: View {
                             }
                         
                     }
-                    else if token != nil {
+                    else if loginVm.checkLogin() {
                         Text("")
                             .onAppear {
                                 self.log = true

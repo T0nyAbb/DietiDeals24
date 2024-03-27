@@ -56,6 +56,9 @@ public class UserController {
     @PutMapping("/api/user/{id}")
     public ResponseEntity<User> updateUser(@PathVariable("id") Long userId,
                                            @RequestBody User user) {
+        User checkUser = userService.getUserById(userId);
+        if(checkUser == null)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         user.setId(userId);
         User updatedUser = userService.updateUser(user);
         return new ResponseEntity<>(updatedUser, HttpStatus.OK);

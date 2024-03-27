@@ -9,49 +9,72 @@ import SwiftUI
 
 struct MyAuctionsView: View {
     
-    var userVm: UserViewModel
-    @ObservedObject var loginVm: LoginViewModel
+    var userVm: UserViewModel = UserViewModel()
+    var loginVm: LoginViewModel
+    var auctionVm: AuctionViewModel = AuctionViewModel()
     @State private var user: User?
+    @State private var isPresented: Bool = false
+    @State var isActive: Bool = true
     
     var body: some View {
         NavigationView {
-            VStack {
-                    Text(user?.username ?? "Username")
-                        .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
-                        .bold()
-                    HStack {
-                        Text(user?.firstName ?? "FirstName")
-                        Text(user?.lastName ?? "LastName")
-                    
+            ScrollView {
+                VStack {
+                    if auctionVm.currentUserFixedTimeAuctions.count == 0 {
+                        VStack {
+                            Spacer()
+                            ContentUnavailableView {
+                                Spacer()
+                                Label("No Auctions Published Yet", systemImage: "tag")
+                                    .onAppear {
+                                        self.isActive.toggle()
+                                        self.isActive = true
+                                    }
+                            }
+                        }
+                        
+                    } else {
+                        ForEach(auctionVm.currentUserFixedTimeAuctions) { auction in
+                            Text(auction.title)
+                        }
+                            .onAppear {
+                                self.isActive = true
+                            }
+                    }
                     
                 }
+                .onAppear {
+                    Task {
+                        do {
+                            try await auctionVm.getAllFixedTimeAuction()
+                        } catch {
+                            print("Error")
+                        }
+                    }
+                }
             }
-            .navigationTitle("My Auctions")
-            .task {
-                do {
-                    user = try await userVm.getUserByEmail(username: loginVm.email)
-                } catch UserError.invalidURL {
-                    print("Invalid URL")
-                } catch UserError.invalidResponse {
-                    print("Invalid response")
-                } catch UserError.invalidData {
-                    print("Invalid data")
-                } catch {
-                    print("Generic error")
+            .toolbar {
+                ToolbarItem(placement: .primaryAction) {
+                    NavigationLink(destination: CreateNewAuctionView(rootIsActive: self.$isActive)) {
+                        Image(systemName: "plus")
+                    }
                 }
             }
             .refreshable {
                 do {
-                    user = try await userVm.getUserByEmail(username: loginVm.email)
+                    try await auctionVm.getAllFixedTimeAuction()
                 } catch {
                     print("Error")
                 }
                 
             }
+            .navigationTitle("My Auctions")
+            
+            
         }
     }
 }
 
 #Preview {
-    MyAuctionsView(userVm: UserViewModel(), loginVm: LoginViewModel.shared)
+    MyAuctionsView(loginVm: LoginViewModel.shared)
 }

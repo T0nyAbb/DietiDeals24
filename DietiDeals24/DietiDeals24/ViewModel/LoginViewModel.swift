@@ -44,17 +44,31 @@ class LoginViewModel: ObservableObject {
         if(GIDSignIn.sharedInstance.currentUser != nil){
             let user = GIDSignIn.sharedInstance.currentUser
             guard let user = user else { return }
-            let name = user.profile?.givenName
+            let name: String = (user.profile?.givenName)!
+            let lastName: String = (user.profile?.familyName)!
             let profilePicUrl = user.profile!.imageURL(withDimension: 100)!.absoluteString
             let email = user.profile!.email
-            self.googleName = name ?? ""
+            self.googleName = name
             self.profilePicUrl = profilePicUrl
+            Task {
+                do {
+                    let token = try await signUpWithSocialProvider(user: .init(id: nil, firstName: name, lastName: lastName, username: email, password: "", bio: nil, website: nil, social: nil, geographicArea: nil, google: email, facebook: nil, apple: nil, profilePicture: profilePicUrl, iban: nil, vatNumber: nil, nationalInsuranceNumber: nil))
+                    print("Login with google successful")
+                    UserDefaults.standard.setValue(token.token, forKey: "Token")
+                    print("Token saved: \(token)")
+                    self.user = try await userVm.getUserByEmail(username: email)
+                    print("user fetched")
+                } catch {
+                    print(error.localizedDescription)
+                }
+            }
             self.isGoogleLogged = true
             self.logged = true
             self.googleEmail = email
         } else {
             self.isGoogleLogged = false
             self.logged = false
+            self.signOut()
 //            self.name = "Not Logged In"
 //            self.profilePicUrl =  ""
         }
@@ -88,6 +102,7 @@ class LoginViewModel: ObservableObject {
         self.appleIsLogged = false
         self.appleName = ""
         self.appleEmail = ""
+        self.signOut()
     }
     
     func userDetails() -> some View {
@@ -103,7 +118,7 @@ class LoginViewModel: ObservableObject {
         return Text(self.googleEmail)
     }
     
-    func getfbUserDetails() -> String {
+    func getfbProfilePic() -> String {
         return self.fbProfilePicUrl
     }
     
@@ -112,7 +127,7 @@ class LoginViewModel: ObservableObject {
             .frame(width: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/, height: 100)
     }
     
-    func getfbUserName() -> String {
+    func getfbName() -> String {
         return self.fbName
     }
     
@@ -151,17 +166,17 @@ class LoginViewModel: ObservableObject {
     }
     
     func getEmail() -> Text {
-        return Text(self.email)
+        return Text(self.user?.username ?? "" )
     }
     
     func getName() -> Text {
         return Text(self.name)
     }
     
-    // Example async login function
+
     func login(username: String, password: String) async throws -> Token {
         // Construct the URL for your login endpoint
-        guard let url = URL(string: "http://localhost:8080/api/login") else {
+        guard let url = URL(string: Constants.BASE_URL + Constants.getEndpoint(endpoint: .LOGIN)) else {
             throw NSError(domain: "Invalid URL", code: 0, userInfo: nil)
         }
         print("called login func with username: \(username) passw: \(password)")
@@ -180,13 +195,6 @@ class LoginViewModel: ObservableObject {
         request.httpMethod = "POST"
         request.httpBody = jsonData
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        guard let token = UserDefaults.standard.string(forKey: "SignUpToken") else {
-            print("Token not found")
-            throw UserError.tokenNotFound
-        }
-        let auth = "Bearer ".appending(token)
-        request.setValue(auth, forHTTPHeaderField: "Authorization")
-        print(auth)
         do {
             // Perform the login request asynchronously
             let (data, response) = try await URLSession.shared.data(for: request)
@@ -195,13 +203,15 @@ class LoginViewModel: ObservableObject {
             if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 {
                 // Decode the user information from the response data
                 let token = try JSONDecoder().decode(Token.self, from: data)
-                UserDefaults.standard.setValue(token.token, forKey: "LoginToken")
+                UserDefaults.standard.setValue(token.token, forKey: "Token")
                 print("login successful!")
                 self.user = try await userVm.getUserByEmail(username: username)
                 self.email = user!.username
                 let lastName = (user?.lastName)! as String
                 self.name = (user?.firstName?.appending(" \(lastName)"))!
                 self.logged = true
+                UserDefaults.standard.setValue(true, forKey: "isLogged")
+                UserDefaults.standard.setValue(username, forKey: "Username")
                 return token
             } else {
                 // Handle unsuccessful login (non-200 status code)
@@ -219,8 +229,8 @@ class LoginViewModel: ObservableObject {
     
     
     func signUp(user: User) async throws -> Token {
-        // Construct the URL for your login endpoint
-        guard let url = URL(string: "http://localhost:8080/api/register") else {
+        // Construct the URL for your signup endpoint
+        guard let url = URL(string: Constants.BASE_URL + Constants.getEndpoint(endpoint: .REGISTER)) else {
             throw NSError(domain: "Invalid URL", code: 0, userInfo: nil)
         }
         print("called signup func with username: \(user.username) passw: \(user.password)")
@@ -241,7 +251,7 @@ class LoginViewModel: ObservableObject {
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
         do {
-            // Perform the login request asynchronously
+            // Perform the signup request asynchronously
             let (data, response) = try await URLSession.shared.data(for: request)
 
             // Handle the response
@@ -249,8 +259,66 @@ class LoginViewModel: ObservableObject {
                 // Decode the user information from the response data
                 let token = try JSONDecoder().decode(Token.self, from: data)
                 
-                UserDefaults.standard.setValue(token.token, forKey: "SignUpToken")
+                UserDefaults.standard.setValue(token.token, forKey: "Token")
+                UserDefaults.standard.setValue(user.username, forKey: "Username")
                 print("Received token: \(token)")
+                return token
+            } else {
+                // Handle unsuccessful login (non-200 status code)
+                print("unsuccesful registration")
+                throw NSError(domain: "Login Failed", code: 0, userInfo: nil)
+                
+            }
+        } catch {
+            // Handle any errors that occurred during the request
+            print("generic error")
+            throw error
+            
+        }
+        
+    }
+    
+    func signUpWithSocialProvider(user: User) async throws -> Token {
+        // Construct the URL for your signup endpoint
+        guard let url = URL(string: Constants.BASE_URL + Constants.getEndpoint(endpoint: .REGISTER)) else {
+            throw NSError(domain: "Invalid URL", code: 0, userInfo: nil)
+        }
+        print("called signupWithSocialProvider func with username: \(user.username) passw: \(user.password)")
+
+        // Create the signup request body
+        let requestBody = user
+
+        // Serialize the request body to JSON
+        guard let jsonData = try? JSONEncoder().encode(requestBody) else {
+            print("encoding error")
+            throw NSError(domain: "JSON Encoding Error", code: 0, userInfo: nil)
+        }
+        print(jsonData)
+        // Create the URLRequest
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.httpBody = jsonData
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        do {
+            // Perform the signup request asynchronously
+            let (data, response) = try await URLSession.shared.data(for: request)
+
+            // Handle the response
+            if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 {
+                let token = try JSONDecoder().decode(Token.self, from: data)
+                
+                UserDefaults.standard.setValue(token.token, forKey: "Token")
+                UserDefaults.standard.setValue(user.username, forKey: "Username")
+                print("Received token: \(token)")
+                return token
+            } else if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 400 {
+                print("User already registered, trying login...")
+                UserDefaults.standard.setValue(user.username, forKey: "Username")
+                let token = try await login(username: user.username, password: user.password!)
+                UserDefaults.standard.setValue(token.token, forKey: "Token")
+                print("User login successful!")
+                print("Token received: \(token)")
                 return token
             } else {
                 // Handle unsuccessful login (non-200 status code)
@@ -271,13 +339,26 @@ class LoginViewModel: ObservableObject {
         self.logged = false
         self.name = ""
         self.email = ""
+        UserDefaults.standard.setValue(false, forKey: "isLogged")
+        UserDefaults.standard.setValue("", forKey: "Username")
     }
     
-    func checkLogin() {
-        
+    func checkLogin() -> Bool {
+        return UserDefaults.standard.bool(forKey: "isLogged")
     }
     
+    func updateCurrentUser() async {
+        if checkLogin() {
+            do {
+                user = try await userVm.getUserByEmail(username: UserDefaults.standard.string(forKey: "Username")!)
+                
+            } catch {
+                print(error.localizedDescription)
+            }
+        }
+    }
     
+    func checkSignupFields() {}
     
 
     
@@ -366,6 +447,16 @@ struct FBLog: UIViewRepresentable {
                                                print("https://graph.facebook.com/\(id)/picture?type=large&redirect=true&width=100&height=100")
                                                self.parent.loginVm.setFbPic(pic: "https://graph.facebook.com/\(id)/picture?type=large&redirect=true&width=100&height=100")
                                            }
+                                           Task {
+                                               do {
+                                                   let token = try await self.parent.loginVm.signUpWithSocialProvider(user: .init(id: nil, firstName: self.parent.loginVm.getfbName(), lastName: nil, username: self.parent.loginVm.getFbEmail(), password: "", bio: nil,  website: nil, social: nil, geographicArea: nil, google: nil, facebook: self.parent.loginVm.getFbEmail(), apple: nil, profilePicture: self.parent.loginVm.getfbProfilePic(), iban: nil, vatNumber: nil, nationalInsuranceNumber: nil))
+                                                   print("Login with facebook successful")
+                                                   UserDefaults.standard.setValue(token.token, forKey: "Token")
+                                                   print("Token saved: \(token)")
+                                               } catch {
+                                                   print(error.localizedDescription)
+                                               }
+                                           }
                                            self.parent.loginVm.setFbIsLogged(isLogged: true)
                                      }
                                  }
@@ -381,6 +472,7 @@ struct FBLog: UIViewRepresentable {
         func loginButtonDidLogOut(_ loginButton: FBSDKLoginKit.FBLoginButton) {
             print("fb logged out")
             self.parent.loginVm.setFbIsLogged(isLogged: false)
+            self.parent.loginVm.signOut()
         }
         
         

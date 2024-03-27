@@ -8,12 +8,22 @@
 import SwiftUI
 
 struct AuctionsView: View {
+    
+    @State private var search: String = ""
+    
     var body: some View {
         NavigationView {
             VStack {
-                Text("Auctions View")
-                    .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
+                if true {
+                    ContentUnavailableView {
+                        Label("No Active Auctions", systemImage: "tag")
+                    }
+                } else {
+                    Text("Auctions View")
+                        .font(.title)
+                }
             }
+                .searchable(text: $search)
                 .navigationTitle("Auctions")
         }
         

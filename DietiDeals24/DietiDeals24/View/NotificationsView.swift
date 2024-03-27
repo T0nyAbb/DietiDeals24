@@ -11,8 +11,9 @@ struct NotificationsView: View {
     var body: some View {
         NavigationView {
             VStack {
-                Text("Notifications View")
-                    .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
+                ContentUnavailableView {
+                    Label("No New Notifications", systemImage: "bell")
+                }
             }
                 .navigationTitle("Notifications")
         }

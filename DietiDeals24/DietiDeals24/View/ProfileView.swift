@@ -13,6 +13,7 @@ import FBSDKLoginKit
 
 struct ProfileView: View {
     @StateObject var loginVm: LoginViewModel
+    var userVm: UserViewModel = UserViewModel()
     @EnvironmentObject var authViewModel: AuthenticationViewModel
     @ObservedObject var vm = GoogleSignInButtonViewModel()
     @State var fbLogged: Bool = AccessToken.isCurrentAccessTokenActive
@@ -20,6 +21,11 @@ struct ProfileView: View {
     @Environment(\.dismiss) var dismiss
     @State var loggedOut: Bool = false
     @State var appleLogged: Bool = LoginViewModel.shared.appleIsLogged
+    @State var isPresented = false
+    @State var sourceType: UIImagePickerController.SourceType = .photoLibrary
+    @State var uiImage: UIImage?
+    var imageViewModel = ImageViewModel()
+    
     
     
     var body: some View {
@@ -28,7 +34,7 @@ struct ProfileView: View {
                     if fbLogged {
                         loginVm.getfbImage()
                             .clipShape(/*@START_MENU_TOKEN@*/Circle()/*@END_MENU_TOKEN@*/)
-                        Text(loginVm.getfbUserName())
+                        Text(loginVm.getfbName())
                         Text(loginVm.fbEmail)
                             .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
                         FBLog(loginVm: loginVm)
@@ -56,6 +62,20 @@ struct ProfileView: View {
                     }
                     
                     else if appleLogged {
+                        AsyncImage(url: URL(string: loginVm.user?.profilePicture ?? "")) { image in
+                            image
+                                .resizable()
+                                .scaledToFit()
+                                .clipShape(Circle())
+                                .frame(width: 125, height: 125)
+                        } placeholder: {
+                            Image(systemName: "person.circle")
+                                .font(.system(size: 100))
+                                .frame(width: 100, height: 100)
+                        }
+                        Button("Modify") {
+                            isPresented = true
+                        }
                         loginVm.getAppleName()
                         loginVm.getAppleEmail()
                             .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
@@ -68,22 +88,71 @@ struct ProfileView: View {
                             Text("Sign Out")
                         }
                     }
-                    else if loginVm.logged {
+                    else if loginVm.checkLogin() {
+                        if let imageURL = loginVm.user?.profilePicture {
+                            AsyncImage(url: URL(string: imageURL)) { image in
+                                image
+                                    .resizable()
+                                    .scaledToFit()
+                                    .clipShape(Circle())
+                                    .frame(width: 125, height: 125)
+                            } placeholder: {
+                                ProgressView()
+                            }
+                        } else {
+                            Image(systemName: "person.circle")
+                                .font(.system(size: 100))
+                                .frame(width: 100, height: 100)
+                        }
+                        Button("Modify") {
+                            isPresented = true
+                        }
+                        Divider()
+                            .padding()
                         loginVm.getName()
+                            .font(.title)
+                            .bold()
+                        Divider()
                         loginVm.getEmail()
                             .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
                             .padding()
+                        Spacer()
                         Button(action: {
                             loginVm.signOut()
                             loggedOut = true
                             dismiss()
                         }) {
                             Text("Sign Out")
+                                .bold()
+                                .frame(width: 360, height: 45)
+                                .background(Color.red.gradient)
+                                .foregroundColor(.white)
+                                .cornerRadius(10)
+                                .padding()
                         }
                     }
                 }
                 .navigationTitle("Profile")
             }
+            .sheet(isPresented: $isPresented, content: {
+                ImagePicker(uiImage: $uiImage, isPresenting: $isPresented, sourceType: $sourceType)
+                    .onDisappear {
+                        if uiImage != nil {
+                            imageViewModel.uiImage = self.uiImage
+                            Task {
+                                let image = try await imageViewModel.uploadProfilePicture(username: loginVm.user!.username)
+                                print("image saved: \(image)")
+                                let imageUrl = try await imageViewModel.getProfilePictureUrl(username: image)
+                                print("image url saved: \(imageUrl)")
+                                loginVm.user?.profilePicture = imageUrl
+                                print("updated user pfp")
+                                loginVm.user = try await userVm.updateUser(user: loginVm.user!)
+                                print("updated user in db!")
+                            }
+                            
+                        }
+                    }
+            })
 
             
         }

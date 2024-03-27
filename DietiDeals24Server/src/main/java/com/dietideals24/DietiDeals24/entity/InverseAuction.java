@@ -22,6 +22,6 @@ public class InverseAuction extends Auction{
     private int startingPrice;
 
     @Column(nullable = false)
-    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy'T'HH:mm:ss[.SSS][.SS][.S]")
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
     private LocalDateTime expiryDate;
 }

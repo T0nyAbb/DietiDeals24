@@ -12,7 +12,12 @@ import AuthenticationServices
 import FBSDKLoginKit
 
 struct MainView: View {
-    @ObservedObject var loginVm: LoginViewModel
+    @StateObject var loginVm: LoginViewModel
+    
+    var auctionsViewModel = AuctionViewModel()
+    
+    var userViewModel = UserViewModel()
+    
     
     @State private var selection = 1
 
@@ -46,7 +51,10 @@ struct MainView: View {
                 .tag(4)
         }
         .onAppear {
-            
+            Task {
+                try await auctionsViewModel.getAllFixedTimeAuction()
+                await loginVm.updateCurrentUser()
+            }
         }
         .navigationBarBackButtonHidden()
     }

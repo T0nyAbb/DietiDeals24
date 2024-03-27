@@ -7,6 +7,9 @@
 
 import Foundation
 
-enum Endpoint {
-    
+enum Endpoint: String {
+    case LOGIN
+    case REGISTER
+    case USER
+    case FIXED_TIME_AUCTION
 }
