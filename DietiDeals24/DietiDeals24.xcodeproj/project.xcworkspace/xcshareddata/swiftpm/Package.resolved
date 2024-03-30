@@ -1,5 +1,5 @@
 {
-  "originHash" : "a3075ec154a4adfac97f6c9bd15f50c0bcd305fcf2ae7fc29b543b9f70ce1ded",
+  "originHash" : "5490f89de3d3fe0ce67b7008e3590ba780cb2b400593968ae41bdae7fb946950",
   "pins" : [
     {
       "identity" : "amplify-ios",
@@ -53,6 +53,15 @@
       "state" : {
         "revision" : "485501db8b0c57d6636c2b33a03dcd77ee0911f9",
         "version" : "0.36.1"
+      }
+    },
+    {
+      "identity" : "effects-library",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/GetStream/effects-library.git",
+      "state" : {
+        "revision" : "09ebd8e7536aa6dd70a48042244524e895ccd2aa",
+        "version" : "1.0.0"
       }
     },
     {
@@ -125,6 +134,15 @@
       "state" : {
         "revision" : "e97a6fcb1ab07462881ac165fdbb37f067e205d5",
         "version" : "1.5.4"
+      }
+    },
+    {
+      "identity" : "swiftui-cached-async-image",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/lorenzofiamingo/swiftui-cached-async-image",
+      "state" : {
+        "revision" : "467a3d17479887943ab917a379e62bbaff60ac8a",
+        "version" : "2.1.1"
       }
     }
   ],

@@ -51,7 +51,7 @@ struct CreateNewAuctionView: View {
                 .id(UUID())
                 Spacer()
                 NavigationLink {
-                    CreateNewDescendingPriceAuction()
+                    CreateNewDescendingPriceAuction(rootIsActive: self.$rootIsActive)
                 } label: {
                     HStack {
                         Image(systemName: "eurosign.arrow.circlepath")

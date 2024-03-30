@@ -1,11 +1,9 @@
 package com.dietideals24.DietiDeals24.configuration;
 
 import com.dietideals24.DietiDeals24.entity.*;
-import com.dietideals24.DietiDeals24.repository.DescendingPriceAuctionRepository;
-import com.dietideals24.DietiDeals24.repository.EnglishAuctionRepository;
-import com.dietideals24.DietiDeals24.repository.FixedTimeAuctionRepository;
-import com.dietideals24.DietiDeals24.repository.InverseAuctionRepository;
+import com.dietideals24.DietiDeals24.repository.*;
 import com.dietideals24.DietiDeals24.service.NotificationService;
+import com.dietideals24.DietiDeals24.service.OfferService;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -30,6 +28,8 @@ public class SpringConfig {
     private InverseAuctionRepository inverseAuctionRepository;
     @Autowired
     private NotificationService notificationService;
+    @Autowired
+    private OfferRepository offerRepository;
 
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy'T'HH:mm:ss[.SSS][.SS][.S]")
     private LocalDateTime currentTime;
@@ -62,11 +62,17 @@ public class SpringConfig {
     @Scheduled(fixedDelay = 1000)
     public void descendingPriceAuctionValidity(){
         List<DescendingPriceAuction> descendingPriceAuctions = new ArrayList<>(descendingPriceAuctionRepository.findAll());
+        List<Offer> offers = new ArrayList<>(offerRepository.findAll());
         currentTime = LocalDateTime.now();
         for (DescendingPriceAuction iterator : descendingPriceAuctions){
-            if(iterator.getCurrentPrice() != 0 || iterator.getCurrentPrice() < iterator.getMinimumPrice() && iterator.isActive() && iterator.getStartingDate().isBefore(currentTime)){
+            //Attiva l'asta quando la data di inizio è passata e non ci sono offerte per l'asta
+            if(!iterator.isActive() && !iterator.isFailed() && iterator.getCurrentPrice() == iterator.getStartingPrice() && iterator.getStartingDate().isBefore(currentTime) && offers.stream().noneMatch(offer -> offer.getAuctionId() == iterator.getId())) {
+                iterator.setActive(true);
+                descendingPriceAuctionRepository.save(iterator);
+            }
+            if(iterator.getCurrentPrice() <= 0 && iterator.isActive() || ((iterator.getCurrentPrice() < iterator.getMinimumPrice() || offers.stream().anyMatch(offer -> offer.getAuctionId() == iterator.getId())) && iterator.isActive() && iterator.getStartingDate().isBefore(currentTime))){
                 iterator.setActive(false);
-                if(iterator.getCurrentPrice() < iterator.getMinimumPrice())
+                if(iterator.getCurrentPrice() < iterator.getMinimumPrice() || offers.stream().noneMatch(offer -> offer.getAuctionId() == iterator.getId()))
                     iterator.setFailed(true);
                 descendingPriceAuctionRepository.save(iterator);
                 notificationService.sendNotifications(iterator); //Manda le notifiche

@@ -26,6 +26,7 @@ public class DescendingPriceAuctionController {
     //Posta un'asta a ribasso
     @PostMapping("/api/descending_price_auction")
     public ResponseEntity<DescendingPriceAuction> createDescendingPriceAuction (@RequestBody DescendingPriceAuction descendingPriceAuction){
+
         DescendingPriceAuction savedDescendingPriceAuction = descendingPriceAuctionService.createDescendingPriceAuction(descendingPriceAuction);
         return new ResponseEntity<>(savedDescendingPriceAuction, HttpStatus.CREATED);
     }

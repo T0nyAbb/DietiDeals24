@@ -20,7 +20,7 @@ class ImageViewModel {
     
     
     func uploadProfilePicture(username: String) async throws -> String {
-        let data = Data(((uiImage?.jpegData(compressionQuality: 0.8)!)!))
+        let data = Data(((uiImage?.jpegData(compressionQuality: 0.5)!)!))
         let uploadTask = Amplify.Storage.uploadData(
             key: username,
             data: data
@@ -35,10 +35,10 @@ class ImageViewModel {
         return value
     }
     
-    func uploadAuctionPicture(username: String) async throws -> String {
+    func uploadAuctionPicture(auction: Auction) async throws -> String {
         let data = Data(((uiImage?.jpegData(compressionQuality: 0.5)!)!))
         let uploadTask = Amplify.Storage.uploadData(
-            key: username,
+            key: auction.id!.description,
             data: data
         )
         Task {
@@ -65,7 +65,13 @@ class ImageViewModel {
     }
     
     func getProfilePictureUrl(username: String) async throws -> String {
-        let url = try await Amplify.Storage.getURL(key: username)
+        let url = try await Amplify.Storage.getURL(key: username, options: .init(expires: 604_800)) //expiration set to 7 days in seconds)
+        print("Completed: \(url)")
+        return url.absoluteString
+    }
+    
+    func getAuctionPictureUrl(auction: Auction) async throws -> String {
+        let url = try await Amplify.Storage.getURL(key: auction.id!.description, options: .init(expires: 604_800)) //expiration set to 7 days in seconds
         print("Completed: \(url)")
         return url.absoluteString
     }

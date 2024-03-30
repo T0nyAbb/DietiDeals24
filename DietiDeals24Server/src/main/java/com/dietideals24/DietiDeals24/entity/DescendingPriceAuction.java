@@ -26,7 +26,7 @@ public class DescendingPriceAuction extends Auction{
     @Column(nullable = false)
     private int timer = 10;
     @Column(nullable = false)
-    private int timerAmount = 10;
+    private int timerAmount = 3600;
     @Column(nullable = false)
     private long reduction;
     @Column(nullable = false)

@@ -39,7 +39,7 @@ public class NotificationController {
     }
 
     //Ottiene la lista di tutte le notifiche di uno specifico recieverId
-    @GetMapping("/api/notification_by_reciever/{recieverId}")
+    @GetMapping("/api/notification/{recieverId}")
     public ResponseEntity<List<Notification>> getNotificationsByRecieverId (@PathVariable("recieverId") Long recieverId){
         List<Notification> notification = notificationService.getNotificationsByRecieverId(recieverId);
 
@@ -63,7 +63,7 @@ public class NotificationController {
     }
 
     //Elimina una notifica dato un'id
-    @DeleteMapping("/api/delete_notification/{id}")
+    @DeleteMapping("/api/notification/{id}")
     public ResponseEntity<String> deleteNotification (@PathVariable("id") Long id){
 
         Notification notification = notificationService.getNotificationByNotificationId(id);

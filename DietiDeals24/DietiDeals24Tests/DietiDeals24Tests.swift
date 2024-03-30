@@ -11,16 +11,19 @@ import XCTest
 final class DietiDeals24Tests: XCTestCase {
     
     var fieldChecker: FieldChecker!
+    var descendingPriceChecker: DescendingPriceChecker!
 
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
         super.setUp()
         fieldChecker = FieldChecker()
+        descendingPriceChecker = DescendingPriceChecker()
     }
 
     override func tearDownWithError() throws {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
         fieldChecker = nil
+        descendingPriceChecker = nil
         super.tearDown()
     }
 
@@ -33,6 +36,7 @@ final class DietiDeals24Tests: XCTestCase {
     }
     
     
+    // MARK: - Registration tests
     
     
     //Test valid fields
@@ -167,20 +171,98 @@ final class DietiDeals24Tests: XCTestCase {
         XCTAssertFalse(try! fieldChecker.checkFields(username: username, password: password, confirmPassword: confirmPassword, iban: iban))
     }
     
-    // Coverage test
-    func testCodeCoverage() {
-        // This test will check the code coverage of the FieldChecker class
-        // We are not testing any specific functionality here, just ensuring that the code is executed
-        
-        // Arrange
-        let username = "test@example.com"
-        let password = "Password123"
-        let confirmPassword = "Password123"
-        let iban = "AB1234567890123"
-        
-        // Act & Assert
-        XCTAssertNoThrow(try fieldChecker.checkFields(username: username, password: password, confirmPassword: confirmPassword, iban: iban))
-    }
+    // MARK: - Descending price auction tests
+    
+    func testValidAuctionFields() throws {
+            // Arrange
+            let startingPrice = 100
+            let minimumPrice = 50
+            let decrementAmount = 5
+            let startingDate = Date(timeIntervalSinceNow: 3600) // 1 hour from now
+
+            // Assert
+        XCTAssertTrue(try descendingPriceChecker.checkAuctionFields(startingPrice: startingPrice, minimumPrice: minimumPrice, decrementAmount: decrementAmount, startingDate: startingDate))
+        }
+
+        func testMissingFields() {
+            // Arrange
+            let startingPrice: Int? = nil
+            let minimumPrice = 50
+            let decrementAmount = 5
+            let startingDate = Date(timeIntervalSinceNow: 3600) // 1 hour from now
+
+            // Act & Assert
+            XCTAssertThrowsError(try descendingPriceChecker.checkAuctionFields(startingPrice: startingPrice, minimumPrice: minimumPrice, decrementAmount: decrementAmount, startingDate: startingDate))
+        }
+
+        func testStartingPriceLessThanOrEqualToZero() {
+            // Arrange
+            let startingPrice = 0
+            let minimumPrice = 50
+            let decrementAmount = 5
+            let startingDate = Date(timeIntervalSinceNow: 3600) // 1 hour from now
+
+
+
+            // Assert
+            XCTAssertFalse(try descendingPriceChecker.checkAuctionFields(startingPrice: startingPrice, minimumPrice: minimumPrice, decrementAmount: decrementAmount, startingDate: startingDate))
+        }
+
+        func testMinimumPriceLessThanOrEqualToZero() {
+            // Arrange
+            let startingPrice = 100
+            let minimumPrice = 0
+            let decrementAmount = 5
+            let startingDate = Date(timeIntervalSinceNow: 3600) // 1 hour from now
+
+            // Assert
+            XCTAssertFalse(try descendingPriceChecker.checkAuctionFields(startingPrice: startingPrice, minimumPrice: minimumPrice, decrementAmount: decrementAmount, startingDate: startingDate))
+        }
+
+        func testDecrementAmountLessThanOrEqualToZero() {
+            // Arrange
+            let startingPrice = 100
+            let minimumPrice = 50
+            let decrementAmount = 0
+            let startingDate = Date(timeIntervalSinceNow: 3600) // 1 hour from now
+
+            // Assert
+            XCTAssertFalse(try descendingPriceChecker.checkAuctionFields(startingPrice: startingPrice, minimumPrice: minimumPrice, decrementAmount: decrementAmount, startingDate: startingDate))
+        }
+    
+    func testDecrementAmountGreaterThanStartingPrice() {
+         // Arrange
+         let startingPrice = 100
+         let minimumPrice = 50
+         let decrementAmount = 150
+         let startingDate = Date(timeIntervalSinceNow: 3600) // 1 hour from now
+
+         // Assert
+         XCTAssertFalse(try descendingPriceChecker.checkAuctionFields(startingPrice: startingPrice, minimumPrice: minimumPrice, decrementAmount: decrementAmount, startingDate: startingDate))
+     }
+
+        func testMinimumPriceGreaterThanOrEqualToStartingPrice() {
+            // Arrange
+            let startingPrice = 100
+            let minimumPrice = 150
+            let decrementAmount = 5
+            let startingDate = Date(timeIntervalSinceNow: 3600) // 1 hour from now
+
+            // Assert
+            XCTAssertFalse(try descendingPriceChecker.checkAuctionFields(startingPrice: startingPrice, minimumPrice: minimumPrice, decrementAmount: decrementAmount, startingDate: startingDate))
+        }
+
+        func testStartingDateInPast() {
+            // Arrange
+            let startingPrice = 100
+            let minimumPrice = 50
+            let decrementAmount = 5
+            let startingDate = Date(timeIntervalSinceNow: -3600) // 1 hour ago
+
+
+            // Assert
+            XCTAssertFalse(try descendingPriceChecker.checkAuctionFields(startingPrice: startingPrice, minimumPrice: minimumPrice, decrementAmount: decrementAmount, startingDate: startingDate))
+        }
     
 
     func testPerformanceExample() throws {

@@ -9,7 +9,14 @@ import SwiftUI
 
 struct CreateNewEnglishAuctionView: View {
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        HStack {
+            Image(systemName: "info.square.fill")
+                .font(.title)
+            Text("notification.body ahcehcoqcheowhvoeh")
+                .padding()
+                .font(.system(size: 20))
+                .bold()
+        }
     }
 }
 

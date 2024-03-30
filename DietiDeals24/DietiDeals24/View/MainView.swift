@@ -18,26 +18,34 @@ struct MainView: View {
     
     var userViewModel = UserViewModel()
     
+    var notificationViewModel = NotificationViewModel()
+    
+    @Environment(\.dismiss) var dismiss
     
     @State private var selection = 1
+    
+    @State var auctionSelection = 0
+    
+    @State var myAuctionSelection = 0
 
     var body: some View {
         
 
         TabView(selection:$selection) {
-             AuctionsView()
+            AuctionsView(selectedAuction: $auctionSelection, auctionViewModel: auctionsViewModel, userViewModel: userViewModel)
                   .tabItem {
                       Image(systemName: "tag.fill")
                       Text("Auctions")
                   }
                   .tag(1)
-             NotificationsView()
+            NotificationsView(notificationViewModel: notificationViewModel, loginViewModel: LoginViewModel.shared)
                   .tabItem {
                       Image(systemName: "bell.fill")
                       Text("Notifications")
                   }
                   .tag(2)
-            MyAuctionsView(userVm: UserViewModel(), loginVm: LoginViewModel.shared)
+            MyAuctionsView(userVm: userViewModel, loginVm: LoginViewModel.shared, auctionVm: auctionsViewModel, selectedAuction: $myAuctionSelection)
+                .id(UUID())
                   .tabItem {
                       Image(systemName: "bookmark.fill")
                       Text("My Auctions")
@@ -52,8 +60,17 @@ struct MainView: View {
         }
         .onAppear {
             Task {
+                print(UserDefaults.standard.string(forKey: "Token"))
                 try await auctionsViewModel.getAllFixedTimeAuction()
                 await loginVm.updateCurrentUser()
+                try await notificationViewModel.updateCurrentUserNotifications(user: loginVm.user!)
+                try await auctionsViewModel.getAllDescendingPriceAuctions()
+                try await auctionsViewModel.getAllEnglishAuctions()
+                try await auctionsViewModel.getAllInverseAuctions()
+                try await userViewModel.getAllUsers()
+                if loginVm.user == nil {
+                    dismiss()
+                }
             }
         }
         .navigationBarBackButtonHidden()

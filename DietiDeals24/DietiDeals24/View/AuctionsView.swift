@@ -10,21 +10,56 @@ import SwiftUI
 struct AuctionsView: View {
     
     @State private var search: String = ""
+    @Binding var selectedAuction: Int
+    @State private var showCurrentUserOnly: Bool = false
+    
+    var auctionViewModel: AuctionViewModel
+    
+    var userViewModel: UserViewModel
+    
+
     
     var body: some View {
         NavigationView {
-            VStack {
-                if true {
-                    ContentUnavailableView {
-                        Label("No Active Auctions", systemImage: "tag")
+            ScrollView(.vertical, showsIndicators: false) {
+                VStack {
+                    
+                    Picker("Auction type", selection: $selectedAuction) {
+                        Text("Fixed Time").tag(0)
+                        Text("Inverse").tag(1)
+                        Text("English").tag(2)
+                        Text("Descending Price").tag(3)
                     }
-                } else {
-                    Text("Auctions View")
-                        .font(.title)
+                    .pickerStyle(.segmented)
+                    .padding()
+                    Divider()
+                    if selectedAuction == 0 {
+                        FixedTimeAuctionListView(auctionViewModel: auctionViewModel, userViewModel: userViewModel, search: $search, showCurrentUserOnly: $showCurrentUserOnly)
+                            .padding(.bottom, 30)
+                            .id(UUID())
+                    } else if selectedAuction == 1 {
+                        Text("Auctions View")
+                            .font(.title)
+                    } else if selectedAuction == 2 {
+                        Text("wevwv")
+                    } else if selectedAuction == 3 {
+                        DescendingPriceAuctionListView(auctionViewModel: auctionViewModel, userViewModel: userViewModel, search: $search, showCurrentUserOnly: $showCurrentUserOnly)
+                    }
+                }
+                .searchable(text: $search, prompt: Text("Search by Title or Category"))
+                
+            }
+            .navigationTitle("Auctions")
+            .refreshable {
+                do {
+                    try await auctionViewModel.getAllFixedTimeAuction()
+                    try await auctionViewModel.getAllDescendingPriceAuctions()
+                    try await auctionViewModel.getAllEnglishAuctions()
+                    try await auctionViewModel.getAllInverseAuctions()
+                } catch {
+                    print(error)
                 }
             }
-                .searchable(text: $search)
-                .navigationTitle("Auctions")
         }
         
         
@@ -34,5 +69,5 @@ struct AuctionsView: View {
 }
 
 #Preview {
-    AuctionsView()
+    AuctionsView(selectedAuction: .constant(0), auctionViewModel: AuctionViewModel(), userViewModel: UserViewModel())
 }

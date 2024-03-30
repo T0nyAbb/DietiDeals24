@@ -354,6 +354,7 @@ class LoginViewModel: ObservableObject {
                 
             } catch {
                 print(error.localizedDescription)
+                signOut()
             }
         }
     }

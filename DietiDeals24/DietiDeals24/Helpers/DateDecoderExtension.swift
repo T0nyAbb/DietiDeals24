@@ -27,3 +27,15 @@ extension JSONDecoder.DateDecodingStrategy {
                                      debugDescription: "Invalid date"))
    }
 }
+
+extension Date {
+    func timeDifference(date: Date) -> String {
+        let form = DateComponentsFormatter()
+        form.maximumUnitCount = 2
+        form.unitsStyle = .full
+        form.allowedUnits = [.year, .month, .day, .hour, .minute, .second]
+        let difference = form.string(from: date, to: self)
+        let result = difference!
+        return result
+    }
+}

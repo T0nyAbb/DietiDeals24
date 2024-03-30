@@ -16,7 +16,7 @@ public class DescendingPriceAuctionServiceImplementation implements DescendingPr
 
     @Override
     public DescendingPriceAuction createDescendingPriceAuction(DescendingPriceAuction descendingPriceAuction) {
-        descendingPriceAuction.setTimerAmount(descendingPriceAuction.getTimer());
+        descendingPriceAuction.setTimer(descendingPriceAuction.getTimerAmount());
         return descendingPriceAuctionRepository.save(descendingPriceAuction);
     }
 

@@ -81,7 +81,7 @@ public class NotificationServiceImplementation implements NotificationService {
         notificationWinner.setAuctionId(auction.getId());
 
             List<Offer> offers = offerRepository.getAllByAuctionId(auction.getId());
-            double maxBidValue = Double.MIN_VALUE;
+            double maxBidValue = 0.0;
             long bidderIDWithMaxValue = -1;
 
             for (Offer i : offers){
@@ -90,10 +90,14 @@ public class NotificationServiceImplementation implements NotificationService {
                     bidderIDWithMaxValue = i.getBidderId();
                 }
             }
-        notificationWinner.setReceiverId(bidderIDWithMaxValue);
-        notificationWinner.setBody("YOU WON! - You just won the \"" + auction.getTitle() + "\" auction!");
 
-    notificationRepository.save(notificationWinner);
+            //Se c'è un vincitore mando la notifica
+            if (bidderIDWithMaxValue != -1) {
+                notificationWinner.setReceiverId(bidderIDWithMaxValue);
+                notificationWinner.setBody("YOU WON! - You just won the \"" + auction.getTitle() + "\" auction!");
+                notificationRepository.save(notificationWinner);
+            }
+
 
         //Notifica per tutti i partecipanti
         List<Long> bidders = new ArrayList<>();

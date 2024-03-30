@@ -130,6 +130,20 @@ struct ProfileView: View {
                                 .cornerRadius(10)
                                 .padding()
                         }
+                    } else {
+                        Button(action: {
+                            loginVm.signOut()
+                            loggedOut = true
+                            dismiss()
+                        }) {
+                            Text("Sign Out")
+                                .bold()
+                                .frame(width: 360, height: 45)
+                                .background(Color.red.gradient)
+                                .foregroundColor(.white)
+                                .cornerRadius(10)
+                                .padding()
+                        }
                     }
                 }
                 .navigationTitle("Profile")

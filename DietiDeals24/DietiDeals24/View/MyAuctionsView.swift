@@ -11,35 +11,40 @@ struct MyAuctionsView: View {
     
     var userVm: UserViewModel = UserViewModel()
     var loginVm: LoginViewModel
-    var auctionVm: AuctionViewModel = AuctionViewModel()
+    var auctionVm: AuctionViewModel
     @State private var user: User?
     @State private var isPresented: Bool = false
+    @Binding var selectedAuction: Int
+    @State private var search: String = ""
+    @State private var showCurrentUserOnly: Bool = true
     @State var isActive: Bool = true
     
     var body: some View {
         NavigationView {
-            ScrollView {
+            ScrollView(.vertical, showsIndicators: false) {
                 VStack {
-                    if auctionVm.currentUserFixedTimeAuctions.count == 0 {
-                        VStack {
-                            Spacer()
-                            ContentUnavailableView {
-                                Spacer()
-                                Label("No Auctions Published Yet", systemImage: "tag")
-                                    .onAppear {
-                                        self.isActive.toggle()
-                                        self.isActive = true
-                                    }
-                            }
-                        }
-                        
-                    } else {
-                        ForEach(auctionVm.currentUserFixedTimeAuctions) { auction in
-                            Text(auction.title)
-                        }
-                            .onAppear {
-                                self.isActive = true
-                            }
+                    Picker("Auction type", selection: $selectedAuction) {
+                        Text("Fixed Time").tag(0)
+                        Text("Inverse").tag(1)
+                        Text("English").tag(2)
+                        Text("Descending Price").tag(3)
+                    }
+                    .pickerStyle(.segmented)
+                    .padding()
+                    Divider()
+                    if selectedAuction == 0 {
+                        FixedTimeAuctionListView(auctionViewModel: auctionVm, userViewModel: userVm, search: $search, showCurrentUserOnly: $showCurrentUserOnly)
+                            .padding(.bottom, 30)
+                            .id(UUID())
+                    } else if selectedAuction == 1 {
+                        Text("Auctions View")
+                            .font(.title)
+                    } else if selectedAuction == 2 {
+                        Text("wevwv")
+                    } else if selectedAuction == 3 {
+                        DescendingPriceAuctionListView(auctionViewModel: auctionVm, userViewModel: userVm, search: $search, showCurrentUserOnly: $showCurrentUserOnly)
+                            .padding(.bottom, 30)
+                            .id(UUID())
                     }
                     
                 }
@@ -52,6 +57,7 @@ struct MyAuctionsView: View {
                         }
                     }
                 }
+                .searchable(text: $search, prompt: Text("Search by Title or Category"))
             }
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
@@ -63,8 +69,11 @@ struct MyAuctionsView: View {
             .refreshable {
                 do {
                     try await auctionVm.getAllFixedTimeAuction()
+                    try await auctionVm.getAllDescendingPriceAuctions()
+                    try await auctionVm.getAllEnglishAuctions()
+                    try await auctionVm.getAllInverseAuctions()
                 } catch {
-                    print("Error")
+                    print(error)
                 }
                 
             }
@@ -76,5 +85,5 @@ struct MyAuctionsView: View {
 }
 
 #Preview {
-    MyAuctionsView(loginVm: LoginViewModel.shared)
+    MyAuctionsView(loginVm: LoginViewModel.shared, auctionVm: AuctionViewModel(), selectedAuction: .constant(0))
 }

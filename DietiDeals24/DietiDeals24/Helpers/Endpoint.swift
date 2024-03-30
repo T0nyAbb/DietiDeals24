@@ -12,4 +12,10 @@ enum Endpoint: String {
     case REGISTER
     case USER
     case FIXED_TIME_AUCTION
+    case DESCENDING_PRICE_AUCTION
+    case ENGLISH_AUCTION
+    case INVERSE_AUCTION
+    case OFFER
+    case DELETE_AUCTION
+    case NOTIFICATION
 }

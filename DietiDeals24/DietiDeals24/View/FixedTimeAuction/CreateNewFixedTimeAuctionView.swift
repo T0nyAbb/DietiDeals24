@@ -14,7 +14,7 @@ struct CreateNewFixedTimeAuctionView: View {
     @State var category: Category = .automotive
     @State var minimumPrice: Int?
     @State var selectedDate: Date = Date().advanced(by: .days(2))
-    @State var isPresented: Bool = false
+    @State private var isPresented: Bool = false
     @State var uiImage: UIImage?
     @Binding var rootIsActive: Bool
     @State var sourceType: UIImagePickerController.SourceType = .photoLibrary
@@ -113,7 +113,7 @@ struct CreateNewFixedTimeAuctionView: View {
                         }
                         .padding(.horizontal)
                     Spacer()
-                    NavigationLink(destination: FixedAuctionRecapView(image: uiImage, title: title, description: description, category: category, selectedDate: selectedDate, minimumPrice: 0, popToRoot: self.$rootIsActive)) {
+                    NavigationLink(destination: FixedAuctionRecapView(image: uiImage, title: title, description: description, category: category, selectedDate: selectedDate, minimumPrice: minimumPrice ?? 0, popToRoot: self.$rootIsActive)) {
                         HStack {
                             Text("Next")
                                 .frame(width: 360, height: 45)
