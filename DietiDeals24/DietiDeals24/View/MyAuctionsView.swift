@@ -12,6 +12,7 @@ struct MyAuctionsView: View {
     var userVm: UserViewModel = UserViewModel()
     var loginVm: LoginViewModel
     var auctionVm: AuctionViewModel
+    var notificationViewModel: NotificationViewModel
     @State private var user: User?
     @State private var isPresented: Bool = false
     @Binding var selectedAuction: Int
@@ -40,7 +41,9 @@ struct MyAuctionsView: View {
                         Text("Auctions View")
                             .font(.title)
                     } else if selectedAuction == 2 {
-                        Text("wevwv")
+                        EnglishAuctionListView(auctionViewModel: auctionVm, userViewModel: userVm, search: $search, showCurrentUserOnly: $showCurrentUserOnly)
+                            .padding(.bottom, 30)
+                            .id(UUID())
                     } else if selectedAuction == 3 {
                         DescendingPriceAuctionListView(auctionViewModel: auctionVm, userViewModel: userVm, search: $search, showCurrentUserOnly: $showCurrentUserOnly)
                             .padding(.bottom, 30)
@@ -59,6 +62,7 @@ struct MyAuctionsView: View {
                 }
                 .searchable(text: $search, prompt: Text("Search by Title or Category"))
             }
+            .scrollDismissesKeyboard(.immediately)
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
                     NavigationLink(destination: CreateNewAuctionView(rootIsActive: self.$isActive)) {
@@ -72,18 +76,16 @@ struct MyAuctionsView: View {
                     try await auctionVm.getAllDescendingPriceAuctions()
                     try await auctionVm.getAllEnglishAuctions()
                     try await auctionVm.getAllInverseAuctions()
+                    try await notificationViewModel.updateCurrentUserNotifications(user: loginVm.user!)
                 } catch {
                     print(error)
                 }
-                
             }
             .navigationTitle("My Auctions")
-            
-            
         }
     }
 }
 
 #Preview {
-    MyAuctionsView(loginVm: LoginViewModel.shared, auctionVm: AuctionViewModel(), selectedAuction: .constant(0))
+    MyAuctionsView(loginVm: LoginViewModel.shared, auctionVm: AuctionViewModel(), notificationViewModel: NotificationViewModel(), selectedAuction: .constant(0))
 }

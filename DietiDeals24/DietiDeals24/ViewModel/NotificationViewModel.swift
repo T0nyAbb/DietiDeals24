@@ -39,6 +39,8 @@ class NotificationViewModel {
 
                 self.currentUserNotifications = try decoder.decode([Notification].self, from: data)
                 
+                self.currentUserNotifications = self.currentUserNotifications.sorted { $0.notificationId > $1.notificationId }
+                
                 print("notifications successfully retrieved!")
             } else if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 404 {
                 print("No notifications for the selected user")

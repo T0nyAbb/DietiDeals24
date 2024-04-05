@@ -86,6 +86,12 @@ public class SpringConfig {
         List<EnglishAuction> englishAuctions = new ArrayList<>(englishAuctionRepository.findAll());
         currentTime = LocalDateTime.now();
         for (EnglishAuction iterator : englishAuctions){
+            //Attiva l'asta quando la data di inizio è passata e non ci sono offerte per l'asta (current price = 0)
+            if(!iterator.isActive() && !iterator.isFailed() && iterator.getCurrentPrice() == 0 && iterator.getStartingDate().isBefore(currentTime)) {
+                iterator.setActive(true);
+                englishAuctionRepository.save(iterator);
+            }
+
             if(iterator.getTimer() <= 0 && iterator.isActive() && iterator.getStartingDate().isBefore(currentTime)) {
                 iterator.setActive(false);
                 if(iterator.getCurrentPrice() == 0)

@@ -1,29 +1,24 @@
 //
-//  AuctionListView.swift
+//  EnglishAuctionListView.swift
 //  DietiDeals24
 //
-//  Created by Antonio Abbatiello on 19/03/24.
+//  Created by Antonio Abbatiello on 30/03/24.
 //
 
 import SwiftUI
-import CachedAsyncImage
 
-
-struct FixedTimeAuctionListView: View {
-    
+struct EnglishAuctionListView: View {
     var auctionViewModel: AuctionViewModel
     
     var userViewModel: UserViewModel
-    
-    @State var currentDate = Date()
     
     @Binding var search: String
     
     @Binding var showCurrentUserOnly: Bool
     
-    var filteredAuctions: [FixedTimeAuction] {
-        guard !search.isEmpty else { return showCurrentUserOnly ? auctionViewModel.currentUserFixedTimeAuctions : auctionViewModel.fixedTimeAuctions}
-        return showCurrentUserOnly ? auctionViewModel.currentUserFixedTimeAuctions.filter { $0.title.localizedCaseInsensitiveContains(search) || $0.category!.localizedCaseInsensitiveContains(search)} : auctionViewModel.fixedTimeAuctions.filter { $0.title.localizedCaseInsensitiveContains(search) || $0.category!.localizedCaseInsensitiveContains(search)}
+    var filteredAuctions: [EnglishAuction] {
+        guard !search.isEmpty else { return showCurrentUserOnly ? auctionViewModel.currentUserEnglishAuctions : auctionViewModel.englishAuctions}
+        return showCurrentUserOnly ? auctionViewModel.currentUserEnglishAuctions.filter { $0.title.localizedCaseInsensitiveContains(search) || $0.category!.localizedCaseInsensitiveContains(search)} : auctionViewModel.englishAuctions.filter { $0.title.localizedCaseInsensitiveContains(search) || $0.category!.localizedCaseInsensitiveContains(search)}
     }
     
     
@@ -32,9 +27,7 @@ struct FixedTimeAuctionListView: View {
             if !filteredAuctions.isEmpty {
                 ForEach(filteredAuctions) { auction in
                     NavigationLink {
-                        FixedTimeAuctionDetailView(fixedTimeAuction: auction, auctionViewModel: auctionViewModel, user: userViewModel.users.first {
-                            $0.id! == auction.sellerId
-                        })
+                        EnglishAuctionDetailView(englishAuction: auction, auctionViewModel: auctionViewModel)
                     } label: {
                         AuctionRowView(auction: auction)
                     }
@@ -44,7 +37,7 @@ struct FixedTimeAuctionListView: View {
                 .onAppear {
                     Task {
                         do {
-                            try await auctionViewModel.getAllFixedTimeAuction()
+                            try await auctionViewModel.getAllEnglishAuctions()
                         } catch {
                             print("Error")
                         }
@@ -63,7 +56,7 @@ struct FixedTimeAuctionListView: View {
                 .onAppear {
                     Task {
                         do {
-                            try await auctionViewModel.getAllFixedTimeAuction()
+                            try await auctionViewModel.getAllEnglishAuctions()
                         } catch {
                             print("Error")
                         }
@@ -76,5 +69,5 @@ struct FixedTimeAuctionListView: View {
 }
 
 #Preview {
-    FixedTimeAuctionListView(auctionViewModel: AuctionViewModel(), userViewModel: UserViewModel(), search: .constant(""), showCurrentUserOnly: .constant(false))
+    EnglishAuctionListView(auctionViewModel: AuctionViewModel(), userViewModel: UserViewModel(), search: .constant(""), showCurrentUserOnly: .constant(false))
 }

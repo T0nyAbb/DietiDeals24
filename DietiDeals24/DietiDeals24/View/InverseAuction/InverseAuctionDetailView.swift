@@ -1,17 +1,17 @@
 //
-//  FixedTimeAuctionDetailView.swift
+//  InverseAuctionDetailView.swift
 //  DietiDeals24
 //
-//  Created by Antonio Abbatiello on 28/03/24.
+//  Created by Antonio Abbatiello on 05/04/24.
 //
 
 import SwiftUI
 
-struct FixedTimeAuctionDetailView: View {
+struct InverseAuctionDetailView: View {
     
     @Environment(\.dismiss) var dismiss
     
-    @State var fixedTimeAuction: FixedTimeAuction
+    @State var inverseAuction: InverseAuction
     
     var offerViewModel = OfferViewModel()
     
@@ -43,14 +43,14 @@ struct FixedTimeAuctionDetailView: View {
     
     var body: some View {
         ScrollView(.vertical, showsIndicators: false) {
-            AuctionImageView(pictureUrl: fixedTimeAuction.urlPicture)
+            AuctionImageView(pictureUrl: inverseAuction.urlPicture)
                 .frame(width: 300, height: 300)
             VStack(alignment: .leading) {
-                Text(fixedTimeAuction.title)
+                Text(inverseAuction.title)
                     .font(.largeTitle)
                     .bold()
                 HStack {
-                    Text(fixedTimeAuction.category ?? "No category")
+                    Text(inverseAuction.category ?? "No category")
                     Spacer()
                     Image(systemName: "person")
                     Text("Username")
@@ -60,14 +60,14 @@ struct FixedTimeAuctionDetailView: View {
                 .foregroundStyle(.secondary)
                 Divider()
                 VStack {
-                    Text(fixedTimeAuction.description ?? "No description")
+                    Text(inverseAuction.description ?? "No description")
                         .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
                 } .padding(.top)
             }
             .padding()
             HStack {
                 VStack {
-                    Text("\(fixedTimeAuction.currentPrice, specifier: "%.2f") €")
+                    Text("\(inverseAuction.currentPrice, specifier: "%.2f") €")
                         .font(.title)
                         .bold()
                     Text("Highest offer")
@@ -79,17 +79,17 @@ struct FixedTimeAuctionDetailView: View {
             VStack {
                 
                 Button {
-                    if loginVm.user?.id == fixedTimeAuction.sellerId {
+                    if loginVm.user?.id == inverseAuction.sellerId {
                         self.showConfirmation = true
                         self.showAlert = true
                     } else {
                         self.isPresented = true
                     }
                 } label: {
-                    Text(loginVm.user?.id != fixedTimeAuction.sellerId ? "Offer" : "Delete")
+                    Text(loginVm.user?.id != inverseAuction.sellerId ? "Offer" : "Delete")
                         .bold()
                         .frame(width: 360, height: 45)
-                        .background(loginVm.user?.id != fixedTimeAuction.sellerId ? Color.green.gradient : Color.red.gradient)
+                        .background(loginVm.user?.id != inverseAuction.sellerId ? Color.green.gradient : Color.red.gradient)
                         .foregroundColor(.white)
                         .cornerRadius(10)
                         .padding()
@@ -105,9 +105,9 @@ struct FixedTimeAuctionDetailView: View {
                                 .padding()
                             Button {
                                 Task {
-                                    if offerChecker.checkFixedTimeOffer(currentPrice: fixedTimeAuction.currentPrice, offerAmount: offerAmount) {
+                                    if offerChecker.checkInverseAuctionOffer(currentPrice: inverseAuction.currentPrice, offerAmount: offerAmount) {
                                         do {
-                                        self.offer = try await offerViewModel.createOffer(offer: .init(offerId: nil, bidderId: loginVm.user!.id!, bidAmount: offerAmount, auctionId: fixedTimeAuction.id!))
+                                        self.offer = try await offerViewModel.createOffer(offer: .init(offerId: nil, bidderId: loginVm.user!.id!, bidAmount: offerAmount, auctionId: inverseAuction.id!))
                                         } catch UserError.auctionNotActive {
                                             print("Auction not active")
                                             self.offerError = true
@@ -164,7 +164,7 @@ struct FixedTimeAuctionDetailView: View {
                           message: Text("This action is permanent."),
                           primaryButton: .destructive(Text("Delete"), action: {
                         Task {
-                            if try await auctionViewModel.deleteAuction(auction: fixedTimeAuction) {
+                            if try await auctionViewModel.deleteAuction(auction: inverseAuction) {
                                 dismiss()
                             }
                         }
@@ -193,7 +193,7 @@ struct FixedTimeAuctionDetailView: View {
                         
                     } else {
                         Alert(title: Text("Bid successfuly made!"), dismissButton: .default(Text("Ok"), action: {
-                            fixedTimeAuction.currentPrice = offer!.bidAmount
+                            inverseAuction.currentPrice = offer!.bidAmount
                         }))
                     }
                 }

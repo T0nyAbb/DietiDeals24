@@ -11,7 +11,7 @@ struct FixedAuctionRecapView: View {
     
     @State var image: UIImage?
     @State var title: String
-    @State var description: String
+    @State var description: String?
     @State var category: Category
     @State var selectedDate: Date
     @State var minimumPrice: Int
@@ -43,7 +43,7 @@ struct FixedAuctionRecapView: View {
                 .font(.title)
                 .bold()
                 .padding()
-            Text(description)
+            Text(description ?? "No Description")
                 .padding()
             Text(category.description)
                 .padding()

@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @AllArgsConstructor
 @RequestMapping
@@ -23,11 +25,11 @@ public class OfferController {
     //Posta un'offerta per un'asta
     @PostMapping("/api/offer")
     public ResponseEntity<Offer> makeOffer(@RequestBody Offer offer) {
-
         Auction auction = auctionService.getAuctionById(offer.getAuctionId());
         if(!auction.isActive())
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
-
+        if(offer.getBidAmount() <= auction.getCurrentPrice() && !(auction instanceof DescendingPriceAuction))
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
         Offer savedOffer = offerService.makeOffer(offer);
         return new ResponseEntity<>(savedOffer, HttpStatus.CREATED);
     }

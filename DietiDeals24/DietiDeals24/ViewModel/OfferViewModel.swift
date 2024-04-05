@@ -52,14 +52,17 @@ class OfferViewModel {
                 decoder.dateDecodingStrategy = .iso8601
                 let offer = try decoder.decode(Offer.self, from: data)
                 return offer
-            } else {
+            } else if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 406 {
                 // Handle unsuccessful upload (non-200 status code)
-                print("offer publication failed")
-                throw NSError(domain: "Auction Upload Failed", code: 0, userInfo: nil)
+                print("offer publication failed, auction is not active!")
+                throw UserError.auctionNotActive
+            } else if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 409 {
+                print("offer with same amount already exists!")
+                throw UserError.invalidOffer
+            } else {
+                throw NSError(domain: "Offer error", code: 0)
             }
         } catch {
-            // Handle any errors that occurred during the request
-            print("generic error")
             print(error)
             throw error
         }

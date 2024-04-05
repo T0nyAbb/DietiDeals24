@@ -7,15 +7,15 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "CA1C7175-9FF1-4E0F-B5B1-0E103557CE34"
+            uuid = "E9FF8DE2-6735-4EE4-AFD5-A04E245846DE"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "DietiDeals24/View/MyAuctionsView.swift"
+            filePath = "DietiDeals24/View/DescendingPriceAuction/CreateNewDescendingPriceAuction.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "64"
-            endingLineNumber = "64"
+            startingLineNumber = "181"
+            endingLineNumber = "181"
             landmarkName = "body"
             landmarkType = "24">
          </BreakpointContent>

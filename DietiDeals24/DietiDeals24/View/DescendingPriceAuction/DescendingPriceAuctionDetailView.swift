@@ -39,24 +39,8 @@ struct DescendingPriceAuctionDetailView: View {
     var body: some View {
         if !showWin {
             ScrollView(.vertical, showsIndicators: false) {
-            VStack {
-                if let auctionImage = descendingPriceAuction.urlPicture {
-                    AsyncImage(url: URL(string: auctionImage))
-                        .scaledToFit()
-                        .shadow(radius: /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/)
-                        .clipShape(RoundedRectangle(cornerRadius: 15))
-                        .frame(width: 300, height: 300)
-                        .clipped()
-                } else {
-                    Image(systemName: "photo")
-                        .resizable()
-                        .scaledToFit()
-                        .clipShape(RoundedRectangle(cornerRadius: 15))
-                        .frame(width: UIScreen.main.bounds.width, height: 300)
-                        .shadow(radius: /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/)
-                }
-            }
-            .frame(width: 300, height: 300)
+                AuctionImageView(pictureUrl: descendingPriceAuction.urlPicture)
+                    .frame(width: 300, height: 300)
             VStack(alignment: .leading) {
                 Text(descendingPriceAuction.title)
                     .font(.largeTitle)
@@ -64,15 +48,25 @@ struct DescendingPriceAuctionDetailView: View {
                 HStack {
                     Text(descendingPriceAuction.category ?? "No category")
                     Spacer()
-                    Image(systemName: "person")
-                    Text("Username")
-                        .bold()
+                    if loginVm.user?.id != descendingPriceAuction.sellerId {
+                    NavigationLink {
+                        EmptyView() //TODO: User profile
+                    } label: {
+                        HStack {
+                            Image(systemName: "person")
+                            Text("Username")
+                                .bold()
+                        }
+                        }
+                    .id(UUID())
+                    }
+                    
                 }
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
                 Divider()
                 VStack {
-                    Text(descendingPriceAuction.description ?? "No description")
+                    Text(descendingPriceAuction.description ?? "No Description")
                         .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
                 } .padding(.top)
             }
@@ -85,18 +79,13 @@ struct DescendingPriceAuctionDetailView: View {
                     Text("Current price*")
                         .font(.callout)
                 }
-                
                 .padding()
-                
                 Spacer()
-                
-                
             }
-            Text("*Price will lower every ^[\(Int(descendingPriceAuction.timerAmount/60)) Minute](inflect: true)")
+                Text("*Price will lower by \(descendingPriceAuction.reduction) € every ^[\(Int(descendingPriceAuction.timerAmount/60)) Minute](inflect: true)")
                 .bold()
                 .padding()
             VStack {
-                
                 Button {
                     if loginVm.user?.id == descendingPriceAuction.sellerId {
                         self.showConfirmation = true
@@ -105,27 +94,16 @@ struct DescendingPriceAuctionDetailView: View {
                         self.showAlert = true
                     }
                 } label: {
-                    if loginVm.user?.id != descendingPriceAuction.sellerId {
-                        Text("Buy Now")
+                        Text(loginVm.user?.id != descendingPriceAuction.sellerId ? "Buy Now" : "Delete")
                             .bold()
                             .frame(width: 360, height: 45)
-                            .background(Color.green.gradient)
+                            .background(loginVm.user?.id != descendingPriceAuction.sellerId ? Color.green.gradient : Color.red.gradient)
                             .foregroundColor(.white)
                             .cornerRadius(10)
                             .padding()
-                    } else {
-                        Text("Delete")
-                            .bold()
-                            .frame(width: 360, height: 45)
-                            .background(Color.red.gradient)
-                            .foregroundColor(.white)
-                            .cornerRadius(10)
-                            .padding()
-                        
-                    }
+                            .padding(.top, 40)
                 }
             }
-            Spacer()
                 .refreshable {
                     do {
                         try await auctionViewModel.getAllDescendingPriceAuctions()
@@ -166,14 +144,19 @@ struct DescendingPriceAuctionDetailView: View {
                     }
                 })
         }
-        
         } else {
-            FireworksView()
+            ZStack {
+                FireworksView(config: .init(intensity: .high))
+                Text("You Won!")
+                    .font(.largeTitle)
+                    .bold()
+                    .fontDesign(.monospaced)
+                    .scaleEffect(2)
+                    
+            }
                 .navigationBarBackButtonHidden()
-                .onAppear {
-                    DispatchQueue.main.asyncAfter(deadline: .now()+2.5) {
-                        self.dismiss()
-                    }
+                .onTapGesture {
+                    self.dismiss()
                 }
         }
     }

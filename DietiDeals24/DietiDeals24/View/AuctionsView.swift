@@ -17,6 +17,8 @@ struct AuctionsView: View {
     
     var userViewModel: UserViewModel
     
+    var notificationViewModel: NotificationViewModel
+    
 
     
     var body: some View {
@@ -41,7 +43,7 @@ struct AuctionsView: View {
                         Text("Auctions View")
                             .font(.title)
                     } else if selectedAuction == 2 {
-                        Text("wevwv")
+                        EnglishAuctionListView(auctionViewModel: auctionViewModel, userViewModel: userViewModel, search: $search, showCurrentUserOnly: $showCurrentUserOnly)
                     } else if selectedAuction == 3 {
                         DescendingPriceAuctionListView(auctionViewModel: auctionViewModel, userViewModel: userViewModel, search: $search, showCurrentUserOnly: $showCurrentUserOnly)
                     }
@@ -49,6 +51,7 @@ struct AuctionsView: View {
                 .searchable(text: $search, prompt: Text("Search by Title or Category"))
                 
             }
+            .scrollDismissesKeyboard(.immediately)
             .navigationTitle("Auctions")
             .refreshable {
                 do {
@@ -56,6 +59,7 @@ struct AuctionsView: View {
                     try await auctionViewModel.getAllDescendingPriceAuctions()
                     try await auctionViewModel.getAllEnglishAuctions()
                     try await auctionViewModel.getAllInverseAuctions()
+                    try await notificationViewModel.updateCurrentUserNotifications(user: LoginViewModel.shared.user!)
                 } catch {
                     print(error)
                 }
@@ -69,5 +73,5 @@ struct AuctionsView: View {
 }
 
 #Preview {
-    AuctionsView(selectedAuction: .constant(0), auctionViewModel: AuctionViewModel(), userViewModel: UserViewModel())
+    AuctionsView(selectedAuction: .constant(0), auctionViewModel: AuctionViewModel(), userViewModel: UserViewModel(), notificationViewModel: NotificationViewModel())
 }

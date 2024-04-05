@@ -15,4 +15,11 @@ class OfferChecker {
         }
         return false
     }
+    
+    func checkInverseAuctionOffer(currentPrice: Double, offerAmount: Double) -> Bool {
+        if(offerAmount < currentPrice) {
+            return true
+        }
+        return false
+    }
 }

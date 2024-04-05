@@ -1,22 +1,20 @@
 //
-//  DescendingPriceAuctionRecapView.swift
+//  InverseAuctionRecapView.swift
 //  DietiDeals24
 //
-//  Created by Antonio Abbatiello on 29/03/24.
+//  Created by Antonio Abbatiello on 05/04/24.
 //
 
 import SwiftUI
 
-struct DescendingPriceAuctionRecapView: View {
+struct InverseAuctionRecapView: View {
+    
     @State var image: UIImage?
     @State var title: String
     @State var description: String?
     @State var category: Category
-    @State var startingPrice: Int
-    @State var selectedDate: Date = Date().advanced(by: .days(2))
-    @State var minimumPrice: Int
-    @State var timerAmount: Int
-    @State var reductionAmount: Int
+    @State var selectedDate: Date
+    @State var maximumPrice: Int
     @Binding var popToRoot: Bool
     @Environment(\.dismiss) private var dismiss
     @State private var isPresented: Bool = false
@@ -24,7 +22,8 @@ struct DescendingPriceAuctionRecapView: View {
     var auctionViewModel: AuctionViewModel = AuctionViewModel()
     var imageViewModel: ImageViewModel = ImageViewModel()
     @State var user: User = LoginViewModel.shared.user!
-    @State var auction: DescendingPriceAuction?
+    @State var auction: InverseAuction?
+    
     
     
     var body: some View {
@@ -44,27 +43,19 @@ struct DescendingPriceAuctionRecapView: View {
                 .font(.title)
                 .bold()
                 .padding()
-            Divider()
             Text(description ?? "No Description")
                 .padding()
-            Divider()
-            Text("Category: \(category.description)")
+            Text(category.description)
                 .padding()
-            Text("Starting Date: \(selectedDate.formatted(date: .numeric, time: .standard))")
+            Text("Expiry Date: \(selectedDate.formatted(date: .numeric, time: .standard))")
                 .padding()
-            Text("Starting Price: \(startingPrice) €")
-                .padding()
-            Text("Minimum Selling Price: \(minimumPrice) €")
-                .padding()
-            Text("Decreasing starting price every: ^[\(timerAmount) Minute](inflect: true)")
-                .padding()
-            Text("Decreasing by \(reductionAmount) €")
+            Text("Maximum Price: \(maximumPrice) €")
                 .padding()
             VStack {
                 Spacer()
                 Button {
                     Task {
-                        self.auction = try await auctionViewModel.createDescendingPriceAuction(auction: .init(id: nil, title: title, description: description, category: category.description, sellerId: user.id!, urlPicture: nil, active: nil, failed: nil, currentPrice: Double(startingPrice), startingPrice: startingPrice, startingDate: selectedDate, timer: nil, timerAmount: timerAmount*60, reduction: reductionAmount, minimumPrice: minimumPrice))
+                        self.auction = try await auctionViewModel.createInverseAuction(auction: .init(id: nil, title: title, description: description, category: category.description, sellerId: user.id!, urlPicture: nil, active: nil, failed: nil, currentPrice: 0, startingPrice: maximumPrice, expiryDate: selectedDate))
                         if self.auction != nil {
                             if self.image != nil {
                                     do {
@@ -76,7 +67,7 @@ struct DescendingPriceAuctionRecapView: View {
                                         self.auction?.urlPicture = imageUrl
                                         print("updated auction picture")
                                         do {
-                                            self.auction = try await auctionViewModel.updateDescendingPriceAuction(auction: self.auction!)
+                                            self.auction = try await auctionViewModel.updateInverseAuction(auction: self.auction!)
                                             print("updated auction in db!")
                                             DispatchQueue.main.asyncAfter(deadline: .now()+0.3) {
                                                 self.isPresented = true
@@ -105,16 +96,12 @@ struct DescendingPriceAuctionRecapView: View {
                         .foregroundColor(.white)
                         .cornerRadius(15)
                         .onAppear {
-                            self.auction = .init(id: nil, title: title, description: description, category: category.description, sellerId: user.id!, urlPicture: nil, active: nil, failed: nil, currentPrice: 0, startingPrice: startingPrice, startingDate: selectedDate, timer: nil, timerAmount: timerAmount*60, reduction: reductionAmount, minimumPrice: minimumPrice)
+                            self.auction = .init(id: nil, title: title, description: description, category: category.description, sellerId: user.id!, urlPicture: nil, active: nil, failed: nil, currentPrice: 0, startingPrice: maximumPrice, expiryDate: selectedDate)
                         }
                 }
-
             }
-
         .navigationBarBackButtonHidden(!popToRoot)
         .navigationTitle("Summary")
-
-
         }
         .alert(isPresented: $isPresented, content: {
             if !showError {
@@ -126,13 +113,11 @@ struct DescendingPriceAuctionRecapView: View {
                 Alert(title: Text("Error uploading auction!"), dismissButton: .default(Text("Ok"), action: {
                     self.showError = false
                 }))
-
             }
         })
-
     }
 }
 
 #Preview {
-    DescendingPriceAuctionRecapView(title: "Test", description: "teststetst", category: .automotive, startingPrice: 20, selectedDate: Date(), minimumPrice: 10, timerAmount: 60, reductionAmount: 2, popToRoot: .constant(true))
+    InverseAuctionRecapView(title: "Test", description: "teststetst", category: .automotive, selectedDate: Date(), maximumPrice: 10, popToRoot: .constant(true))
 }

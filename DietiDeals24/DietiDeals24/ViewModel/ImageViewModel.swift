@@ -23,7 +23,8 @@ class ImageViewModel {
         let data = Data(((uiImage?.jpegData(compressionQuality: 0.5)!)!))
         let uploadTask = Amplify.Storage.uploadData(
             key: username,
-            data: data
+            data: data,
+            options: .init(accessLevel: .guest)
         )
         Task {
             for await progress in await uploadTask.progress {
@@ -39,7 +40,8 @@ class ImageViewModel {
         let data = Data(((uiImage?.jpegData(compressionQuality: 0.5)!)!))
         let uploadTask = Amplify.Storage.uploadData(
             key: auction.id!.description,
-            data: data
+            data: data,
+            options: .init(accessLevel: .guest)
         )
         Task {
             for await progress in await uploadTask.progress {
@@ -53,6 +55,19 @@ class ImageViewModel {
     
     func downloadProfilePicture(username: String) async throws -> UIImage {
         let downloadTask = Amplify.Storage.downloadData(key: username)
+        Task {
+            for await progress in await downloadTask.progress {
+                print("Progress: \(progress)")
+            }
+        }
+        let data = try await downloadTask.value
+        print("Completed: \(data)")
+        let image = UIImage(data: data)
+        return image!
+    }
+    
+    func downloadAuctionPicture(auctionID: Int) async throws -> UIImage {
+        let downloadTask = Amplify.Storage.downloadData(key: auctionID.description)
         Task {
             for await progress in await downloadTask.progress {
                 print("Progress: \(progress)")

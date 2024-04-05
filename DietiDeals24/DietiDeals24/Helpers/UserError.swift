@@ -13,4 +13,6 @@ enum UserError: Error {
     case invalidData
     case tokenNotFound
     case invalidFields
+    case auctionNotActive
+    case invalidOffer
 }

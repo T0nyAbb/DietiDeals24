@@ -1,18 +1,17 @@
 //
-//  CreateNewFixedTimeAuctionView.swift
+//  CreateNewInverseAuctionView.swift
 //  DietiDeals24
 //
-//  Created by Antonio Abbatiello on 20/03/24.
+//  Created by Antonio Abbatiello on 05/04/24.
 //
 
 import SwiftUI
 
-struct CreateNewFixedTimeAuctionView: View {
-    
+struct CreateNewInverseAuctionView: View {
     @State var description: String = ""
     @State var title: String = ""
     @State var category: Category = .automotive
-    @State var minimumPrice: Int?
+    @State var maximumPrice: Int?
     @State var selectedDate: Date = Date().advanced(by: .days(2))
     @State private var isPresented: Bool = false
     @State var uiImage: UIImage?
@@ -104,7 +103,7 @@ struct CreateNewFixedTimeAuctionView: View {
                             .padding(.horizontal)
                     }
                     Divider()
-                    TextField("Minimum Price", value: $minimumPrice, format: .currency(code: Locale.current.currency?.identifier ?? "€"), prompt: Text("Minimum Price*"))
+                    TextField("Maximum Price", value: $maximumPrice, format: .currency(code: Locale.current.currency?.identifier ?? "€"), prompt: Text("Maximum Price*"))
                         .keyboardType(.decimalPad)
                         .autocorrectionDisabled()
                         .padding()
@@ -114,7 +113,7 @@ struct CreateNewFixedTimeAuctionView: View {
                         }
                         .padding(.horizontal)
                     Spacer()
-                    NavigationLink(destination: FixedAuctionRecapView(image: uiImage, title: title, description: description.isEmpty ? nil : description, category: category, selectedDate: selectedDate, minimumPrice: minimumPrice ?? 1, popToRoot: self.$rootIsActive)) {
+                    NavigationLink(destination: FixedAuctionRecapView(image: uiImage, title: title, description: description.isEmpty ? nil : description, category: category, selectedDate: selectedDate, minimumPrice: maximumPrice ?? 1, popToRoot: self.$rootIsActive)) {
                         HStack {
                             Text("Next")
                                 .frame(width: 360, height: 45)
@@ -125,9 +124,10 @@ struct CreateNewFixedTimeAuctionView: View {
                     }
                     .isDetailLink(false)
                     .id(UUID())
-                    .disabled(title == "" || minimumPrice == nil)
+                    .disabled(title == "" || maximumPrice == nil)
                 }
-                .navigationTitle("Fixed Time Auction")
+                
+                .navigationTitle("Inverse Auction")
                 .sheet(isPresented: $isPresented, content: {
                     ImagePicker(uiImage: $uiImage, isPresenting: $isPresented, sourceType: $sourceType)
                 })
@@ -144,5 +144,6 @@ struct CreateNewFixedTimeAuctionView: View {
 }
 
 #Preview {
-    CreateNewFixedTimeAuctionView(rootIsActive: .constant(true))
+    CreateNewInverseAuctionView(rootIsActive: .constant(true))
 }
+

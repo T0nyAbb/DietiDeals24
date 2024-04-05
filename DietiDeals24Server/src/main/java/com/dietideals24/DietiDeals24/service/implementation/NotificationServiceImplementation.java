@@ -72,7 +72,7 @@ public class NotificationServiceImplementation implements NotificationService {
 
         notificationSeller.setAuctionId(auction.getId());
         notificationSeller.setReceiverId(auction.getSellerId());
-        notificationSeller.setBody("Your auction \"" + auction.getTitle() + "\" just ended, check out the winner in the app!");
+        notificationSeller.setBody("Your auction \"" + auction.getTitle() + "\" just ended, the highest offer was " + auction.getCurrentPrice() + " €");
         notificationRepository.save(notificationSeller);
 
         //Notifica per il vincitore

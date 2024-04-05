@@ -1,15 +1,13 @@
 //
-//  AuctionListView.swift
+//  InverseAuctionListView.swift
 //  DietiDeals24
 //
-//  Created by Antonio Abbatiello on 19/03/24.
+//  Created by Antonio Abbatiello on 05/04/24.
 //
 
 import SwiftUI
-import CachedAsyncImage
 
-
-struct FixedTimeAuctionListView: View {
+struct InverseAuctionListView: View {
     
     var auctionViewModel: AuctionViewModel
     
@@ -21,9 +19,9 @@ struct FixedTimeAuctionListView: View {
     
     @Binding var showCurrentUserOnly: Bool
     
-    var filteredAuctions: [FixedTimeAuction] {
-        guard !search.isEmpty else { return showCurrentUserOnly ? auctionViewModel.currentUserFixedTimeAuctions : auctionViewModel.fixedTimeAuctions}
-        return showCurrentUserOnly ? auctionViewModel.currentUserFixedTimeAuctions.filter { $0.title.localizedCaseInsensitiveContains(search) || $0.category!.localizedCaseInsensitiveContains(search)} : auctionViewModel.fixedTimeAuctions.filter { $0.title.localizedCaseInsensitiveContains(search) || $0.category!.localizedCaseInsensitiveContains(search)}
+    var filteredAuctions: [InverseAuction] {
+        guard !search.isEmpty else { return showCurrentUserOnly ? auctionViewModel.currentUserInverseAuctions : auctionViewModel.inverseAuctions}
+        return showCurrentUserOnly ? auctionViewModel.currentUserInverseAuctions.filter { $0.title.localizedCaseInsensitiveContains(search) || $0.category!.localizedCaseInsensitiveContains(search)} : auctionViewModel.inverseAuctions.filter { $0.title.localizedCaseInsensitiveContains(search) || $0.category!.localizedCaseInsensitiveContains(search)}
     }
     
     
@@ -32,7 +30,7 @@ struct FixedTimeAuctionListView: View {
             if !filteredAuctions.isEmpty {
                 ForEach(filteredAuctions) { auction in
                     NavigationLink {
-                        FixedTimeAuctionDetailView(fixedTimeAuction: auction, auctionViewModel: auctionViewModel, user: userViewModel.users.first {
+                        InverseAuctionDetailView(inverseAuction: auction, auctionViewModel: auctionViewModel, user: userViewModel.users.first {
                             $0.id! == auction.sellerId
                         })
                     } label: {
@@ -44,7 +42,7 @@ struct FixedTimeAuctionListView: View {
                 .onAppear {
                     Task {
                         do {
-                            try await auctionViewModel.getAllFixedTimeAuction()
+                            try await auctionViewModel.getAllInverseAuctions()
                         } catch {
                             print("Error")
                         }
@@ -63,7 +61,7 @@ struct FixedTimeAuctionListView: View {
                 .onAppear {
                     Task {
                         do {
-                            try await auctionViewModel.getAllFixedTimeAuction()
+                            try await auctionViewModel.getAllInverseAuctions()
                         } catch {
                             print("Error")
                         }
@@ -78,3 +76,4 @@ struct FixedTimeAuctionListView: View {
 #Preview {
     FixedTimeAuctionListView(auctionViewModel: AuctionViewModel(), userViewModel: UserViewModel(), search: .constant(""), showCurrentUserOnly: .constant(false))
 }
+

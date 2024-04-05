@@ -33,7 +33,7 @@ struct CreateNewAuctionView: View {
                 .id(UUID())
                 Spacer()
                 NavigationLink {
-                    CreateNewEnglishAuctionView()
+                    CreateNewEnglishAuctionView(rootIsActive: self.$rootIsActive)
                 } label: {
                     HStack {
                         Image(systemName: "eurosign")
@@ -51,7 +51,7 @@ struct CreateNewAuctionView: View {
                 .id(UUID())
                 Spacer()
                 NavigationLink {
-                    CreateNewDescendingPriceAuction(rootIsActive: self.$rootIsActive)
+                    CreateNewDescendingPriceAuctionView(rootIsActive: self.$rootIsActive)
                 } label: {
                     HStack {
                         Image(systemName: "eurosign.arrow.circlepath")
@@ -69,7 +69,7 @@ struct CreateNewAuctionView: View {
                 .id(UUID())
                 Spacer()
                 NavigationLink {
-                    CreateNewInverseAuctionView()
+                    CreateNewInverseAuctionView(rootIsActive: self.$rootIsActive)
                 } label: {
                     HStack {
                         Image(systemName: "arrow.circlepath")

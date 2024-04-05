@@ -24,7 +24,7 @@ public class DescendingPriceAuction extends Auction{
     @Column(nullable = false)
     private LocalDateTime startingDate;
     @Column(nullable = false)
-    private int timer = 10;
+    private int timer = 3600;
     @Column(nullable = false)
     private int timerAmount = 3600;
     @Column(nullable = false)

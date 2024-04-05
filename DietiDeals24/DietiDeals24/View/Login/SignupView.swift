@@ -28,6 +28,7 @@ struct SignupView: View {
     @State var user: User?
     @State var token: Token?
     @State var animateButton = false
+    @State var showAlert = false
     @State var showError = false
     @State var showConfirmation = false
     @Environment(\.dismiss) var dismiss
@@ -193,6 +194,14 @@ struct SignupView: View {
                             .stroke(.gray, lineWidth: 2)
                     }
                 .padding(.horizontal)
+                    HStack {
+                        Text("2 letters at the beginning then only digits\n Length between 15 and 30 characters")
+                            .bold()
+                            .font(.callout)
+                            .foregroundStyle(.gray)
+                            .padding(.horizontal, 30)
+                            .padding(.top, -10)
+                    }
                     Divider()
                 }
                 Section(header: Text("Selling info").bold().padding(.horizontal)) {

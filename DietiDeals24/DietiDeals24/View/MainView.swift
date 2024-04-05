@@ -27,12 +27,12 @@ struct MainView: View {
     @State var auctionSelection = 0
     
     @State var myAuctionSelection = 0
+    
+    @State var notificationsCount: Int?
 
     var body: some View {
-        
-
         TabView(selection:$selection) {
-            AuctionsView(selectedAuction: $auctionSelection, auctionViewModel: auctionsViewModel, userViewModel: userViewModel)
+            AuctionsView(selectedAuction: $auctionSelection, auctionViewModel: auctionsViewModel, userViewModel: userViewModel, notificationViewModel: notificationViewModel)
                   .tabItem {
                       Image(systemName: "tag.fill")
                       Text("Auctions")
@@ -44,7 +44,8 @@ struct MainView: View {
                       Text("Notifications")
                   }
                   .tag(2)
-            MyAuctionsView(userVm: userViewModel, loginVm: LoginViewModel.shared, auctionVm: auctionsViewModel, selectedAuction: $myAuctionSelection)
+                  .badge(notificationViewModel.currentUserNotifications.count)
+            MyAuctionsView(userVm: userViewModel, loginVm: LoginViewModel.shared, auctionVm: auctionsViewModel, notificationViewModel: notificationViewModel, selectedAuction: $myAuctionSelection)
                 .id(UUID())
                   .tabItem {
                       Image(systemName: "bookmark.fill")
@@ -68,6 +69,7 @@ struct MainView: View {
                 try await auctionsViewModel.getAllEnglishAuctions()
                 try await auctionsViewModel.getAllInverseAuctions()
                 try await userViewModel.getAllUsers()
+                self.notificationsCount = notificationViewModel.currentUserNotifications.count
                 if loginVm.user == nil {
                     dismiss()
                 }

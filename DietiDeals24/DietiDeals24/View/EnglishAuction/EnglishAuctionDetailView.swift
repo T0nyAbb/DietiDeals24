@@ -1,17 +1,16 @@
 //
-//  FixedTimeAuctionDetailView.swift
+//  EnglishAuctionDetailView.swift
 //  DietiDeals24
 //
-//  Created by Antonio Abbatiello on 28/03/24.
+//  Created by Antonio Abbatiello on 01/04/24.
 //
 
 import SwiftUI
 
-struct FixedTimeAuctionDetailView: View {
-    
+struct EnglishAuctionDetailView: View {
     @Environment(\.dismiss) var dismiss
     
-    @State var fixedTimeAuction: FixedTimeAuction
+    @State var englishAuction: EnglishAuction
     
     var offerViewModel = OfferViewModel()
     
@@ -38,19 +37,19 @@ struct FixedTimeAuctionDetailView: View {
     
     @State var offerError = false
     
-    @State var offerAmount: Double = 0.0
+    @State var offerAmount: Int = 0
     
     
     var body: some View {
         ScrollView(.vertical, showsIndicators: false) {
-            AuctionImageView(pictureUrl: fixedTimeAuction.urlPicture)
+            AuctionImageView(pictureUrl: englishAuction.urlPicture)
                 .frame(width: 300, height: 300)
             VStack(alignment: .leading) {
-                Text(fixedTimeAuction.title)
+                Text(englishAuction.title)
                     .font(.largeTitle)
                     .bold()
                 HStack {
-                    Text(fixedTimeAuction.category ?? "No category")
+                    Text(englishAuction.category ?? "No category")
                     Spacer()
                     Image(systemName: "person")
                     Text("Username")
@@ -60,36 +59,46 @@ struct FixedTimeAuctionDetailView: View {
                 .foregroundStyle(.secondary)
                 Divider()
                 VStack {
-                    Text(fixedTimeAuction.description ?? "No description")
+                    Text(englishAuction.description ?? "No description")
                         .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
                 } .padding(.top)
             }
             .padding()
             HStack {
                 VStack {
-                    Text("\(fixedTimeAuction.currentPrice, specifier: "%.2f") €")
+                    Text("\(englishAuction.currentPrice, specifier: "%.2f") €")
                         .font(.title)
                         .bold()
-                    Text("Highest offer")
+                    Text("Current offer")
                         .font(.callout)
+                        .onAppear {
+                            offerAmount = Int(englishAuction.currentPrice)
+                        }
                 }
                 .padding()
                 Spacer()
+                VStack {
+                    Text("\(englishAuction.startingPrice, specifier: "%.2f") €")
+                        .font(.title2)
+                        .bold()
+                    Text("Starting price")
+                        .font(.callout)
+                }
             }
             VStack {
                 
                 Button {
-                    if loginVm.user?.id == fixedTimeAuction.sellerId {
+                    if loginVm.user?.id == englishAuction.sellerId {
                         self.showConfirmation = true
                         self.showAlert = true
                     } else {
                         self.isPresented = true
                     }
                 } label: {
-                    Text(loginVm.user?.id != fixedTimeAuction.sellerId ? "Offer" : "Delete")
+                    Text(loginVm.user?.id != englishAuction.sellerId ? "Offer" : "Delete")
                         .bold()
                         .frame(width: 360, height: 45)
-                        .background(loginVm.user?.id != fixedTimeAuction.sellerId ? Color.green.gradient : Color.red.gradient)
+                        .background(loginVm.user?.id != englishAuction.sellerId ? Color.green.gradient : Color.red.gradient)
                         .foregroundColor(.white)
                         .cornerRadius(10)
                         .padding()
@@ -98,16 +107,24 @@ struct FixedTimeAuctionDetailView: View {
                 Spacer()
                     .sheet(isPresented: $isPresented) {
                         VStack {
-                            TextField("Minimum Price", value: $offerAmount, format: .currency(code: Locale.current.currency?.identifier ?? "€"), prompt: Text("Bid Amount"))
-                                .textFieldStyle(.roundedBorder)
-                                .keyboardType(.decimalPad)
-                                .autocorrectionDisabled()
-                                .padding()
+                            ZStack {
+                                Text("\(offerAmount) €")
+                                    .font(.largeTitle)
+                                    .bold()
+                                Stepper("Bid Amount:", onIncrement: {
+                                    offerAmount += englishAuction.rise
+                                            }, onDecrement: {
+                                                if offerAmount > Int(englishAuction.currentPrice) {
+                                                    offerAmount -= englishAuction.rise
+                                                }
+                                        })
+                            }
+                            .padding()
                             Button {
                                 Task {
-                                    if offerChecker.checkFixedTimeOffer(currentPrice: fixedTimeAuction.currentPrice, offerAmount: offerAmount) {
+                                    if offerChecker.checkFixedTimeOffer(currentPrice: englishAuction.currentPrice, offerAmount: Double(offerAmount)) {
                                         do {
-                                        self.offer = try await offerViewModel.createOffer(offer: .init(offerId: nil, bidderId: loginVm.user!.id!, bidAmount: offerAmount, auctionId: fixedTimeAuction.id!))
+                                            self.offer = try await offerViewModel.createOffer(offer: .init(offerId: nil, bidderId: loginVm.user!.id!, bidAmount: Double(offerAmount), auctionId: englishAuction.id!))
                                         } catch UserError.auctionNotActive {
                                             print("Auction not active")
                                             self.offerError = true
@@ -135,6 +152,7 @@ struct FixedTimeAuctionDetailView: View {
                                         }
 
                                     }
+                                    
                                     if self.offer != nil {
                                         isPresented = false
                                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
@@ -156,7 +174,7 @@ struct FixedTimeAuctionDetailView: View {
                             }
                         }
                     }
-                    .presentationDetents([.medium, .large])
+                    .presentationDetents([.medium])
             }
             .alert(isPresented: $showAlert, content: {
                 if showConfirmation {
@@ -164,7 +182,7 @@ struct FixedTimeAuctionDetailView: View {
                           message: Text("This action is permanent."),
                           primaryButton: .destructive(Text("Delete"), action: {
                         Task {
-                            if try await auctionViewModel.deleteAuction(auction: fixedTimeAuction) {
+                            if try await auctionViewModel.deleteAuction(auction: englishAuction) {
                                 dismiss()
                             }
                         }
@@ -193,7 +211,7 @@ struct FixedTimeAuctionDetailView: View {
                         
                     } else {
                         Alert(title: Text("Bid successfuly made!"), dismissButton: .default(Text("Ok"), action: {
-                            fixedTimeAuction.currentPrice = offer!.bidAmount
+                            englishAuction.currentPrice = offer!.bidAmount
                         }))
                     }
                 }
@@ -203,5 +221,5 @@ struct FixedTimeAuctionDetailView: View {
 }
 
 #Preview {
-    FixedTimeAuctionDetailView(fixedTimeAuction: .init(id: 0, title: "Auction title", description: "Auction description", category: "Auction category", sellerId: 0, urlPicture: nil, active: nil, failed: nil, currentPrice: 20, minimumPrice: 30, expiryDate: Date().advanced(by: .hours(2))), auctionViewModel: AuctionViewModel())
+    EnglishAuctionDetailView(englishAuction: .init(id: nil, title: "title", description: nil, category: nil, sellerId: 0, urlPicture: nil, active: nil, failed: nil, currentPrice: 0.0, startingPrice: 10, startingDate: Date(), timer: 60*60, timerAmount: 60*60, rise: 10), auctionViewModel: AuctionViewModel())
 }

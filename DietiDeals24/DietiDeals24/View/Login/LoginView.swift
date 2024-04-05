@@ -28,10 +28,6 @@ struct LoginView: View {
     @State var showError = false
     @Environment(\.colorScheme) var colorScheme
     
-    
-    
-    
-    
     var body: some View {
         NavigationStack {
             ScrollView(.vertical, showsIndicators: false) {
@@ -176,19 +172,18 @@ struct LoginView: View {
                                 .font(.title2)
                                 .bold()
                                 .foregroundColor(.white)
-
+                                .frame(height: 50)
+                                .frame(maxWidth: .infinity)
+                                .background(
+                                    LinearGradient(colors: [.blue, .teal], startPoint: .topLeading, endPoint: .bottomTrailing)
+                                        .hueRotation(.degrees(animateButton ? 45 : 0))
+                                        .onAppear {
+                                            withAnimation(.easeInOut(duration: 2).repeatForever(autoreverses: true)) {
+                                                animateButton.toggle()
+                                            }
+                                        }
+                                )
                         }
-                        .frame(height: 50)
-                        .frame(maxWidth: .infinity) // how to make a button fill all the space available horizontaly
-                        .background(
-                            LinearGradient(colors: [.blue, .teal], startPoint: .topLeading, endPoint: .bottomTrailing)
-                                .hueRotation(.degrees(animateButton ? 45 : 0))
-                                .onAppear {
-                                    withAnimation(.easeInOut(duration: 2).repeatForever(autoreverses: true)) {
-                                        animateButton.toggle()
-                                    }
-                                }
-                        )
                         .cornerRadius(10)
                         .padding()
                     }
@@ -241,6 +236,7 @@ struct LoginView: View {
                         }
                 }
             }
+            .scrollDismissesKeyboard(.immediately)
         }
     }
 }

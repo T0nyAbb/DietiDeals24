@@ -31,49 +31,7 @@ struct DescendingPriceAuctionListView: View {
                     NavigationLink {
                         DescendingPriceAuctionDetailView(descendingPriceAuction: auction, auctionViewModel: auctionViewModel)
                     } label: {
-                        HStack {
-                            if let imageURL = auction.urlPicture {
-                                AsyncImage(url: URL(string: imageURL)) { phase in
-                                    if let image = phase.image {
-                                        // Display the loaded image
-                                            image
-                                                .resizable()
-                                                .aspectRatio(contentMode: .fit)
-                                                .clipShape(RoundedRectangle(cornerRadius: 10))
-                                    } else if phase.error != nil {
-                                            // Display a placeholder when loading failed
-                                            Image(systemName: "questionmark.diamond")
-                                                .imageScale(.large)
-                                    } else {
-                                            // Display a placeholder while loading
-                                            ProgressView()
-                                    }
-                                }
-                            } else {
-                                Image(systemName: "photo")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .clipShape(RoundedRectangle(cornerRadius: 10))
-                                    .frame(width: 100, height: 100)
-                            }
-                            VStack {
-                                Text(auction.title)
-                                    .font(.title2)
-                                    .bold()
-                                Spacer()
-                                Text("Price reduction every:")
-                                    .font(.caption)
-                                Text("^[\(Int(auction.timerAmount/60)) Minute](inflect: true)")
-                                    .font(.caption)
-                                    .bold()
-                            }
-                            .padding(.vertical)
-                            Spacer()
-                            Text("\(auction.currentPrice, specifier: "%.2f") €")
-                                .font(.title)
-                                .bold()
-                        }
-                        .padding()
+                        AuctionRowView(auction: auction)
                     }
                     .id(UUID())
                     .buttonStyle(PlainButtonStyle())

@@ -177,25 +177,14 @@ class AuctionViewModel {
                 self.currentUserFixedTimeAuctions = self.fixedTimeAuctions.filter { $0.sellerId == user.id}
 
                 
-                self.fixedTimeAuctions = self.fixedTimeAuctions.filter { $0.sellerId != user.id}
+                self.fixedTimeAuctions.removeAll { $0.sellerId == user.id}
 
                 
                 self.fixedTimeAuctions.removeAll { $0.failed == true}
                 
-                print("Not failed auctions")
-                for auction in fixedTimeAuctions {
-                    print(auction.expiryDate)
-                    print(auction.failed)
-                }
                 
                 self.fixedTimeAuctions.removeAll { $0.active == false}
-                
-                print("Not active auctions")
-                for auction in fixedTimeAuctions {
-                    print(auction.expiryDate)
-                    print(auction.failed)
-                }
-                
+                                
                 print("auctions successfully retrieved!")
             } else {
             
@@ -316,7 +305,7 @@ class AuctionViewModel {
         } catch {
             // Handle any errors that occurred during the request
             print("generic error")
-            print(error.localizedDescription)
+            print(error)
             throw error
         }
     }
