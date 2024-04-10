@@ -18,31 +18,35 @@ struct EnglishAuctionDetailView: View {
     
     var auctionViewModel: AuctionViewModel
     
+    var userViewModel: UserViewModel = UserViewModel()
+    
     @State var offer: Offer?
     
     @State var user: User?
     
+    @State var seller: User?
+    
     @StateObject var loginVm: LoginViewModel = LoginViewModel.shared
     
     
-    @State var isPresented = false
+    @State var isPresented: Bool = false
     
-    @State var showAlert = false
+    @State var showAlert: Bool = false
     
-    @State var showConfirmation = false
+    @State var showConfirmation: Bool = false
     
-    @State var auctionNotActiveError = false
+    @State var auctionNotActiveError: Bool = false
     
-    @State var offerAlreadyMadeError = false
+    @State var offerAlreadyMadeError: Bool = false
     
-    @State var offerError = false
+    @State var offerError: Bool = false
     
     @State var offerAmount: Int = 0
     
     
     var body: some View {
         ScrollView(.vertical, showsIndicators: false) {
-            AuctionImageView(pictureUrl: englishAuction.urlPicture)
+            ImageView(pictureUrl: englishAuction.urlPicture)
                 .frame(width: 300, height: 300)
             VStack(alignment: .leading) {
                 Text(englishAuction.title)
@@ -50,17 +54,30 @@ struct EnglishAuctionDetailView: View {
                     .bold()
                 HStack {
                     Text(englishAuction.category ?? "No category")
+                        .onAppear {
+                            Task {
+                                self.seller = try await userViewModel.getUserById(id: englishAuction.sellerId)
+                            }
+                        }
                     Spacer()
-                    Image(systemName: "person")
-                    Text("Username")
-                        .bold()
+                    if loginVm.user?.id != englishAuction.sellerId {
+                        NavigationLink(destination: UserProfileView(user: seller)) {
+                            HStack {
+                                Image(systemName: "person")
+                                Text("\(seller?.firstName ?? "") \(seller?.lastName ?? "")")
+                                    .bold()
+                            }
+                        }
+                        .isDetailLink(false)
+                        .id(UUID())
+                    }
                 }
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
                 Divider()
                 VStack {
                     Text(englishAuction.description ?? "No description")
-                        .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
+                        .frame(maxWidth: .infinity)
                 } .padding(.top)
             }
             .padding()
@@ -221,5 +238,5 @@ struct EnglishAuctionDetailView: View {
 }
 
 #Preview {
-    EnglishAuctionDetailView(englishAuction: .init(id: nil, title: "title", description: nil, category: nil, sellerId: 0, urlPicture: nil, active: nil, failed: nil, currentPrice: 0.0, startingPrice: 10, startingDate: Date(), timer: 60*60, timerAmount: 60*60, rise: 10), auctionViewModel: AuctionViewModel())
+    EnglishAuctionDetailView(englishAuction: .init(id: 0, title: "title", description: nil, category: nil, sellerId: 0, urlPicture: nil, active: nil, failed: nil, currentPrice: 0.0, startingPrice: 10, startingDate: Date(), timer: 60*60, timerAmount: 60*60, rise: 10), auctionViewModel: AuctionViewModel())
 }

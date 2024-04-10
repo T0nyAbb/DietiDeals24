@@ -38,6 +38,9 @@ class LoginViewModel: ObservableObject {
     
     private init(){
         check()
+        Task {
+            await updateCurrentUser()
+        }
     }
     
     func checkStatus(){
@@ -59,7 +62,7 @@ class LoginViewModel: ObservableObject {
                     self.user = try await userVm.getUserByEmail(username: email)
                     print("user fetched")
                 } catch {
-                    print(error.localizedDescription)
+                    print(error)
                 }
             }
             self.isGoogleLogged = true
@@ -69,8 +72,6 @@ class LoginViewModel: ObservableObject {
             self.isGoogleLogged = false
             self.logged = false
             self.signOut()
-//            self.name = "Not Logged In"
-//            self.profilePicUrl =  ""
         }
     }
     
@@ -359,7 +360,6 @@ class LoginViewModel: ObservableObject {
         }
     }
     
-    func checkSignupFields() {}
     
 
     
@@ -433,8 +433,6 @@ struct FBLog: UIViewRepresentable {
                                            print(data)
                                            if let email: String = dictData["username"] as? String
                                            {
-                                               
-                                               print(self.parent.loginVm.googleEmail)
                                                self.parent.loginVm.setFbEmail(email: email)
                                            }
                                            
@@ -469,7 +467,6 @@ struct FBLog: UIViewRepresentable {
             
             
         }
-        
         func loginButtonDidLogOut(_ loginButton: FBSDKLoginKit.FBLoginButton) {
             print("fb logged out")
             self.parent.loginVm.setFbIsLogged(isLogged: false)

@@ -65,7 +65,7 @@ struct MyAuctionsView: View {
             .scrollDismissesKeyboard(.immediately)
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
-                    NavigationLink(destination: CreateNewAuctionView(rootIsActive: self.$isActive)) {
+                    NavigationLink(destination: CreateNewAuctionView(rootIsActive: self.$isActive, user: loginVm.user!)) {
                         Image(systemName: "plus")
                     }
                 }

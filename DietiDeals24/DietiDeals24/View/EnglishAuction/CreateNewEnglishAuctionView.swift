@@ -19,7 +19,7 @@ struct CreateNewEnglishAuctionView: View {
     @Binding var rootIsActive: Bool
     @State var sourceType: UIImagePickerController.SourceType = .photoLibrary
     @Environment(\.dismiss) private var dismiss
-    @State var nextDisabled = true
+    @State var nextDisabled: Bool = true
     
     
 

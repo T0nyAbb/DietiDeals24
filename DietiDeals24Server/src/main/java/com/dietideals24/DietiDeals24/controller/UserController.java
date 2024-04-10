@@ -22,7 +22,7 @@ public class UserController {
     private UserService userService;
 
     //Restituisce un'utente dato un id
-    @GetMapping("/api/user/{id}")
+    @PostMapping("/api/user/id/{id}")
     public ResponseEntity<User> getUserById(@PathVariable("id") Long userId) {
         User user = userService.getUserById(userId);
 

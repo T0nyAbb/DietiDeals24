@@ -30,13 +30,18 @@
 		1D63A4D42B5ED9BA00D283DE /* AuctionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D63A4D32B5ED9BA00D283DE /* AuctionsView.swift */; };
 		1D63A4D62B5EDC0000D283DE /* MyAuctionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D63A4D52B5EDC0000D283DE /* MyAuctionsView.swift */; };
 		1D63F1DC2BBA1B3600E082AA /* AuctionRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D63F1DB2BBA1B3600E082AA /* AuctionRowView.swift */; };
-		1D63F1DE2BBA306C00E082AA /* AuctionImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D63F1DD2BBA306C00E082AA /* AuctionImageView.swift */; };
+		1D63F1DE2BBA306C00E082AA /* ImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D63F1DD2BBA306C00E082AA /* ImageView.swift */; };
 		1D63F1E22BBA3BE900E082AA /* EnglishAuctionDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D63F1E12BBA3BE900E082AA /* EnglishAuctionDetailView.swift */; };
 		1D63F1E42BBA5A1800E082AA /* EnglishAuctionRecapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D63F1E32BBA5A1800E082AA /* EnglishAuctionRecapView.swift */; };
 		1D63F2262BC0931E00E082AA /* CreateNewInverseAuctionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D63F2252BC0931E00E082AA /* CreateNewInverseAuctionView.swift */; };
 		1D63F2282BC0970E00E082AA /* InverseAuctionRecapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D63F2272BC0970E00E082AA /* InverseAuctionRecapView.swift */; };
 		1D63F22A2BC0984C00E082AA /* InverseAuctionListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D63F2292BC0984C00E082AA /* InverseAuctionListView.swift */; };
 		1D63F22C2BC099EB00E082AA /* InverseAuctionDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D63F22B2BC099EB00E082AA /* InverseAuctionDetailView.swift */; };
+		1D63F2302BC1FCFC00E082AA /* ModifyProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D63F22F2BC1FCFC00E082AA /* ModifyProfileView.swift */; };
+		1D63F2322BC239AA00E082AA /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 1D63F2312BC239AA00E082AA /* Localizable.xcstrings */; };
+		1D63F2342BC23C2F00E082AA /* StringLocalizationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D63F2332BC23C2F00E082AA /* StringLocalizationExtension.swift */; };
+		1D63F2362BC51FFE00E082AA /* AuctionInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D63F2352BC51FFE00E082AA /* AuctionInfoView.swift */; };
+		1D63F23A2BC5340B00E082AA /* UserProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D63F2392BC5340B00E082AA /* UserProfileView.swift */; };
 		1D6B4FCE2BB2C5FC007B74AC /* AuctionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D6B4FCD2BB2C5FC007B74AC /* AuctionViewModel.swift */; };
 		1D78FDB72BB72EC7003289BC /* NotificationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D78FDB62BB72EC7003289BC /* NotificationViewModel.swift */; };
 		1D78FDB92BB72EFB003289BC /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D78FDB82BB72EFB003289BC /* Notification.swift */; };
@@ -123,13 +128,18 @@
 		1D63A4D32B5ED9BA00D283DE /* AuctionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuctionsView.swift; sourceTree = "<group>"; };
 		1D63A4D52B5EDC0000D283DE /* MyAuctionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyAuctionsView.swift; sourceTree = "<group>"; };
 		1D63F1DB2BBA1B3600E082AA /* AuctionRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuctionRowView.swift; sourceTree = "<group>"; };
-		1D63F1DD2BBA306C00E082AA /* AuctionImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuctionImageView.swift; sourceTree = "<group>"; };
+		1D63F1DD2BBA306C00E082AA /* ImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageView.swift; sourceTree = "<group>"; };
 		1D63F1E12BBA3BE900E082AA /* EnglishAuctionDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnglishAuctionDetailView.swift; sourceTree = "<group>"; };
 		1D63F1E32BBA5A1800E082AA /* EnglishAuctionRecapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnglishAuctionRecapView.swift; sourceTree = "<group>"; };
 		1D63F2252BC0931E00E082AA /* CreateNewInverseAuctionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateNewInverseAuctionView.swift; sourceTree = "<group>"; };
 		1D63F2272BC0970E00E082AA /* InverseAuctionRecapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InverseAuctionRecapView.swift; sourceTree = "<group>"; };
 		1D63F2292BC0984C00E082AA /* InverseAuctionListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InverseAuctionListView.swift; sourceTree = "<group>"; };
 		1D63F22B2BC099EB00E082AA /* InverseAuctionDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InverseAuctionDetailView.swift; sourceTree = "<group>"; };
+		1D63F22F2BC1FCFC00E082AA /* ModifyProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModifyProfileView.swift; sourceTree = "<group>"; };
+		1D63F2312BC239AA00E082AA /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		1D63F2332BC23C2F00E082AA /* StringLocalizationExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringLocalizationExtension.swift; sourceTree = "<group>"; };
+		1D63F2352BC51FFE00E082AA /* AuctionInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuctionInfoView.swift; sourceTree = "<group>"; };
+		1D63F2392BC5340B00E082AA /* UserProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileView.swift; sourceTree = "<group>"; };
 		1D6B4FCD2BB2C5FC007B74AC /* AuctionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuctionViewModel.swift; sourceTree = "<group>"; };
 		1D78FDB62BB72EC7003289BC /* NotificationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationViewModel.swift; sourceTree = "<group>"; };
 		1D78FDB82BB72EFB003289BC /* Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
@@ -237,6 +247,7 @@
 				1D4A35062B51D10F00012205 /* DietiDeals24App.swift */,
 				1D4A350A2B51D11000012205 /* Assets.xcassets */,
 				1D4A350C2B51D11000012205 /* Preview Content */,
+				1D63F2312BC239AA00E082AA /* Localizable.xcstrings */,
 			);
 			path = DietiDeals24;
 			sourceTree = "<group>";
@@ -293,6 +304,7 @@
 				1DBDBC232BA056F700CFB68E /* Login */,
 				1DD6AF692B5D796C00D489EE /* MainView.swift */,
 				1D63A4CF2B5ED99000D283DE /* ProfileView.swift */,
+				1D63F22F2BC1FCFC00E082AA /* ModifyProfileView.swift */,
 				1D63F1E02BBA3A4400E082AA /* Notification */,
 				1D63A4D32B5ED9BA00D283DE /* AuctionsView.swift */,
 				1DBDBC3C2BAAE8E100CFB68E /* CreateNewAuctionView.swift */,
@@ -300,7 +312,9 @@
 				1D63F1DF2BBA3A1B00E082AA /* EnglishAuction */,
 				1D63A4D52B5EDC0000D283DE /* MyAuctionsView.swift */,
 				1D63F1DB2BBA1B3600E082AA /* AuctionRowView.swift */,
-				1D63F1DD2BBA306C00E082AA /* AuctionImageView.swift */,
+				1D63F2392BC5340B00E082AA /* UserProfileView.swift */,
+				1D63F2352BC51FFE00E082AA /* AuctionInfoView.swift */,
+				1D63F1DD2BBA306C00E082AA /* ImageView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -385,6 +399,7 @@
 				1DBDBC732BAD75C500CFB68E /* DateDecoderExtension.swift */,
 				1D79C17D2BB6635D0017F1DF /* OfferChecker.swift */,
 				1D78FDBD2BB77721003289BC /* DescendingPriceChecker.swift */,
+				1D63F2332BC23C2F00E082AA /* StringLocalizationExtension.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -510,6 +525,7 @@
 			knownRegions = (
 				en,
 				Base,
+				it,
 			);
 			mainGroup = 1D4A34FA2B51D10F00012205;
 			packageReferences = (
@@ -536,6 +552,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1D4A350E2B51D11000012205 /* Preview Assets.xcassets in Resources */,
+				1D63F2322BC239AA00E082AA /* Localizable.xcstrings in Resources */,
 				1D4A350B2B51D11000012205 /* Assets.xcassets in Resources */,
 				7223FB12D52B5E2BB11D9038 /* awsconfiguration.json in Resources */,
 				E971C3B1E7741A49E0DE06E2 /* amplifyconfiguration.json in Resources */,
@@ -567,6 +584,7 @@
 				1D78FDB72BB72EC7003289BC /* NotificationViewModel.swift in Sources */,
 				1DBDBC3D2BAAE8E100CFB68E /* CreateNewAuctionView.swift in Sources */,
 				1D63A4D62B5EDC0000D283DE /* MyAuctionsView.swift in Sources */,
+				1D63F2302BC1FCFC00E082AA /* ModifyProfileView.swift in Sources */,
 				1DBDBC312BA9A41A00CFB68E /* FixedTimeAuctionListView.swift in Sources */,
 				1D606CAB2B6FF310002BA4F7 /* UserViewModel.swift in Sources */,
 				1DBDBC2F2BA46B2700CFB68E /* FieldChecker.swift in Sources */,
@@ -578,13 +596,16 @@
 				1DBDBC742BAD75C500CFB68E /* DateDecoderExtension.swift in Sources */,
 				1D63F1DC2BBA1B3600E082AA /* AuctionRowView.swift in Sources */,
 				1D78FDB92BB72EFB003289BC /* Notification.swift in Sources */,
+				1D63F23A2BC5340B00E082AA /* UserProfileView.swift in Sources */,
 				1DBDBC2B2BA3008F00CFB68E /* Constants.swift in Sources */,
 				1DBDBC3B2BAAE35500CFB68E /* DescendingPriceAuction.swift in Sources */,
 				1D6B4FCE2BB2C5FC007B74AC /* AuctionViewModel.swift in Sources */,
 				1D63F2282BC0970E00E082AA /* InverseAuctionRecapView.swift in Sources */,
 				1D4A353A2B51D81600012205 /* GoogleSignInAuthenticator.swift in Sources */,
 				1DBDBC152B9D13EF00CFB68E /* SignupView.swift in Sources */,
-				1D63F1DE2BBA306C00E082AA /* AuctionImageView.swift in Sources */,
+				1D63F2362BC51FFE00E082AA /* AuctionInfoView.swift in Sources */,
+				1D63F1DE2BBA306C00E082AA /* ImageView.swift in Sources */,
+				1D63F2342BC23C2F00E082AA /* StringLocalizationExtension.swift in Sources */,
 				1D63F22A2BC0984C00E082AA /* InverseAuctionListView.swift in Sources */,
 				1DD6AF6A2B5D796C00D489EE /* MainView.swift in Sources */,
 				1DBDBC392BAAE2D600CFB68E /* FixedTimeAuction.swift in Sources */,

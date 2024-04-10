@@ -15,7 +15,7 @@ struct FixedTimeAuctionListView: View {
     
     var userViewModel: UserViewModel
     
-    @State var currentDate = Date()
+    @State var currentDate: Date = Date()
     
     @Binding var search: String
     

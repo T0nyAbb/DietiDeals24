@@ -25,6 +25,7 @@ struct SignupView: View {
     @State private var vatNumber: String = ""
     @State private var nationalInsuranceNumber: String = ""
     @State private var showPassword: Bool = false
+    @State private var countryList: [String] = Locale.Region.isoRegions.compactMap { Locale.current.localizedString(forRegionCode: $0.identifier) }
     @State var user: User?
     @State var token: Token?
     @State var animateButton = false
@@ -32,7 +33,8 @@ struct SignupView: View {
     @State var showError = false
     @State var showConfirmation = false
     @Environment(\.dismiss) var dismiss
-    var fieldChecker = FieldChecker()
+    @Environment(\.locale) var locale
+    var fieldChecker: FieldChecker = FieldChecker()
     
     
     
@@ -43,8 +45,49 @@ struct SignupView: View {
         }
     }
     
+    private var isPasswordValid: Bool {
+        let numberRegex  = ".*[0-9]+.*"
+        let passwordPredicate = NSPredicate(format:"SELF MATCHES %@", numberRegex)
+        if(password.count < 5) {
+            return false
+        }
+        if(!passwordPredicate.evaluate(with: password)) {
+            return false
+        }
+        if(password != confirmPassword) {
+            return false
+        }
+        return true
+    }
+    
+    private var isPasswordEmpty: Bool {
+        return password == "" && confirmPassword == ""
+    }
+    
+    private var checkPasswordField: Bool {
+        return isPasswordEmpty || isPasswordValid
+    }
+    
+    private var checkIbanField: Bool {
+        return iban.isEmpty || isIbanValid
+    }
+    
+    private var isIbanValid: Bool {
+        let ibanRegex = #"^[a-zA-Z]{2}\d+$"#
+        let ibanPredicate = NSPredicate(format: "SELF MATCHES %@", ibanRegex)
+        if(iban.count < 15 || iban.count > 30) {
+            return false
+        }
+        if(!ibanPredicate.evaluate(with: iban)) {
+            return false
+        }
+        return true
+    }
+    
+    
+    
     var body: some View {
-            ScrollView(.vertical) {
+            ScrollView(.vertical, showsIndicators: false) {
             VStack(alignment: .leading, spacing: 15) {
                 Spacer()
                 Section(header: Text("General info").bold().padding(.horizontal)) {
@@ -89,15 +132,15 @@ struct SignupView: View {
                 HStack {
                     Group {
                         if showPassword {
-                            TextField("Password", // how to create a secure text field
+                            TextField("Password",
                                       text: $password,
-                                      prompt: Text("Password*").foregroundColor(.gray)) // How to change the color of the TextField Placeholder
+                                      prompt: Text("Password*").foregroundColor(.gray))
                             .autocorrectionDisabled()
                             .textInputAutocapitalization(.never)
                         } else {
-                            SecureField("Password", // how to create a secure text field
+                            SecureField("Password",
                                         text: $password,
-                                        prompt: Text("Password*").foregroundColor(.gray)) // How to change the color of the TextField Placeholder
+                                        prompt: Text("Password*").foregroundColor(.gray))
                             .autocorrectionDisabled()
                             .textInputAutocapitalization(.never)
                         }
@@ -105,16 +148,14 @@ struct SignupView: View {
                     .padding(10)
                     .overlay {
                         RoundedRectangle(cornerRadius: 10)
-                            .stroke(.gray, lineWidth: 2) // How to add rounded corner to a TextField and change it colour
+                            .stroke(.gray, lineWidth: 2)
                     }
-                    
                     Button {
                         showPassword.toggle()
                     } label: {
                         Image(systemName: showPassword ? "eye" : "eye.slash")
-                            .foregroundColor(.blue) // how to change image based in a State variable
+                            .foregroundColor(.blue)
                     }
-                    
                 }.padding(.horizontal)
                 if showPassword {
                     TextField("Confirm Password",
@@ -125,7 +166,7 @@ struct SignupView: View {
                     .padding(10)
                     .overlay {
                         RoundedRectangle(cornerRadius: 10)
-                            .stroke(.gray, lineWidth: 2)
+                            .stroke(checkPasswordField ? .gray : .red, lineWidth: 2)
                     }
                     .padding(.horizontal)
                 } else {
@@ -137,7 +178,7 @@ struct SignupView: View {
                     .padding(10)
                     .overlay {
                         RoundedRectangle(cornerRadius: 10)
-                            .stroke(.gray, lineWidth: 2)
+                            .stroke(checkPasswordField ? .gray : .red, lineWidth: 2)
                     }
                     .padding(.horizontal)
                 }
@@ -178,20 +219,26 @@ struct SignupView: View {
                         .stroke(.gray, lineWidth: 2)
                 }
                 .padding(.horizontal)
-                TextField("Geographic Area", text: $geographicArea, prompt: Text("Geographic Area").foregroundColor(.gray))
-                    .padding(10)
-                .overlay {
-                    RoundedRectangle(cornerRadius: 10)
-                        .stroke(.gray, lineWidth: 2)
+                HStack {
+                    Text("Geographic Area: ")
+                        .padding()
+                        .padding(.horizontal, 10)
+                    Picker("Timer", selection: $geographicArea) {
+                        ForEach(countryList, id:\.self) {
+                            Text($0)
+                        }
+                    }
+                    .pickerStyle(.automatic)
+                    .frame(height: 100)
+                    Spacer()
                 }
-                .padding(.horizontal)
                 Divider()
                 Section(header: Text("Billing info").bold().padding(.horizontal)) {
                     TextField("Iban", text: $iban, prompt: Text("IBAN*").foregroundColor(.gray))
                         .padding(10)
                     .overlay {
                         RoundedRectangle(cornerRadius: 10)
-                            .stroke(.gray, lineWidth: 2)
+                            .stroke(checkIbanField ? .gray : .red, lineWidth: 2)
                     }
                 .padding(.horizontal)
                     HStack {
@@ -232,15 +279,19 @@ struct SignupView: View {
                         self.showError = try !fieldChecker.checkFields(username: username, password: password, confirmPassword: confirmPassword, iban: iban)
                     } catch {
                         self.showError = true
+                        self.showAlert = true
                     }
                     Task {
                         do {
                             token = try await loginVm.signUp(user: .init(id: nil, firstName: self.firstName, lastName: self.lastName, username: self.username, password: self.password, bio: self.bio, website: self.webSite, social: self.social, geographicArea: self.geographicArea, google: nil, facebook: nil, apple: nil, profilePicture: nil, iban: self.iban, vatNumber: self.vatNumber, nationalInsuranceNumber: self.nationalInsuranceNumber))
                             if token != nil {
                                 showConfirmation = true
+                                showAlert = true
                             }
                         } catch {
                             print(error.localizedDescription)
+                            showError = true
+                            showAlert = true
                         }
                     }
                 } label: {
@@ -250,9 +301,9 @@ struct SignupView: View {
                         .foregroundColor(.white)
                 }
                 .frame(height: 50)
-                .frame(maxWidth: .infinity) // how to make a button fill all the space available horizontaly
+                .frame(maxWidth: .infinity)
                 .background(
-                    isSignInButtonDisabled ? // how to add a gradient to a button in SwiftUI if the button is disabled
+                    isSignInButtonDisabled ?
                     LinearGradient(colors: [.gray], startPoint: .topLeading, endPoint: .bottomTrailing)
                         .hueRotation(Angle(degrees: 0)):
                         LinearGradient(colors: [.blue, .red], startPoint: .topLeading, endPoint: .bottomTrailing)
@@ -265,15 +316,23 @@ struct SignupView: View {
                     }
                 }
                 .cornerRadius(20)
-                .disabled(isSignInButtonDisabled) // how to disable while some condition is applied
+                .disabled(isSignInButtonDisabled)
                 .padding()
             }
             .navigationTitle("Sign Up")
-            .alert(isPresented: $showError) {
-                Alert(title: Text("Error"), message: Text("Some fields are not valid"), dismissButton: .default(Text("Ok")))
-            }
-            .alert(isPresented: $showConfirmation) {
-                Alert(title: Text("Success"), message: Text("Account successfully registered!"), dismissButton: .default(Text("Ok"), action: {dismiss()}))
+            .alert(isPresented: $showAlert) {
+                if showError {
+                    Alert(title: Text("Error"), message: Text("Some fields are not valid"), dismissButton: .default(Text("Ok"), action: {
+                        showError = false
+                        showAlert = false
+                    }))
+                } else  {
+                    Alert(title: Text("Success"), message: Text("Account successfully registered!"), dismissButton: .default(Text("Ok"), action: {
+                        showConfirmation = false
+                        showAlert = false
+                        dismiss()
+                    }))
+                }
             }
             .onDisappear {
                 firstName = ""
@@ -289,10 +348,7 @@ struct SignupView: View {
                 vatNumber = ""
                 nationalInsuranceNumber = ""
             }
-            
         }
-        
-    
     }
 }
 

@@ -33,12 +33,6 @@ struct LoginView: View {
             ScrollView(.vertical, showsIndicators: false) {
                 VStack {
                     VStack {
-                        //                    Image(systemName: "person.circle")
-                        //                        .resizable()
-                        //                        .aspectRatio(contentMode: .fit)
-                        //                        .frame(width: 75, height: 75)
-                        //                        .padding(.bottom, 30)
-                        
                         TextField("Email",
                                   text: $email ,
                                   prompt: Text("Email").foregroundColor(.gray)
@@ -132,7 +126,7 @@ struct LoginView: View {
                                         print(appleIdCredentials.fullName?.familyName)
                                         Task {
                                             do {
-                                                token = try await loginVm.signUp(user: .init(id: nil, firstName: firstName, lastName: lastName, username: username, password: nil, bio: nil, website: nil, social: nil, geographicArea: nil, google: nil, facebook: nil, apple: username, profilePicture: nil, iban: nil, vatNumber: nil, nationalInsuranceNumber: nil))
+                                                token = try await loginVm.signUpWithSocialProvider(user: .init(id: nil, firstName: firstName, lastName: lastName, username: username, password: "", bio: nil, website: nil, social: nil, geographicArea: nil, google: nil, facebook: nil, apple: username, profilePicture: nil, iban: nil, vatNumber: nil, nationalInsuranceNumber: nil))
                                             } catch {
                                                 print(error.localizedDescription)
                                             }

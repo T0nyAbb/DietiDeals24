@@ -23,27 +23,29 @@ struct InverseAuctionDetailView: View {
     
     @State var user: User?
     
+    @State var seller: User?
+    
     @StateObject var loginVm: LoginViewModel = LoginViewModel.shared
     
     
-    @State var isPresented = false
+    @State var isPresented: Bool = false
     
-    @State var showAlert = false
+    @State var showAlert: Bool = false
     
-    @State var showConfirmation = false
+    @State var showConfirmation: Bool = false
     
-    @State var auctionNotActiveError = false
+    @State var auctionNotActiveError: Bool = false
     
-    @State var offerAlreadyMadeError = false
+    @State var offerAlreadyMadeError: Bool = false
     
-    @State var offerError = false
+    @State var offerError: Bool = false
     
     @State var offerAmount: Double = 0.0
     
     
     var body: some View {
         ScrollView(.vertical, showsIndicators: false) {
-            AuctionImageView(pictureUrl: inverseAuction.urlPicture)
+            ImageView(pictureUrl: inverseAuction.urlPicture)
                 .frame(width: 300, height: 300)
             VStack(alignment: .leading) {
                 Text(inverseAuction.title)
@@ -52,9 +54,17 @@ struct InverseAuctionDetailView: View {
                 HStack {
                     Text(inverseAuction.category ?? "No category")
                     Spacer()
-                    Image(systemName: "person")
-                    Text("Username")
-                        .bold()
+                    if loginVm.user?.id != inverseAuction.sellerId {
+                        NavigationLink(destination: UserProfileView(user: seller)) {
+                            HStack {
+                                Image(systemName: "person")
+                                Text("\(seller?.firstName ?? "") \(seller?.lastName ?? "")")
+                                    .bold()
+                            }
+                        }
+                        .isDetailLink(false)
+                        .id(UUID())
+                    }
                 }
                 .font(.subheadline)
                 .foregroundStyle(.secondary)

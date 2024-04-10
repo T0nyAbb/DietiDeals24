@@ -21,102 +21,142 @@ struct ProfileView: View {
     @Environment(\.dismiss) var dismiss
     @State var loggedOut: Bool = false
     @State var appleLogged: Bool = LoginViewModel.shared.appleIsLogged
-    @State var isPresented = false
+    @State var isPresented: Bool = false
     @State var sourceType: UIImagePickerController.SourceType = .photoLibrary
     @State var uiImage: UIImage?
-    var imageViewModel = ImageViewModel()
+    @State var changed: Bool = false
+    var imageViewModel: ImageViewModel = ImageViewModel()
     
     
     
     var body: some View {
             NavigationView {
-                VStack {
-                    if fbLogged {
-                        loginVm.getfbImage()
-                            .clipShape(/*@START_MENU_TOKEN@*/Circle()/*@END_MENU_TOKEN@*/)
-                        Text(loginVm.getfbName())
-                        Text(loginVm.fbEmail)
-                            .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
-                        FBLog(loginVm: loginVm)
-                            .frame(height: 45)
-                        if !AccessToken.isCurrentAccessTokenActive {
-                            let _ = print("logged out from fb")
-                            let _ = loggedOut = true
-                            let _ = dismiss()
+                ScrollView(.vertical, showsIndicators: false) {
+                    VStack {
+                        if fbLogged {
+                            loginVm.getfbImage()
+                                .clipShape(/*@START_MENU_TOKEN@*/Circle()/*@END_MENU_TOKEN@*/)
+                            Text(loginVm.getfbName())
+                            Text(loginVm.fbEmail)
+                                .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
+                            FBLog(loginVm: loginVm)
+                                .frame(height: 45)
+                            if !AccessToken.isCurrentAccessTokenActive {
+                                let _ = print("logged out from fb")
+                                let _ = loggedOut = true
+                                let _ = dismiss()
+                            }
                         }
-                    }
-                    else if googleLogged {
+                        else if googleLogged {
+                            
+                            loginVm.userDetails()
+                                .clipShape(/*@START_MENU_TOKEN@*/Circle()/*@END_MENU_TOKEN@*/)
+                            loginVm.getGoogleUserName()
+                            loginVm.getGoogleEmail()
+                                .padding()
+                            Button(action: {
+                                authViewModel.signOut()
+                                loggedOut = true
+                                dismiss()
+                            }) {
+                                Text("Sign Out")
+                            }
+                        }
                         
-                        loginVm.userDetails()
-                            .clipShape(/*@START_MENU_TOKEN@*/Circle()/*@END_MENU_TOKEN@*/)
-                        loginVm.getGoogleUserName()
-                        loginVm.getGoogleEmail()
-                            .padding()
-                        Button(action: {
-                            authViewModel.signOut()
-                            loggedOut = true
-                            dismiss()
-                        }) {
-                            Text("Sign Out")
-                        }
-                    }
-                    
-                    else if appleLogged {
-                        AsyncImage(url: URL(string: loginVm.user?.profilePicture ?? "")) { image in
-                            image
-                                .resizable()
-                                .scaledToFit()
-                                .clipShape(Circle())
-                                .frame(width: 125, height: 125)
-                        } placeholder: {
-                            Image(systemName: "person.circle")
-                                .font(.system(size: 100))
-                                .frame(width: 100, height: 100)
-                        }
-                        Button("Modify") {
-                            isPresented = true
-                        }
-                        loginVm.getAppleName()
-                        loginVm.getAppleEmail()
-                            .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
-                            .padding()
-                        Button(action: {
-                            loginVm.appleSignOut()
-                            loggedOut = true
-                            dismiss()
-                        }) {
-                            Text("Sign Out")
-                        }
-                    }
-                    else if loginVm.checkLogin() {
-                        if let imageURL = loginVm.user?.profilePicture {
-                            AsyncImage(url: URL(string: imageURL)) { image in
+                        else if appleLogged {
+                            AsyncImage(url: URL(string: loginVm.user?.profilePicture ?? "")) { image in
                                 image
                                     .resizable()
                                     .scaledToFit()
                                     .clipShape(Circle())
                                     .frame(width: 125, height: 125)
                             } placeholder: {
-                                ProgressView()
+                                Image(systemName: "person.circle")
+                                    .font(.system(size: 100))
+                                    .frame(width: 100, height: 100)
                             }
-                        } else {
-                            Image(systemName: "person.circle")
-                                .font(.system(size: 100))
-                                .frame(width: 100, height: 100)
+                            Button("Modify") {
+                                isPresented = true
+                            }
+                            loginVm.getAppleName()
+                            loginVm.getAppleEmail()
+                                .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
+                                .padding()
+                            Button(action: {
+                                loginVm.appleSignOut()
+                                loggedOut = true
+                                dismiss()
+                            }) {
+                                Text("Sign Out")
+                            }
                         }
-                        Button("Modify") {
-                            isPresented = true
-                        }
-                        Divider()
+                        else if loginVm.checkLogin() {
+                            //                        ImageView(pictureUrl: loginVm.user?.profilePicture, isProfilePicture: true)
+                            //                            .clipShape(Circle())
+                            //                            .frame(width: 125, height: 125)
+                            //                        Button("Modify") {
+                            //                            isPresented = true
+                            //                        }
+                            //                        Divider()
+                            //                            .padding()
+                            //                        loginVm.getName()
+                            //                            .font(.title)
+                            //                            .bold()
+                            //                        Divider()
+                            //                        loginVm.getEmail()
+                            //                            .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
+                            //                            .padding()
+                            //                        Spacer()
+                            
+//                            LinearGradient(colors: [.blue, .purple], startPoint: .bottomLeading, endPoint: .topTrailing)
+//                                .edgesIgnoringSafeArea(.all)
+//                                .frame(height: 300)
+                            ImageView(pictureUrl: loginVm.user?.profilePicture, isProfilePicture: true)
+                                .clipShape(Circle())
+                                .overlay {
+                                    Circle().stroke(.white, lineWidth: 4)
+                                }
+                                .shadow(radius: 7)
+                                .offset(y: -50)
+                                .padding(.bottom, -130)
+                                .frame(width: 300, height: 300)
+                                .onTapGesture {
+                                isPresented = true
+                            }
+                            VStack(alignment: .leading) {
+                                Text("\(loginVm.user?.firstName! ?? "") \(loginVm.user?.lastName! ?? "")")
+                                    .font(.title)
+                                HStack {
+                                    Text(loginVm.user?.website ?? "No website")
+                                    Spacer()
+                                    Text(loginVm.user?.geographicArea ?? "Unknown")
+                                }
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                                Divider()
+                                Text(loginVm.user?.bio ?? "No description")
+                                    .padding()
+                            }
                             .padding()
-                        loginVm.getName()
-                            .font(.title)
-                            .bold()
-                        Divider()
-                        loginVm.getEmail()
-                            .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
-                            .padding()
-                        Spacer()
+                                NavigationLink(destination: ModifyProfileView(user: loginVm.user!, userViewModel: userVm, changed: $changed)) {
+                                    HStack {
+                                        Text("Edit Profile")
+                                            .frame(width: 360, height: 45)
+                                            .background(Color.blue)
+                                            .foregroundColor(.white)
+                                            .cornerRadius(10)
+                                    }
+                                }
+                                .isDetailLink(false)
+                                .id(UUID())
+                                .onAppear {
+                                    if changed {
+                                        loginVm.signOut()
+                                        loggedOut = true
+                                        dismiss()
+                                    }
+                                }
+                            
                         Button(action: {
                             loginVm.signOut()
                             loggedOut = true
@@ -130,43 +170,38 @@ struct ProfileView: View {
                                 .cornerRadius(10)
                                 .padding()
                         }
-                    } else {
-                        Button(action: {
-                            loginVm.signOut()
-                            loggedOut = true
-                            dismiss()
-                        }) {
-                            Text("Sign Out")
-                                .bold()
-                                .frame(width: 360, height: 45)
-                                .background(Color.red.gradient)
-                                .foregroundColor(.white)
-                                .cornerRadius(10)
-                                .padding()
-                        }
+                            } else {
+                                Text("")
+                                    .onAppear {
+                                        loginVm.signOut()
+                                        loggedOut = true
+                                        dismiss()
+                                    }
+                            }
                     }
                 }
                 .navigationTitle("Profile")
-            }
-            .sheet(isPresented: $isPresented, content: {
-                ImagePicker(uiImage: $uiImage, isPresenting: $isPresented, sourceType: $sourceType)
-                    .onDisappear {
-                        if uiImage != nil {
-                            imageViewModel.uiImage = self.uiImage
-                            Task {
-                                let image = try await imageViewModel.uploadProfilePicture(username: loginVm.user!.username)
-                                print("image saved: \(image)")
-                                let imageUrl = try await imageViewModel.getProfilePictureUrl(username: image)
-                                print("image url saved: \(imageUrl)")
-                                loginVm.user?.profilePicture = imageUrl
-                                print("updated user pfp")
-                                loginVm.user = try await userVm.updateUser(user: loginVm.user!)
-                                print("updated user in db!")
+                .sheet(isPresented: $isPresented, content: {
+                    ImagePicker(uiImage: $uiImage, isPresenting: $isPresented, sourceType: $sourceType)
+                        .onDisappear {
+                            if uiImage != nil {
+                                imageViewModel.uiImage = self.uiImage
+                                Task {
+                                    let image = try await imageViewModel.uploadProfilePicture(username: loginVm.user!.username)
+                                    print("image saved: \(image)")
+                                    let imageUrl = try await imageViewModel.getProfilePictureUrl(username: image)
+                                    print("image url saved: \(imageUrl)")
+                                    loginVm.user?.profilePicture = imageUrl
+                                    print("updated user pfp")
+                                    loginVm.user = try await userVm.updateUser(user: loginVm.user!)
+                                    print("updated user in db!")
+                                }
+                                
                             }
-                            
                         }
-                    }
-            })
+                })
+            }
+ 
 
             
         }

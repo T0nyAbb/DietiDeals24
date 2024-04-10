@@ -1,5 +1,5 @@
 //
-//  AuctionImageView.swift
+//  ImageView.swift
 //  DietiDeals24
 //
 //  Created by Antonio Abbatiello on 01/04/24.
@@ -7,9 +7,10 @@
 
 import SwiftUI
 
-struct AuctionImageView: View {
+struct ImageView: View {
     
     @State var pictureUrl: String?
+    @State var isProfilePicture: Bool = false
     
     var body: some View {
         VStack {
@@ -31,16 +32,20 @@ struct AuctionImageView: View {
                     }
                 }
             } else {
-                Image(systemName: "photo")
-                    .resizable()
-                    .scaledToFit()
-                    .clipShape(RoundedRectangle(cornerRadius: 15))
-                    .shadow(radius: /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/)
+                if isProfilePicture {
+                    Image(systemName: "person.circle")
+                } else {
+                    Image(systemName: "photo")
+                        .resizable()
+                        .scaledToFit()
+                        .clipShape(RoundedRectangle(cornerRadius: 15))
+                        .shadow(radius: /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/)
+                }
             }
         }
     }
 }
 
 #Preview {
-    AuctionImageView(pictureUrl: "https://m.media-amazon.com/images/I/41TuK9whOAL._AC_UF1000,1000_QL80_.jpg")
+    ImageView(pictureUrl: "https://m.media-amazon.com/images/I/41TuK9whOAL._AC_UF1000,1000_QL80_.jpg")
 }
