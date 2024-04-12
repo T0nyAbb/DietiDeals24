@@ -1,0 +1,23 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-dietideals24-dev-95024-authRole",
+      "UnauthRoleArn": "arn:aws:iam::992382635272:role/amplify-dietideals24-dev-95024-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::992382635272:role/amplify-dietideals24-dev-95024-authRole",
+      "Region": "eu-north-1",
+      "DeploymentBucketName": "amplify-dietideals24-dev-95024-deployment",
+      "UnauthRoleName": "amplify-dietideals24-dev-95024-unauthRole",
+      "StackName": "amplify-dietideals24-dev-95024",
+      "StackId": "arn:aws:cloudformation:eu-north-1:992382635272:stack/amplify-dietideals24-dev-95024/923b0870-e04d-11ee-a1f7-0a1b85bf14e4",
+      "AmplifyAppId": "d1i0shh76cc2hz"
+    },
+    "categories": {
+      "auth": {
+        "dietideals245bc5b55a": {}
+      },
+      "storage": {
+        "s32e254829": {}
+      }
+    }
+  }
+}

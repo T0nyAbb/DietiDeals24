@@ -33,84 +33,64 @@ struct ProfileView: View {
             NavigationView {
                 ScrollView(.vertical, showsIndicators: false) {
                     VStack {
-                        if fbLogged {
-                            loginVm.getfbImage()
-                                .clipShape(/*@START_MENU_TOKEN@*/Circle()/*@END_MENU_TOKEN@*/)
-                            Text(loginVm.getfbName())
-                            Text(loginVm.fbEmail)
-                                .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
-                            FBLog(loginVm: loginVm)
-                                .frame(height: 45)
-                            if !AccessToken.isCurrentAccessTokenActive {
-                                let _ = print("logged out from fb")
-                                let _ = loggedOut = true
-                                let _ = dismiss()
-                            }
-                        }
-                        else if googleLogged {
-                            
-                            loginVm.userDetails()
-                                .clipShape(/*@START_MENU_TOKEN@*/Circle()/*@END_MENU_TOKEN@*/)
-                            loginVm.getGoogleUserName()
-                            loginVm.getGoogleEmail()
-                                .padding()
-                            Button(action: {
-                                authViewModel.signOut()
-                                loggedOut = true
-                                dismiss()
-                            }) {
-                                Text("Sign Out")
-                            }
-                        }
+//                        if fbLogged {
+//                            loginVm.getfbImage()
+//                                .clipShape(/*@START_MENU_TOKEN@*/Circle()/*@END_MENU_TOKEN@*/)
+//                            Text(loginVm.getfbName())
+//                            Text(loginVm.fbEmail)
+//                                .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
+//                            FBLog(loginVm: loginVm)
+//                                .frame(height: 45)
+//                            if !AccessToken.isCurrentAccessTokenActive {
+//                                let _ = print("logged out from fb")
+//                                let _ = loggedOut = true
+//                                let _ = dismiss()
+//                            }
+//                        }
+//                        else if googleLogged {
+//                            
+//                            loginVm.userDetails()
+//                                .clipShape(/*@START_MENU_TOKEN@*/Circle()/*@END_MENU_TOKEN@*/)
+//                            loginVm.getGoogleUserName()
+//                            loginVm.getGoogleEmail()
+//                                .padding()
+//                            Button(action: {
+//                                authViewModel.signOut()
+//                                loggedOut = true
+//                                dismiss()
+//                            }) {
+//                                Text("Sign Out")
+//                            }
+//                        }
                         
-                        else if appleLogged {
-                            AsyncImage(url: URL(string: loginVm.user?.profilePicture ?? "")) { image in
-                                image
-                                    .resizable()
-                                    .scaledToFit()
-                                    .clipShape(Circle())
-                                    .frame(width: 125, height: 125)
-                            } placeholder: {
-                                Image(systemName: "person.circle")
-                                    .font(.system(size: 100))
-                                    .frame(width: 100, height: 100)
-                            }
-                            Button("Modify") {
-                                isPresented = true
-                            }
-                            loginVm.getAppleName()
-                            loginVm.getAppleEmail()
-                                .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
-                                .padding()
-                            Button(action: {
-                                loginVm.appleSignOut()
-                                loggedOut = true
-                                dismiss()
-                            }) {
-                                Text("Sign Out")
-                            }
-                        }
-                        else if loginVm.checkLogin() {
-                            //                        ImageView(pictureUrl: loginVm.user?.profilePicture, isProfilePicture: true)
-                            //                            .clipShape(Circle())
-                            //                            .frame(width: 125, height: 125)
-                            //                        Button("Modify") {
-                            //                            isPresented = true
-                            //                        }
-                            //                        Divider()
-                            //                            .padding()
-                            //                        loginVm.getName()
-                            //                            .font(.title)
-                            //                            .bold()
-                            //                        Divider()
-                            //                        loginVm.getEmail()
-                            //                            .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
-                            //                            .padding()
-                            //                        Spacer()
-                            
-//                            LinearGradient(colors: [.blue, .purple], startPoint: .bottomLeading, endPoint: .topTrailing)
-//                                .edgesIgnoringSafeArea(.all)
-//                                .frame(height: 300)
+//                        else if appleLogged {
+//                            AsyncImage(url: URL(string: loginVm.user?.profilePicture ?? "")) { image in
+//                                image
+//                                    .resizable()
+//                                    .scaledToFit()
+//                                    .clipShape(Circle())
+//                                    .frame(width: 125, height: 125)
+//                            } placeholder: {
+//                                Image(systemName: "person.circle")
+//                                    .font(.system(size: 100))
+//                                    .frame(width: 100, height: 100)
+//                            }
+//                            Button("Modify") {
+//                                isPresented = true
+//                            }
+//                            loginVm.getAppleName()
+//                            loginVm.getAppleEmail()
+//                                .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
+//                                .padding()
+//                            Button(action: {
+//                                loginVm.appleSignOut()
+//                                loggedOut = true
+//                                dismiss()
+//                            }) {
+//                                Text("Sign Out")
+//                            }
+//                        }
+                        if loginVm.checkLogin() || appleLogged || googleLogged || fbLogged {
                             ImageView(pictureUrl: loginVm.user?.profilePicture, isProfilePicture: true)
                                 .clipShape(Circle())
                                 .overlay {
@@ -156,20 +136,32 @@ struct ProfileView: View {
                                         dismiss()
                                     }
                                 }
-                            
-                        Button(action: {
-                            loginVm.signOut()
-                            loggedOut = true
-                            dismiss()
-                        }) {
-                            Text("Sign Out")
-                                .bold()
-                                .frame(width: 360, height: 45)
-                                .background(Color.red.gradient)
-                                .foregroundColor(.white)
-                                .cornerRadius(10)
-                                .padding()
-                        }
+                            if !fbLogged {
+                                Button(action: {
+                                    if googleLogged {
+                                        authViewModel.signOut()
+                                    }
+                                    loginVm.signOut()
+                                    loggedOut = true
+                                    dismiss()
+                                }) {
+                                    Text("Sign Out")
+                                        .bold()
+                                        .frame(width: 360, height: 45)
+                                        .background(Color.red.gradient)
+                                        .foregroundColor(.white)
+                                        .cornerRadius(10)
+                                        .padding()
+                                }
+                            } else {
+                                FBLog(loginVm: loginVm)
+                                    .frame(height: 45)
+                                if !AccessToken.isCurrentAccessTokenActive {
+                                    let _ = print("logged out from fb")
+                                    let _ = loggedOut = true
+                                    let _ = dismiss()
+                                }
+                            }
                             } else {
                                 Text("")
                                     .onAppear {
@@ -178,6 +170,11 @@ struct ProfileView: View {
                                         dismiss()
                                     }
                             }
+                    }
+                    .refreshable {
+                        Task {
+                            await loginVm.updateCurrentUser()
+                        }
                     }
                 }
                 .navigationTitle("Profile")

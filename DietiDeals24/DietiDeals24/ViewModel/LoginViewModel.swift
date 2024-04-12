@@ -106,39 +106,39 @@ class LoginViewModel: ObservableObject {
         self.signOut()
     }
     
-    func userDetails() -> some View {
-            AsyncImage(url: URL(string: profilePicUrl))
-                .frame(width: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/, height: 100)
-    }
-    
-    func getGoogleUserName() -> Text {
-        return Text(self.googleName)
-    }
-    
-    func getGoogleEmail() -> Text {
-        return Text(self.googleEmail)
-    }
-    
-    func getfbProfilePic() -> String {
-        return self.fbProfilePicUrl
-    }
-    
-    func getfbImage() -> some View {
-        AsyncImage(url: URL(string: fbProfilePicUrl))
-            .frame(width: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/, height: 100)
-    }
-    
-    func getfbName() -> String {
-        return self.fbName
-    }
-    
-    func getFbEmail() -> String {
-        return self.fbEmail
-    }
-    
-    func setFbEmail(email: String) {
-        self.fbEmail = email
-    }
+//    func userDetails() -> some View {
+//            AsyncImage(url: URL(string: profilePicUrl))
+//                .frame(width: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/, height: 100)
+//    }
+//    
+//    func getGoogleUserName() -> Text {
+//        return Text(self.googleName)
+//    }
+//    
+//    func getGoogleEmail() -> Text {
+//        return Text(self.googleEmail)
+//    }
+//    
+//    func getfbProfilePic() -> String {
+//        return self.fbProfilePicUrl
+//    }
+//    
+//    func getfbImage() -> some View {
+//        AsyncImage(url: URL(string: fbProfilePicUrl))
+//            .frame(width: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/, height: 100)
+//    }
+//    
+//    func getfbName() -> String {
+//        return self.fbName
+//    }
+//    
+//    func getFbEmail() -> String {
+//        return self.fbEmail
+//    }
+//    
+//    func setFbEmail(email: String) {
+//        self.fbEmail = email
+//    }
     
     func setFbIsLogged(isLogged: Bool) {
         self.fbIsLogged = isLogged
@@ -150,29 +150,29 @@ class LoginViewModel: ObservableObject {
         }
     }
     
-    func setFbName(name: String) {
-        self.fbName = name
-    }
-    
-    func setFbPic(pic: String) {
-        self.fbProfilePicUrl = pic
-    }
-    
-    func getAppleEmail() -> Text {
-        return Text(self.appleEmail)
-    }
-    
-    func getAppleName() -> Text {
-        return Text(self.appleName)
-    }
-    
-    func getEmail() -> Text {
-        return Text(self.user?.username ?? "" )
-    }
-    
-    func getName() -> Text {
-        return Text(self.name)
-    }
+//    func setFbName(name: String) {
+//        self.fbName = name
+//    }
+//    
+//    func setFbPic(pic: String) {
+//        self.fbProfilePicUrl = pic
+//    }
+//    
+//    func getAppleEmail() -> Text {
+//        return Text(self.appleEmail)
+//    }
+//    
+//    func getAppleName() -> Text {
+//        return Text(self.appleName)
+//    }
+//    
+//    func getEmail() -> Text {
+//        return Text(self.user?.username ?? "" )
+//    }
+//    
+//    func getName() -> Text {
+//        return Text(self.name)
+//    }
     
 
     func login(username: String, password: String) async throws -> Token {
@@ -433,22 +433,22 @@ struct FBLog: UIViewRepresentable {
                                            print(data)
                                            if let email: String = dictData["username"] as? String
                                            {
-                                               self.parent.loginVm.setFbEmail(email: email)
+                                               self.parent.loginVm.user?.username = email
                                            }
                                            
                                            if let name: String = dictData["name"] as? String
                                            {
-                                               self.parent.loginVm.setFbName(name: name)
+                                               self.parent.loginVm.user?.firstName = name
                                            }
                                            if let id: String = dictData["id"] as? String
                                            {
                                                print("printing image url: ")
                                                print("https://graph.facebook.com/\(id)/picture?type=large&redirect=true&width=100&height=100")
-                                               self.parent.loginVm.setFbPic(pic: "https://graph.facebook.com/\(id)/picture?type=large&redirect=true&width=100&height=100")
+                                               self.parent.loginVm.user?.profilePicture = "https://graph.facebook.com/\(id)/picture?type=large&redirect=true&width=100&height=100"
                                            }
                                            Task {
                                                do {
-                                                   let token = try await self.parent.loginVm.signUpWithSocialProvider(user: .init(id: nil, firstName: self.parent.loginVm.getfbName(), lastName: nil, username: self.parent.loginVm.getFbEmail(), password: "", bio: nil,  website: nil, social: nil, geographicArea: nil, google: nil, facebook: self.parent.loginVm.getFbEmail(), apple: nil, profilePicture: self.parent.loginVm.getfbProfilePic(), iban: nil, vatNumber: nil, nationalInsuranceNumber: nil))
+                                                   let token = try await self.parent.loginVm.signUpWithSocialProvider(user: .init(id: nil, firstName: self.parent.loginVm.user?.firstName, lastName: nil, username: self.parent.loginVm.user!.username, password: "", bio: nil,  website: nil, social: nil, geographicArea: nil, google: nil, facebook: self.parent.loginVm.user?.username, apple: nil, profilePicture: self.parent.loginVm.user?.profilePicture, iban: nil, vatNumber: nil, nationalInsuranceNumber: nil))
                                                    print("Login with facebook successful")
                                                    UserDefaults.standard.setValue(token.token, forKey: "Token")
                                                    print("Token saved: \(token)")

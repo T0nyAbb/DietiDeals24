@@ -40,8 +40,7 @@ struct AuctionsView: View {
                             .padding(.bottom, 30)
                             .id(UUID())
                     } else if selectedAuction == 1 {
-                        Text("Auctions View")
-                            .font(.title)
+                        InverseAuctionListView(auctionViewModel: auctionViewModel, userViewModel: userViewModel, search: $search, showCurrentUserOnly: $showCurrentUserOnly)
                     } else if selectedAuction == 2 {
                         EnglishAuctionListView(auctionViewModel: auctionViewModel, userViewModel: userViewModel, search: $search, showCurrentUserOnly: $showCurrentUserOnly)
                     } else if selectedAuction == 3 {

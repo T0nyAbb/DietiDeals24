@@ -178,7 +178,7 @@ struct CreateNewDescendingPriceAuctionView: View {
                             }
                         }
                     Spacer()
-                    NavigationLink(destination: DescendingPriceAuctionRecapView(image: uiImage, title: title, description: description.isEmpty ? nil : description, category: category,startingPrice: startingPrice!, selectedDate: selectedDate, minimumPrice: minimumPrice ?? 0, timerAmount: timerAmount, reductionAmount: reductionAmount ?? 1, popToRoot: self.$rootIsActive)) {
+                    NavigationLink(destination: DescendingPriceAuctionRecapView(image: uiImage, title: title, description: description.isEmpty ? nil : description, category: category,startingPrice: startingPrice ?? 0, selectedDate: selectedDate, minimumPrice: minimumPrice ?? 0, timerAmount: timerAmount, reductionAmount: reductionAmount ?? 1, popToRoot: self.$rootIsActive)) {
                         HStack {
                             Text("Next")
                                 .frame(width: 360, height: 45)
