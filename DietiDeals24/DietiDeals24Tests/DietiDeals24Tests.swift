@@ -27,15 +27,6 @@ final class DietiDeals24Tests: XCTestCase {
         super.tearDown()
     }
 
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
-    }
-    
-    
     // MARK: - Registration tests
     
     
@@ -51,41 +42,77 @@ final class DietiDeals24Tests: XCTestCase {
         XCTAssertTrue(try! fieldChecker.checkFields(username: username, password: password, confirmPassword: confirmPassword, iban: iban))
     }
     
-    //Test fields are nil
-       func testFieldsAreNil() {
-           // Arrange
-           let username: String? = nil
-           let password: String? = nil
-           let confirmPassword: String? = nil
-           let iban: String? = nil
-           
-           // Act & Assert
-           XCTAssertThrowsError(try fieldChecker.checkFields(username: username, password: password, confirmPassword: confirmPassword, iban: iban))
-       }
-       
-       //Test fields are empty
-       func testFieldsAreEmpty() {
-           // Arrange
-           let username = ""
-           let password = ""
-           let confirmPassword = ""
-           let iban = ""
-           
-           // Act & Assert
-           XCTAssertFalse(try! fieldChecker.checkFields(username: username, password: password, confirmPassword: confirmPassword, iban: iban))
-       }
+    //Test empty username
+    func testEmptyUsername() {
+        // Arrange
+        let username = ""
+        let password = "Password123"
+        let confirmPassword = "Password123"
+        let iban = "AB1234567890123"
+        
+        // Act & Assert
+        XCTAssertFalse(try! fieldChecker.checkFields(username: username, password: password, confirmPassword: confirmPassword, iban: iban))
+    }
     
-    //Test invalid Email
-    func testInvalidEmail() {
-            // Arrange
-            let username = "invalidemail"
-            let password = "Password123"
-            let confirmPassword = "Password123"
-            let iban = "AB1234567890123"
-            
-            // Act & Assert
-            XCTAssertFalse(try! fieldChecker.checkFields(username: username, password: password, confirmPassword: confirmPassword, iban: iban))
-        }
+    //Test nil username
+    func testNilUsername() {
+        // Arrange
+        let username: String? = nil
+        let password = "Password123"
+        let confirmPassword = "Password123"
+        let iban = "AB1234567890123"
+        
+        // Act & Assert
+        XCTAssertThrowsError(try fieldChecker.checkFields(username: username, password: password, confirmPassword: confirmPassword, iban: iban))
+    }
+    
+    //Test no @ username
+    func testNoAtUsername() {
+        // Arrange
+        let username = "invalidemail.com"
+        let password = "Password123"
+        let confirmPassword = "Password123"
+        let iban = "AB1234567890123"
+        
+        // Act & Assert
+        XCTAssertFalse(try! fieldChecker.checkFields(username: username, password: password, confirmPassword: confirmPassword, iban: iban))
+    }
+    
+    //Test no domain username
+    func testNoDomainUsername() {
+        // Arrange
+        let username = "invalidemail@nodomain"
+        let password = "Password123"
+        let confirmPassword = "Password123"
+        let iban = "AB1234567890123"
+        
+        // Act & Assert
+        XCTAssertFalse(try! fieldChecker.checkFields(username: username, password: password, confirmPassword: confirmPassword, iban: iban))
+    }
+    
+    //Test empty password
+    func testEmptyPassword() {
+        // Arrange
+        let username = "test@example.com"
+        let password = ""
+        let confirmPassword = "Password123"
+        let iban = "AB1234567890123"
+        
+        // Act & Assert
+        XCTAssertFalse(try! fieldChecker.checkFields(username: username, password: password, confirmPassword: confirmPassword, iban: iban))
+    }
+    
+    //Test nil password
+    func testNilPassword() {
+        // Arrange
+        let username = "test@example.com"
+        let password: String? = nil
+        let confirmPassword = "Password123"
+        let iban = "AB1234567890123"
+        
+        // Act & Assert
+        XCTAssertThrowsError(try fieldChecker.checkFields(username: username, password: password, confirmPassword: confirmPassword, iban: iban))
+    }
     
     //Test password too short
     func testPasswordTooShort() {
@@ -99,18 +126,6 @@ final class DietiDeals24Tests: XCTestCase {
             XCTAssertFalse(try! fieldChecker.checkFields(username: username, password: password, confirmPassword: confirmPassword, iban: iban))
         }
     
-    //Test empty fields
-    func testEmptyFields() {
-        // Arrange
-        let username = ""
-        let password = ""
-        let confirmPassword = ""
-        let iban = ""
-        
-        // Act & Assert
-        XCTAssertFalse(try! fieldChecker.checkFields(username: username, password: password, confirmPassword: confirmPassword, iban: iban))
-    }
-
     //Test password not containing a number
     func testPasswordWithoutNumber() {
         // Arrange
@@ -134,9 +149,57 @@ final class DietiDeals24Tests: XCTestCase {
         // Act & Assert
         XCTAssertFalse(try! fieldChecker.checkFields(username: username, password: password, confirmPassword: confirmPassword, iban: iban))
     }
+    
+    //Test empty confirm password
+    func testEmptyConfirmPassword() {
+        // Arrange
+        let username = "test@example.com"
+        let password = "Password123"
+        let confirmPassword = ""
+        let iban = "AB1234567890123"
+        
+        // Act & Assert
+        XCTAssertFalse(try! fieldChecker.checkFields(username: username, password: password, confirmPassword: confirmPassword, iban: iban))
+    }
+    
+    //Test nil confirm password
+    func testNilConfirmPassword() {
+        // Arrange
+        let username = "test@example.com"
+        let password = "Password123"
+        let confirmPassword : String? = nil
+        let iban = "AB1234567890123"
+        
+        // Act & Assert
+        XCTAssertThrowsError(try fieldChecker.checkFields(username: username, password: password, confirmPassword: confirmPassword, iban: iban))
+    }
+    
+    //Test empty iban
+    func testEmptyIban() {
+        // Arrange
+        let username = "test@example.com"
+        let password = "Password123"
+        let confirmPassword = "Password123"
+        let iban = ""
+        
+        // Act & Assert
+        XCTAssertFalse(try! fieldChecker.checkFields(username: username, password: password, confirmPassword: confirmPassword, iban: iban))
+    }
+    
+    //Test nil iban
+    func testNilIban() {
+        // Arrange
+        let username = "test@example.com"
+        let password = "Password123"
+        let confirmPassword = "Password123"
+        let iban: String? = nil
+        
+        // Act & Assert
+        XCTAssertThrowsError(try fieldChecker.checkFields(username: username, password: password, confirmPassword: confirmPassword, iban: iban))
+    }
 
     //Test IBAN length less than 15 characters
-    func testIBANTooShort() {
+    func testIbanTooShort() {
         // Arrange
         let username = "test@example.com"
         let password = "Password123"
@@ -173,96 +236,119 @@ final class DietiDeals24Tests: XCTestCase {
     
     // MARK: - Descending price auction tests
     
+    //Test valid fields
     func testValidAuctionFields() throws {
-            // Arrange
-            let startingPrice = 100
-            let minimumPrice = 50
-            let decrementAmount = 5
-            let startingDate = Date(timeIntervalSinceNow: 3600) // 1 hour from now
-
-            // Assert
+        // Arrange
+        let startingPrice = 100
+        let minimumPrice = 50
+        let decrementAmount = 5
+        let startingDate = Date(timeIntervalSinceNow: 3600) // 1 hour from now
+        
+        // Act & Assert
         XCTAssertTrue(try descendingPriceChecker.checkAuctionFields(startingPrice: startingPrice, minimumPrice: minimumPrice, decrementAmount: decrementAmount, startingDate: startingDate))
-        }
-
-        func testMissingFields() {
-            // Arrange
-            let startingPrice: Int? = nil
-            let minimumPrice = 50
-            let decrementAmount = 5
-            let startingDate = Date(timeIntervalSinceNow: 3600) // 1 hour from now
-
-            // Act & Assert
-            XCTAssertThrowsError(try descendingPriceChecker.checkAuctionFields(startingPrice: startingPrice, minimumPrice: minimumPrice, decrementAmount: decrementAmount, startingDate: startingDate))
-        }
-
-        func testStartingPriceLessThanOrEqualToZero() {
-            // Arrange
-            let startingPrice = 0
-            let minimumPrice = 50
-            let decrementAmount = 5
-            let startingDate = Date(timeIntervalSinceNow: 3600) // 1 hour from now
-
-
-
-            // Assert
-            XCTAssertFalse(try descendingPriceChecker.checkAuctionFields(startingPrice: startingPrice, minimumPrice: minimumPrice, decrementAmount: decrementAmount, startingDate: startingDate))
-        }
-
-        func testMinimumPriceLessThanOrEqualToZero() {
-            // Arrange
-            let startingPrice = 100
-            let minimumPrice = 0
-            let decrementAmount = 5
-            let startingDate = Date(timeIntervalSinceNow: 3600) // 1 hour from now
-
-            // Assert
-            XCTAssertFalse(try descendingPriceChecker.checkAuctionFields(startingPrice: startingPrice, minimumPrice: minimumPrice, decrementAmount: decrementAmount, startingDate: startingDate))
-        }
-
-        func testDecrementAmountLessThanOrEqualToZero() {
-            // Arrange
-            let startingPrice = 100
-            let minimumPrice = 50
-            let decrementAmount = 0
-            let startingDate = Date(timeIntervalSinceNow: 3600) // 1 hour from now
-
-            // Assert
-            XCTAssertFalse(try descendingPriceChecker.checkAuctionFields(startingPrice: startingPrice, minimumPrice: minimumPrice, decrementAmount: decrementAmount, startingDate: startingDate))
-        }
+    }
     
-    func testDecrementAmountGreaterThanStartingPrice() {
-         // Arrange
-         let startingPrice = 100
-         let minimumPrice = 50
-         let decrementAmount = 150
-         let startingDate = Date(timeIntervalSinceNow: 3600) // 1 hour from now
+    //Test starting price less than or equal to 0
+    func testStartingPriceLessThanOrEqualToZero() {
+        // Arrange
+        let startingPrice = 0
+        let minimumPrice = 50
+        let decrementAmount = 5
+        let startingDate = Date(timeIntervalSinceNow: 3600) // 1 hour from now
+        
+        
+        
+        //Act & Assert
+        XCTAssertFalse(try descendingPriceChecker.checkAuctionFields(startingPrice: startingPrice, minimumPrice: minimumPrice, decrementAmount: decrementAmount, startingDate: startingDate))
+    }
+    
+    
+    //Test nil starting price
+    func testNilStartingPrice() {
+        // Arrange
+        let startingPrice: Int? = nil
+        let minimumPrice = 50
+        let decrementAmount = 5
+        let startingDate = Date(timeIntervalSinceNow: 3600) // 1 hour from now
+        
+        // Act & Assert
+        XCTAssertThrowsError(try descendingPriceChecker.checkAuctionFields(startingPrice: startingPrice, minimumPrice: minimumPrice, decrementAmount: decrementAmount, startingDate: startingDate))
+    }
+    
+    
+    //Test minimum price less than or equal to 0
+    func testMinimumPriceLessThanOrEqualToZero() {
+        // Arrange
+        let startingPrice = 100
+        let minimumPrice = 0
+        let decrementAmount = 5
+        let startingDate = Date(timeIntervalSinceNow: 3600) // 1 hour from now
+        
+        // Act & Assert
+        XCTAssertFalse(try descendingPriceChecker.checkAuctionFields(startingPrice: startingPrice, minimumPrice: minimumPrice, decrementAmount: decrementAmount, startingDate: startingDate))
+    }
+    
+    
+    //Test nil minimum price
+    func testNilMinimumPrice() {
+        // Arrange
+        let startingPrice = 100
+        let minimumPrice: Int? = nil
+        let decrementAmount = 5
+        let startingDate = Date(timeIntervalSinceNow: 3600) // 1 hour from now
 
-         // Assert
-         XCTAssertFalse(try descendingPriceChecker.checkAuctionFields(startingPrice: startingPrice, minimumPrice: minimumPrice, decrementAmount: decrementAmount, startingDate: startingDate))
-     }
+        // Act & Assert
+        XCTAssertThrowsError(try descendingPriceChecker.checkAuctionFields(startingPrice: startingPrice, minimumPrice: minimumPrice, decrementAmount: decrementAmount, startingDate: startingDate))
+    }
+    
+    //Test decrement amount less than or equal to 0
+    func testDecrementAmountLessThanOrEqualToZero() {
+        // Arrange
+        let startingPrice = 100
+        let minimumPrice = 50
+        let decrementAmount = 0
+        let startingDate = Date(timeIntervalSinceNow: 3600) // 1 hour from now
+        
+        // Act & Assert
+        XCTAssertFalse(try descendingPriceChecker.checkAuctionFields(startingPrice: startingPrice, minimumPrice: minimumPrice, decrementAmount: decrementAmount, startingDate: startingDate))
+    }
+    
+    //Test nil minimum price
+    func testNilDecrementAmount() {
+        // Arrange
+        let startingPrice = 100
+        let minimumPrice = 50
+        let decrementAmount: Int? = nil
+        let startingDate = Date(timeIntervalSinceNow: 3600) // 1 hour from now
 
-        func testMinimumPriceGreaterThanOrEqualToStartingPrice() {
-            // Arrange
-            let startingPrice = 100
-            let minimumPrice = 150
-            let decrementAmount = 5
-            let startingDate = Date(timeIntervalSinceNow: 3600) // 1 hour from now
+        // Act & Assert
+        XCTAssertThrowsError(try descendingPriceChecker.checkAuctionFields(startingPrice: startingPrice, minimumPrice: minimumPrice, decrementAmount: decrementAmount, startingDate: startingDate))
+    }
+    
+    //Test starting date in past
+    func testStartingDateInPast() {
+        // Arrange
+        let startingPrice = 100
+        let minimumPrice = 50
+        let decrementAmount = 5
+        let startingDate = Date(timeIntervalSinceNow: -3600) // 1 hour ago
+        
+        
+        // Act & Assert
+        XCTAssertFalse(try descendingPriceChecker.checkAuctionFields(startingPrice: startingPrice, minimumPrice: minimumPrice, decrementAmount: decrementAmount, startingDate: startingDate))
+    }
+    
+    //Test nil starting date
+    func testNilStartingDate() {
+        // Arrange
+        let startingPrice = 100
+        let minimumPrice = 50
+        let decrementAmount = 5
+        let startingDate: Date? = nil
 
-            // Assert
-            XCTAssertFalse(try descendingPriceChecker.checkAuctionFields(startingPrice: startingPrice, minimumPrice: minimumPrice, decrementAmount: decrementAmount, startingDate: startingDate))
-        }
-
-        func testStartingDateInPast() {
-            // Arrange
-            let startingPrice = 100
-            let minimumPrice = 50
-            let decrementAmount = 5
-            let startingDate = Date(timeIntervalSinceNow: -3600) // 1 hour ago
-
-
-            // Assert
-            XCTAssertFalse(try descendingPriceChecker.checkAuctionFields(startingPrice: startingPrice, minimumPrice: minimumPrice, decrementAmount: decrementAmount, startingDate: startingDate))
-        }
+        // Act & Assert
+        XCTAssertThrowsError(try descendingPriceChecker.checkAuctionFields(startingPrice: startingPrice, minimumPrice: minimumPrice, decrementAmount: decrementAmount, startingDate: startingDate))
+    }
     
 
     func testPerformanceExample() throws {
