@@ -1,0 +1,449 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "" : {
+
+    },
+    "(* Required | ** Required for selling)" : {
+
+    },
+    "*Price will lower by %lld € every ^[%lld Minute](inflect: true)" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "*Price will lower by %1$lld € every ^[%2$lld Minute](inflect: true)"
+          }
+        }
+      }
+    },
+    "%.2f €" : {
+
+    },
+    "%@ %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ %2$@"
+          }
+        }
+      }
+    },
+    "%lld €" : {
+
+    },
+    "%lld/1000" : {
+
+    },
+    "^[%lld Minute](inflect: true)" : {
+
+    },
+    "2 letters at the beginning then only digits\n Length between 15 and 30 characters" : {
+
+    },
+    "2 letters at the beginning then only digits.\n Length between 15 and 30 characters." : {
+
+    },
+    "Account successfully registered!" : {
+
+    },
+    "Add picture" : {
+
+    },
+    "An offer of %lf € was already made for this auction" : {
+
+    },
+    "An offer of %lld € was already made for this auction" : {
+
+    },
+    "Are you sure you want to buy this item?" : {
+
+    },
+    "Are you sure you want to delete this auction?" : {
+
+    },
+    "As bidder: You can see the current price for the product/service and the expiry date (after that date the auction ends). The highest offer when the auction expires wins" : {
+
+    },
+    "As bidder: You can see the current price of the product/service and the timer decreasing, every time the timer reaches 0 the price decreases and the timer resets. The auction ends when someone decides to buy the product/service at the current price or the secret minimum price is reached." : {
+
+    },
+    "As bidder: You can see the current price of the product/service and the timer going down, if someone bids the timer resets, the auction is won by who made the highest bid when the timer reach 0." : {
+
+    },
+    "As bidder: You can set a maximum price that you want to pay, then the sellers will compete with each other by offering the product/service to you at a lower price, the seller that offers the product/service at the lowest price" : {
+
+    },
+    "As seller: You can offer the product/service to the buyer at your own price, the provision of the product/service is won by the lowest price offer when the auction expires." : {
+
+    },
+    "As seller: You can set a high price starting price, a price decrease, a timer and a secret minimum price visible only to you. When the timer reaches 0 the price decreases and the timer resets, the auction ends when the current price reaches the minimum price or someone buys the product/service at the current price." : {
+
+    },
+    "As seller: You can set a initial price, a timer and a rise price, when someone offer on the rise the timer reset. The auction ends when the timer reaches 0." : {
+
+    },
+    "As seller: You can set a secret minimum price visible only to you and a expiry date (after that date the auction ends)." : {
+
+    },
+    "At least 5 characters and one number" : {
+
+    },
+    "Auction Published!" : {
+
+    },
+    "Auction type" : {
+
+    },
+    "Auction Type" : {
+
+    },
+    "Auctions" : {
+
+    },
+    "Bid Amount" : {
+
+    },
+    "Bid Amount:" : {
+
+    },
+    "Bid interval: " : {
+
+    },
+    "Bid interval: ^[%lld Minute](inflect: true)" : {
+
+    },
+    "Bid raise threshold" : {
+
+    },
+    "Bid raise threshold (Default 10 €)" : {
+
+    },
+    "Bid raise threshold: %lld €" : {
+
+    },
+    "Bid successfuly made!" : {
+
+    },
+    "Billing info" : {
+
+    },
+    "Bio" : {
+
+    },
+    "Buy" : {
+
+    },
+    "Buy Now" : {
+
+    },
+    "Cancel" : {
+
+    },
+    "Category" : {
+
+    },
+    "Category: " : {
+
+    },
+    "Category: %@" : {
+
+    },
+    "Changes successfully saved!" : {
+
+    },
+    "Changing the password will sign you out" : {
+
+    },
+    "Confirm Password" : {
+
+    },
+    "Confirm Password*" : {
+
+    },
+    "Current offer" : {
+
+    },
+    "Current price*" : {
+
+    },
+    "Decreasing by %lld €" : {
+
+    },
+    "Decreasing starting price every: ^[%lld Minute](inflect: true)" : {
+
+    },
+    "Decrement Amount" : {
+
+    },
+    "Decrement Amount (Default 1€)" : {
+
+    },
+    "Delete" : {
+
+    },
+    "Descending Price" : {
+
+    },
+    "Descending Price Auction" : {
+
+    },
+    "DescendingPriceAuction" : {
+
+    },
+    "Description" : {
+
+    },
+    "Don't have an account?" : {
+
+    },
+    "Edit Profile" : {
+
+    },
+    "Email" : {
+
+    },
+    "Email*" : {
+
+    },
+    "English" : {
+
+    },
+    "English Auction" : {
+
+    },
+    "Error" : {
+
+    },
+    "Error saving changes." : {
+
+    },
+    "Error uploading auction!" : {
+
+    },
+    "Expires on:" : {
+
+    },
+    "Expiry Date:" : {
+
+    },
+    "Expiry Date: %@" : {
+
+    },
+    "First Name" : {
+
+    },
+    "First Name*" : {
+
+    },
+    "Fixed Time" : {
+
+    },
+    "Fixed Time Auction" : {
+
+    },
+    "General info" : {
+
+    },
+    "Geographic Area: " : {
+
+    },
+    "Highest offer" : {
+
+    },
+    "Iban" : {
+
+    },
+    "IBAN*" : {
+
+    },
+    "Invalid credentials!" : {
+
+    },
+    "Inverse" : {
+
+    },
+    "Inverse Auction" : {
+
+    },
+    "InverseAuction" : {
+
+    },
+    "Last Name" : {
+
+    },
+    "Last Name*" : {
+
+    },
+    "Login" : {
+
+    },
+    "Make Offer" : {
+
+    },
+    "Maximum Price" : {
+
+    },
+    "Maximum Price: %lld €" : {
+
+    },
+    "Maximum Price*" : {
+
+    },
+    "Minimum Price" : {
+
+    },
+    "Minimum Price: %lld €" : {
+
+    },
+    "Minimum Price*" : {
+
+    },
+    "Minimum Selling Price: %lld €" : {
+
+    },
+    "Minimum selling price*" : {
+
+    },
+    "My Auctions" : {
+
+    },
+    "National Insurance Number" : {
+
+    },
+    "National Insurance Number**" : {
+
+    },
+    "Next" : {
+
+    },
+    "No Active Auctions" : {
+
+    },
+    "No Image" : {
+
+    },
+    "No New Notifications" : {
+
+    },
+    "No Results" : {
+
+    },
+    "Notifications" : {
+
+    },
+    "Offer" : {
+
+    },
+    "Ok" : {
+
+    },
+    "Password" : {
+
+    },
+    "Password*" : {
+
+    },
+    "Price reduction every:" : {
+
+    },
+    "Profile" : {
+
+    },
+    "Publish" : {
+
+    },
+    "Raise:" : {
+
+    },
+    "Save Changes" : {
+
+    },
+    "Search by Title or Category" : {
+
+    },
+    "Select Date" : {
+
+    },
+    "Selling info" : {
+
+    },
+    "Sign in with Google button." : {
+
+    },
+    "Sign Out" : {
+
+    },
+    "Sign Up" : {
+
+    },
+    "Social" : {
+
+    },
+    "Some fields are not valid" : {
+
+    },
+    "Starting Date:" : {
+
+    },
+    "Starting Date: %@" : {
+
+    },
+    "Starting price" : {
+
+    },
+    "Starting Price" : {
+
+    },
+    "Starting Price: %lld €" : {
+
+    },
+    "Starting price*" : {
+
+    },
+    "Success" : {
+
+    },
+    "Summary" : {
+
+    },
+    "The auction is not active." : {
+
+    },
+    "This action is permanent." : {
+
+    },
+    "Timer" : {
+
+    },
+    "Timer: " : {
+
+    },
+    "Title" : {
+
+    },
+    "Title*" : {
+
+    },
+    "VAT Number" : {
+
+    },
+    "VAT Number**" : {
+
+    },
+    "Website" : {
+
+    },
+    "You Won!" : {
+
+    },
+    "Your Social Network" : {
+
+    },
+    "Your Website" : {
+
+    }
+  },
+  "version" : "1.0"
+}

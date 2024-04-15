@@ -43,6 +43,8 @@ final class AuthenticationViewModel: ObservableObject {
 
   /// Signs the user out.
   func signOut() {
+      UserDefaults.standard.setValue("", forKey: "Token")
+      print("Logout from google")
     authenticator.signOut()
   }
 

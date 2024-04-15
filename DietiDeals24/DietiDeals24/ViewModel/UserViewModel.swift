@@ -2,243 +2,266 @@
 //  UserViewModel.swift
 //  DietiDeals24
 //
-//  Created by Antonio Abbatiello on 13/01/24.
+//  Created by Antonio Abbatiello on 04/02/24.
 //
 
-import SwiftUI
-import GoogleSignIn
-import FBSDKLoginKit
+import Foundation
 
-class UserViewModel: ObservableObject {
-    @EnvironmentObject var authViewModel: AuthenticationViewModel
-    @Published var name: String = ""
-    @Published var profilePicUrl: String = ""
-    @Published var isLogged: Bool = false
-    @Published var errorMessage: String = ""
-    @Published var email: String = ""
-    @Published var fbName: String = ""
-    @Published var fbProfilePicUrl: String = ""
-    @Published var fbIsLogged: Bool = false
-    @Published var fbEmail: String = ""
-    @Published var logged: Bool = false
+
+@Observable 
+class UserViewModel {
     
+    var users: [User] = [User]()
     
-    
-    static let shared: UserViewModel = UserViewModel()
-    
-    private init(){
-        check()
-    }
-    
-    func checkStatus(){
-        if(GIDSignIn.sharedInstance.currentUser != nil){
-            let user = GIDSignIn.sharedInstance.currentUser
-            guard let user = user else { return }
-            let name = user.profile?.givenName
-            let profilePicUrl = user.profile!.imageURL(withDimension: 100)!.absoluteString
-            let email = user.profile!.email
-            self.name = name ?? ""
-            self.profilePicUrl = profilePicUrl
-            self.isLogged = true
-            self.logged = true
-            self.email = email
-        }else{
-            self.isLogged = false
-            if !self.fbIsLogged {
-                self.logged = false
-            }
-//            self.name = "Not Logged In"
-//            self.profilePicUrl =  ""
+    func getUserByEmail(username: String) async throws -> User {
+        guard let url = URL(string: Constants.BASE_URL + Constants.getEndpoint(endpoint: .USER) + "/" + username) else {
+            throw NSError(domain: "Invalid URL", code: 0, userInfo: nil)
         }
-    }
-    
-    func check(){
-        GIDSignIn.sharedInstance.restorePreviousSignIn { user, error in
-            if let error = error {
-                self.errorMessage = "error: \(error.localizedDescription)"
-            }
-            
-            self.checkStatus()
+        print("called getUserByEmail func with username: \(username)")
+
+        let requestBody = username
+
+        // Serialize the request body to JSON
+        guard let jsonData = try? JSONEncoder().encode(requestBody) else {
+            print("encoding error")
+            throw NSError(domain: "JSON Encoding Error", code: 0, userInfo: nil)
         }
-    }
-    
-    func userDetails() -> some View {
-            AsyncImage(url: URL(string: profilePicUrl))
-                .frame(width: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/, height: 100)
-    }
-    
-    func userName() -> Text {
-        return Text(self.name)
-    }
-    
-    func getEmail() -> Text {
-        return Text(self.email)
-    }
-    
-    func getfbUserDetails() -> String {
-        return self.fbProfilePicUrl
-    }
-    
-    func getfbImage() -> some View {
-        AsyncImage(url: URL(string: fbProfilePicUrl))
-            .frame(width: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/, height: 100)
-    }
-    
-    func getfbUserName() -> String {
-        return self.fbName
-    }
-    
-    func fbGetEmail() -> String {
-        return self.fbEmail
-    }
-    
-    func setFbEmail(email: String) {
-        self.fbEmail = email
-    }
-    
-    func setFbIsLogged(isLogged: Bool) {
-        self.fbIsLogged = isLogged
-        if self.fbIsLogged {
-            self.logged = true
+
+        // Create the URLRequest
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.httpBody = jsonData
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        guard let token = UserDefaults.standard.string(forKey: "Token") else {
+            print("Token not found")
+            throw UserError.tokenNotFound
         }
-        if !self.isLogged && !self.fbIsLogged {
-            self.logged = false
-        }
-    }
-    
-    func setFbName(name: String) {
-        self.fbName = name
-    }
-    
-    func setFbPic(pic: String) {
-        self.fbProfilePicUrl = pic
-    }
-    
-    
-    
-    
-    
-    
+        let auth = "Bearer ".appending(token)
+        request.setValue(auth, forHTTPHeaderField: "Authorization")
+        do {
+            // Perform the login request asynchronously
+            let (data, response) = try await URLSession.shared.data(for: request)
 
-    
-}
-
-
-/// MARK: - FBLogin
-
-struct FBLog: UIViewRepresentable {
-
-    var userVm: UserViewModel = UserViewModel.shared
-    
-    
-    func makeCoordinator() -> Coordinator {
-        return FBLog.Coordinator(parent: self)
-    }
-    
-
-    
-    func makeUIView(context: Context) -> FBLoginButton {
-        let button = FBLoginButton()
-        button.permissions = ["public_profile", "email"]
-        button.delegate = context.coordinator
-        
-        return button
-    }
-    
-    func updateUIView(_ uiView: FBLoginButton, context: Context) {
-        
-    }
-    
-    class Coordinator: NSObject, LoginButtonDelegate {
-        
-        var parent: FBLog
-        
-        init(parent: FBLog) {
-            self.parent = parent
-        }
-        
-        
-        func loginButton(_ loginButton: FBSDKLoginKit.FBLoginButton, didCompleteWith result: FBSDKLoginKit.LoginManagerLoginResult?, error: Error?) {
-            
-            
-            
-            if error != nil {
+            // Handle the response
+            if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 {
+                // Decode the user information from the response data
+                let user = try JSONDecoder().decode(User.self, from: data)
+                print("user successfully retrieved!")
+                return user
+            } else {
+                // Handle unsuccessful login (non-200 status code)
+                print("unsuccesful login")
+                throw NSError(domain: "Login Failed", code: 0, userInfo: nil)
                 
-                print(error!.localizedDescription)
-                return
             }
+        } catch {
+            // Handle any errors that occurred during the request
+            print("generic error")
+            print(error.localizedDescription)
+            throw error
             
-            if !result!.isCancelled {
-                let requestMe = GraphRequest.init(graphPath: "me", parameters: ["fields" : "id,name,email,picture.type(large)"])
+        }
+    }
+    
+    
+    func getUserById(id: Int) async throws -> User {
+        guard let url = URL(string: Constants.BASE_URL + Constants.getEndpoint(endpoint: .USER) + "/id/" + id.description) else {
+            throw NSError(domain: "Invalid URL", code: 0, userInfo: nil)
+        }
+        print("called getUserById func with id: \(id)")
+
+        let requestBody = id
+
+        // Serialize the request body to JSON
+        guard let jsonData = try? JSONEncoder().encode(requestBody) else {
+            print("encoding error")
+            throw NSError(domain: "JSON Encoding Error", code: 0, userInfo: nil)
+        }
+
+        // Create the URLRequest
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.httpBody = jsonData
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        guard let token = UserDefaults.standard.string(forKey: "Token") else {
+            print("Token not found")
+            throw UserError.tokenNotFound
+        }
+        let auth = "Bearer ".appending(token)
+        request.setValue(auth, forHTTPHeaderField: "Authorization")
+        do {
+            // Perform the login request asynchronously
+            let (data, response) = try await URLSession.shared.data(for: request)
+
+            // Handle the response
+            if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 {
+                // Decode the user information from the response data
+                let user = try JSONDecoder().decode(User.self, from: data)
+                print("user successfully retrieved!")
+                return user
+            } else {
+                // Handle unsuccessful login (non-200 status code)
+                if let httpResponse = response as? HTTPURLResponse {
+                    print(httpResponse.statusCode)
+                }
+                print("unsuccesful retrieval")
+                throw NSError(domain: "Login Failed", code: 0, userInfo: nil)
                 
-                   let connection = GraphRequestConnection()
+            }
+        } catch {
+            // Handle any errors that occurred during the request
+            print("generic error")
+            print(error)
+            throw error
+        }
+    }
+    
+    
+    func updateUser(user: User) async throws -> User {
+        guard let id = user.id else { throw NSError(domain: "Invalid User Id", code: 0)}
+        guard let url = URL(string: Constants.BASE_URL + Constants.getEndpoint(endpoint: .USER) + "/" + id.description) else {
+            throw NSError(domain: "Invalid URL", code: 0, userInfo: nil)
+        }
+        print("called updateUser func with username: \(user.username)")
 
-                connection.add(requestMe, completion:{ (connectn, userresult, error) in
+        let requestBody = user
 
-                       if let dictData: [String : Any] = userresult as? [String : Any]
-                       {
-                           print("Printing dictData: ")
-                           print(dictData)
-                           DispatchQueue.main.async
-                               {
-                                   if let pictureData: [String : Any] = dictData["picture"] as? [String : Any]
-                                   {
-                                       print("printing pictureData: ")
-                                       print(pictureData)
-                                       if let data : [String: Any] = pictureData["data"] as? [String: Any]
-                                       {
-                                           print("printing data: ")
-                                           print(data)
-                                           if let email: String = dictData["email"] as? String
-                                           {
-                                               
-                                               print(self.parent.userVm.email)
-                                               self.parent.userVm.setFbEmail(email: email)
-                                           }
-                                           
-                                           if let name: String = dictData["name"] as? String
-                                           {
-                                               self.parent.userVm.setFbName(name: name)
-                                           }
-                                           if let id: String = dictData["id"] as? String
-                                           {
-                                               print("printing image url: ")
-                                               print("https://graph.facebook.com/\(id)/picture?type=large&redirect=true&width=100&height=100")
-                                               self.parent.userVm.setFbPic(pic: "https://graph.facebook.com/\(id)/picture?type=large&redirect=true&width=100&height=100")
-                                           }
-                                           self.parent.userVm.setFbIsLogged(isLogged: true)
-                                           
-                                           
-                                           if let pictureURL = data["url"] as? String { //image url of your image
-                                               print("printing url: ")
-                                                print(pictureURL)
-//                                                  if let url = URL(string: pictureURL) {
-//                                                      print(url)
-//
-//                                                          if let data = try? Data(contentsOf: url) { //here you get image data from url
-//
-//                                                             //generate image from data and assign it to your profile imageview
-//                                                             let uiImage = UIImage(data: data)
-//                                                              let image = Image(uiImage: uiImage!)
-//                                                          }
-//                                                  }
-                                           }
-                                     }
-                                 }
-                             }
-                         }
-                     })
-                     connection.start()
-                 }
-            
+        // Serialize the request body to JSON
+        guard let jsonData = try? JSONEncoder().encode(requestBody) else {
+            print("encoding error")
+            throw NSError(domain: "JSON Encoding Error", code: 0, userInfo: nil)
+        }
+
+        // Create the URLRequest
+        var request = URLRequest(url: url)
+        request.httpMethod = "PUT"
+        request.httpBody = jsonData
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        guard let token = UserDefaults.standard.string(forKey: "Token") else {
+            print("Token not found")
+            throw UserError.tokenNotFound
+        }
+        let auth = "Bearer ".appending(token)
+        request.setValue(auth, forHTTPHeaderField: "Authorization")
+        do {
+            // Perform the login request asynchronously
+            let (data, response) = try await URLSession.shared.data(for: request)
+
+            // Handle the response
+            if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 {
+                // Decode the user information from the response data
+                let user = try JSONDecoder().decode(User.self, from: data)
+                print("user successfully updated!")
+                try await self.getAllUsers()
+                return user
+            } else {
+                // Handle unsuccessful login (non-200 status code)
+                print("unsuccesful update")
+                throw NSError(domain: "Update Failed", code: 0, userInfo: nil)
+                
+            }
+        } catch {
+            // Handle any errors that occurred during the request
+            print("generic error")
+            throw error
             
         }
-        
-        func loginButtonDidLogOut(_ loginButton: FBSDKLoginKit.FBLoginButton) {
-            print("fb logged out")
-            self.parent.userVm.setFbIsLogged(isLogged: false)
+    }
+    
+    func getAllUsers() async throws {
+        guard let url = URL(string: Constants.BASE_URL + Constants.getEndpoint(endpoint: .USER) + "s") else {
+            throw NSError(domain: "Invalid URL", code: 0, userInfo: nil)
         }
         
+
+        // Create the URLRequest
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        guard let token = UserDefaults.standard.string(forKey: "Token") else {
+            print("Token not found")
+            throw UserError.tokenNotFound
+        }
+        let auth = "Bearer ".appending(token)
+        request.setValue(auth, forHTTPHeaderField: "Authorization")
+        do {
+            // Perform the login request asynchronously
+            let (data, response) = try await URLSession.shared.data(for: request)
+
+            // Handle the response
+            if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 {
+                let decoder = JSONDecoder()
+
+                self.users = try decoder.decode([User].self, from: data)
+                
+                
+                print("users successfully retrieved!")
+            } else {
+                throw NSError(domain: "users retrieval failed", code: 0, userInfo: nil)
+            }
+        } catch {
+            // Handle any errors that occurred during the request
+            print("generic error")
+            print(error)
+            throw error
+            
+        }
+    }
+    
+    func deleteUser(user: User) async throws {
+        guard let id = user.id else { throw NSError(domain: "Invalid User Id", code: 0)}
+        guard let url = URL(string: Constants.BASE_URL + Constants.getEndpoint(endpoint: .USER) + "/" + id.description) else {
+            throw NSError(domain: "Invalid URL", code: 0, userInfo: nil)
+        }
+        print("called updateUser func with username: \(user.username)")
+
+        let requestBody = user
+
+        // Serialize the request body to JSON
+        guard let jsonData = try? JSONEncoder().encode(requestBody) else {
+            print("encoding error")
+            throw NSError(domain: "JSON Encoding Error", code: 0, userInfo: nil)
+        }
+
+        // Create the URLRequest
+        var request = URLRequest(url: url)
+        request.httpMethod = "PUT"
+        request.httpBody = jsonData
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        guard let token = UserDefaults.standard.string(forKey: "Token") else {
+            print("Token not found")
+            throw UserError.tokenNotFound
+        }
+        let auth = "Bearer ".appending(token)
+        request.setValue(auth, forHTTPHeaderField: "Authorization")
+        do {
+            // Perform the login request asynchronously
+            let (data, response) = try await URLSession.shared.data(for: request)
+
+            // Handle the response
+            if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 {
+                // Decode the user information from the response data
+                let user = try JSONDecoder().decode(User.self, from: data)
+                print("user successfully deleted!")
+                try await self.getAllUsers()
+            } else {
+                // Handle unsuccessful login (non-200 status code)
+                print("unsuccesful update")
+                throw NSError(domain: "Update Failed", code: 0, userInfo: nil)
+                
+            }
+        } catch {
+            // Handle any errors that occurred during the request
+            print("generic error")
+            throw error
+        }
         
     }
+    
+    
+    
+    
+
+
+    
 }
