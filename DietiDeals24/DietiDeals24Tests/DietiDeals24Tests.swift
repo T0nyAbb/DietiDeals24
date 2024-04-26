@@ -349,13 +349,4 @@ final class DietiDeals24Tests: XCTestCase {
         // Act & Assert
         XCTAssertThrowsError(try descendingPriceChecker.checkAuctionFields(startingPrice: startingPrice, minimumPrice: minimumPrice, decrementAmount: decrementAmount, startingDate: startingDate))
     }
-    
-
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
-    }
-
 }

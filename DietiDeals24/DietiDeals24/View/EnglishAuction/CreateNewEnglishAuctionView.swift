@@ -20,6 +20,23 @@ struct CreateNewEnglishAuctionView: View {
     @State var sourceType: UIImagePickerController.SourceType = .photoLibrary
     @Environment(\.dismiss) private var dismiss
     @State var nextDisabled: Bool = true
+    @State var nextTapped: Bool = false
+    
+    private var disableNextButton: Bool {
+        return title == "" || startingPrice == nil 
+    }
+    
+    private var titleError: Bool {
+        return title == "" && nextTapped
+    }
+    
+    private var startingPriceError: Bool {
+        return startingPrice == nil && nextTapped
+    }
+    
+    private var raiseError: Bool {
+        return raiseAmount == nil && nextTapped
+    }
     
     
 
@@ -41,66 +58,99 @@ struct CreateNewEnglishAuctionView: View {
                             .frame(width: 100, height: 100)
                             .padding(.top, 30)
                     }
+                    if uiImage != nil {
+                        Button {
+                            uiImage = nil
+                        } label: {
+                            Text("Remove")
+                                .foregroundStyle(.red)
+                        }
+                        .padding(.bottom, 15)
+                    } else {
                     Button {
                         isPresented = true
                     } label: {
                         Text("Add picture")
                     }
-                    .padding(.vertical, 25)
-                    TextField("Title", text: $title, prompt: Text("Title*"), axis: .vertical)
-                        .padding(10)
-                        .autocorrectionDisabled()
-                        .overlay {
-                            RoundedRectangle(cornerRadius: 10)
-                                .stroke(description.count > 1000 ? .red : .gray, lineWidth: 2)
-                        }
-                        .padding(.horizontal)
-                        .padding(.vertical)
-                    TextField("Description", text: $description, prompt: Text("Description"), axis: .vertical)
-                        .autocorrectionDisabled()
-                        .padding()
-                        .overlay {
-                            RoundedRectangle(cornerRadius: 10)
-                                .stroke(description.count > 1000 ? .red : .gray, lineWidth: 2)
-                        }
-                        .padding(.horizontal)
-                    HStack {
-                        Spacer()
-                        Text("\(description.count)/1000")
-                            .foregroundColor(.gray)
-                            .padding(.horizontal, 30)
-                            .padding(.top, -7)
+                    .padding(.bottom, 15)
+                }
+                    VStack(alignment: .leading) {
+                    Section(header: Text("Title").bold().padding(.horizontal)) {
+                        TextField("Title", text: $title, prompt: Text("Motorcycle 4-cylinder").foregroundColor(.gray), axis: .vertical)
+                            .padding(10)
+                            .autocorrectionDisabled()
+                            .overlay {
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(titleError ? .red : .gray, lineWidth: 2)
+                            }
+                            .padding(.horizontal)
                     }
+                    Section(header: Text("Description").bold().padding(.horizontal)) {
+                        TextField("Description", text: $description, prompt: Text("year 2013, 120 HP, 800cc, 25.000 Km").foregroundColor(.gray), axis: .vertical)
+                            .autocorrectionDisabled()
+                            .padding(15)
+                            .overlay {
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(description.count > 1000 ? .red : .gray, lineWidth: 2)
+                            }
+                            .padding(.horizontal)
+                            .onChange(of: title) {
+                                nextTapped = false
+                            }
+                        HStack {
+                            Spacer()
+                            Text("\(description.count)/1000")
+                                .font(.caption)
+                                .foregroundColor(.gray)
+                                .padding(.horizontal, 30)
+                                .padding(.vertical, -25)
+                        }
+                    }
+                        Section(header: Text("Starting Price").bold().padding(.horizontal)) {
+                            TextField("Starting Price", value: $startingPrice, format: .currency(code: Locale.current.currency?.identifier ?? "€"), prompt: Text("500,00 €").foregroundColor(.gray))
+                                .keyboardType(.decimalPad)
+                                .autocorrectionDisabled()
+                                .padding(10)
+                                .overlay {
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .stroke(startingPriceError ? .red : .gray, lineWidth: 2)
+                                }
+                                .padding(.horizontal)
+                                .onChange(of: startingPrice) {
+                                    nextTapped = false
+                                }
+                        }
+                        Section(header: Text("Bid raise threshold").bold().padding(.horizontal)) {
+                            TextField("Bid raise threshold", value: $raiseAmount, format: .currency(code: Locale.current.currency?.identifier ?? "€"), prompt: Text("10 €"))
+                                .keyboardType(.decimalPad)
+                                .autocorrectionDisabled()
+                                .padding()
+                                .overlay {
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .stroke(.gray, lineWidth: 2)
+                                }
+                                .padding(.horizontal)
+                        }
+                    }
+                    .padding(.bottom)
                     Divider()
                     HStack {
                         Text("Category: ")
-                            .padding()
-                            .padding(.horizontal, 10)
+                            .padding(.vertical)
+                        Spacer()
                         Picker("Category", selection: $category) {
                             ForEach(Category.allCases, id: \.self) { category in
                                 Text(category.description).tag(category)
                             }
                         }
                         .pickerStyle(.automatic)
-                        Spacer()
                     }
-                    TextField("Starting Price", value: $startingPrice, format: .currency(code: Locale.current.currency?.identifier ?? "€"), prompt: Text("Starting price*"))
-                        .keyboardType(.decimalPad)
-                        .autocorrectionDisabled()
-                        .padding()
-                        .overlay {
-                            RoundedRectangle(cornerRadius: 10)
-                                .stroke(.gray, lineWidth: 2)
-                        }
-                        .padding()
-                        .onChange(of: startingPrice) {
-                            nextDisabled = startingPrice == nil
-                        }
+                    .padding(.horizontal)
                     Divider()
                     HStack {
                         Text("Bid interval: ")
                             .padding()
-                            .padding(.horizontal, 10)
+                        Spacer()
                         Picker("Timer", selection: $timerAmount) {
                             ForEach(1...120, id: \.self) {
                                 Text("^[\($0) Minute](inflect: true)")
@@ -108,32 +158,27 @@ struct CreateNewEnglishAuctionView: View {
                         }
                         .pickerStyle(.wheel)
                         .frame(height: 100)
-                        Spacer()
-                        
                     }
                     Divider()
-                    TextField("Bid raise threshold", value: $raiseAmount, format: .currency(code: Locale.current.currency?.identifier ?? "€"), prompt: Text("Bid raise threshold (Default 10 €)"))
-                        .keyboardType(.decimalPad)
-                        .autocorrectionDisabled()
-                        .padding()
-                        .overlay {
-                            RoundedRectangle(cornerRadius: 10)
-                                .stroke(.gray, lineWidth: 2)
-                        }
-                        .padding(.horizontal)
                     Spacer()
-                    NavigationLink(destination: EnglishAuctionRecapView(title: title, description: description, category: category, startingPrice: startingPrice ?? 0, timerAmount: timerAmount, raiseAmount: raiseAmount ?? 10, popToRoot: self.$rootIsActive)) {
+                    NavigationLink(destination: EnglishAuctionRecapView(image: uiImage, title: title, description: description.isEmpty ? nil : description, category: category, startingPrice: startingPrice ?? 0, timerAmount: timerAmount, raiseAmount: raiseAmount ?? 10, popToRoot: self.$rootIsActive)) {
                         HStack {
                             Text("Next")
                                 .frame(width: 360, height: 45)
-                                .background(title != "" ? Color.blue : Color.gray)
+                                .background(disableNextButton ? Color.gray : Color.blue)
                                 .foregroundColor(.white)
                                 .cornerRadius(15)
-                        }.padding(.top, 100)
+                                .padding()
+                        }
                     }
                     .isDetailLink(false)
                     .id(UUID())
-                    .disabled(title == "" || nextDisabled)
+                    .disabled(disableNextButton)
+                    .onTapGesture {
+                        if disableNextButton {
+                            nextTapped = true
+                        }
+                    }
                 }
                 .navigationTitle("English Auction")
                 .sheet(isPresented: $isPresented, content: {

@@ -19,7 +19,7 @@ struct SignupView: View {
     @State private var characterCount = 0
     @State private var webSite: String = ""
     @State private var social: String = ""
-    @State private var geographicArea: String = ""
+    @State private var geographicArea: String = "Italy"
     @State private var profilePicture: String = ""
     @State private var iban: String = ""
     @State private var vatNumber: String = ""
@@ -191,7 +191,7 @@ struct SignupView: View {
                         .padding(.top, -10)
                 }
                 TextField("Bio", text: $bio, prompt: Text("Bio").foregroundColor(.gray), axis: .vertical)
-                    .padding()
+                    .padding(20)
                 .overlay {
                     RoundedRectangle(cornerRadius: 10)
                         .stroke(bio.count > 1000 ? .red : .gray, lineWidth: 2)
@@ -200,9 +200,10 @@ struct SignupView: View {
                 HStack {
                     Spacer()
                     Text("\(bio.count)/1000")
+                        .font(.caption)
                         .foregroundColor(.gray)
                         .padding(.horizontal, 30)
-                        .padding(.top, -10)
+                        .padding(.vertical, -35)
                 }
                 TextField("Website", text: $webSite, prompt: Text("Your Website").foregroundColor(.gray))
                     .padding(10)
@@ -219,19 +220,19 @@ struct SignupView: View {
                         .stroke(.gray, lineWidth: 2)
                 }
                 .padding(.horizontal)
+                Divider()
                 HStack {
                     Text("Geographic Area: ")
                         .padding()
-                        .padding(.horizontal, 10)
-                    Picker("Timer", selection: $geographicArea) {
+                    Spacer()
+                    Picker("Geographic Area", selection: $geographicArea) {
                         ForEach(countryList, id:\.self) {
                             Text($0)
                         }
                     }
                     .pickerStyle(.automatic)
-                    .frame(height: 100)
-                    Spacer()
                 }
+                .padding(.horizontal)
                 Divider()
                 Section(header: Text("Billing info").bold().padding(.horizontal)) {
                     TextField("Iban", text: $iban, prompt: Text("IBAN*").foregroundColor(.gray))
@@ -242,7 +243,7 @@ struct SignupView: View {
                     }
                 .padding(.horizontal)
                     HStack {
-                        Text("2 letters at the beginning then only digits\n Length between 15 and 30 characters")
+                        Text("2 letters at the beginning then only digits.\n Length must be between 15 and 30 characters")
                             .bold()
                             .font(.callout)
                             .foregroundStyle(.gray)

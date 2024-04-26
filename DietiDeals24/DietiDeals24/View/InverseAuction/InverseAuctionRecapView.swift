@@ -27,30 +27,73 @@ struct InverseAuctionRecapView: View {
     
     
     var body: some View {
-        VStack {
+        ScrollView(.vertical, showsIndicators: false) {
             if let uiImage = image {
                 Image(uiImage: uiImage)
                     .resizable()
                     .scaledToFit()
                     .clipShape(RoundedRectangle(cornerRadius: 10))
-                    .frame(width: 125, height: 125)
-                    .padding()
+                    .frame(width: UIScreen.main.bounds.width, height: 300)
             } else {
-                Text("No Image")
-                    .font(.title2)
+                Image(systemName: "photo")
+                    .resizable()
+                    .scaledToFit()
+                    .clipShape(RoundedRectangle(cornerRadius: 15))
+                    .shadow(radius: /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/)
+                    .frame(width: UIScreen.main.bounds.width, height: 300)
             }
-            Text(title)
-                .font(.title)
-                .bold()
-                .padding()
-            Text(description ?? "No Description")
-                .padding()
-            Text(category.description)
-                .padding()
-            Text("Expiry Date: \(selectedDate.formatted(date: .numeric, time: .standard))")
-                .padding()
-            Text("Maximum Price: \(maximumPrice) €")
-                .padding()
+            
+            VStack(alignment: .leading) {
+                Text(title)
+                    .font(.largeTitle)
+                    .bold()
+                HStack {
+                    Text(category.description)
+                    Spacer()
+                    HStack {
+                        Image(systemName: "person")
+                        Text("\(user.firstName ?? "") \(user.lastName ?? "")")
+                            .bold()
+                    }
+                }
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+                Divider()
+                VStack {
+                    Text(description ?? "No description")
+                        .frame(maxWidth: .infinity)
+                } .padding(.top)
+            }
+            .padding()
+            Divider()
+            VStack {
+                HStack {
+                    Text("Expiry Date:")
+                        .font(.caption)
+                        .padding(.leading)
+                    Text(selectedDate.formatted(date: .numeric, time: .omitted))
+                        .font(.title3)
+                        .bold()
+                    Spacer()
+                        Text("Maximum price")
+                            .font(.caption)
+                            .padding(.trailing)
+                }
+                HStack {
+                    Text("Expiry Time:")
+                        .font(.caption)
+                        .padding(.leading)
+                    Text(selectedDate.formatted(date: .omitted, time: .standard))
+                        .font(.title3)
+                        .bold()
+                    Spacer()
+                    Text("\(maximumPrice) €")
+                        .font(.title)
+                        .bold()
+                        .padding(.trailing)
+                }
+
+            }.padding(.vertical)
             VStack {
                 Spacer()
                 Button {
@@ -102,6 +145,7 @@ struct InverseAuctionRecapView: View {
             }
         .navigationBarBackButtonHidden(!popToRoot)
         .navigationTitle("Summary")
+        .navigationBarTitleDisplayMode(.inline)
         }
         .alert(isPresented: $isPresented, content: {
             if !showError {

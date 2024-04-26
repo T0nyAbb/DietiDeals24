@@ -17,6 +17,7 @@ struct CreateNewInverseAuctionView: View {
     @State var uiImage: UIImage?
     @Binding var rootIsActive: Bool
     @State var sourceType: UIImagePickerController.SourceType = .photoLibrary
+    @State var nextTapped: Bool = false
     @Environment(\.dismiss) var dismiss
     
     var formattedDate: String {
@@ -24,6 +25,18 @@ struct CreateNewInverseAuctionView: View {
         formatter.dateStyle = .medium
         formatter.timeStyle = .short
         return formatter.string(from: selectedDate)
+    }
+    
+    private var disableNextButton: Bool {
+        return title == "" || maximumPrice == nil
+    }
+    
+    private var titleError: Bool {
+        return title == "" && nextTapped
+    }
+    
+    private var priceError: Bool {
+        return maximumPrice == nil && nextTapped
     }
     
     var body: some View {
@@ -36,57 +49,90 @@ struct CreateNewInverseAuctionView: View {
                             .scaledToFit()
                             .clipShape(RoundedRectangle(cornerRadius: 10))
                             .frame(width: 125, height: 125)
-                            .padding(.top, 30)
+                            .padding(.top, 10)
                     } else {
                         Image(systemName: "photo")
                             .font(.system(size: 100))
                             .frame(width: 100, height: 100)
-                            .padding(.top, 30)
+                            .padding(.top, 10)
                     }
+                    if uiImage != nil {
+                        Button {
+                            uiImage = nil
+                        } label: {
+                            Text("Remove")
+                                .foregroundStyle(.red)
+                        }
+                        .padding(.bottom, 15)
+                    } else {
                     Button {
                         isPresented = true
                     } label: {
                         Text("Add picture")
                     }
-                    .padding(.vertical, 25)
-                    TextField("Title", text: $title, prompt: Text("Title*").foregroundColor(.gray), axis: .vertical)
-                        .padding(10)
-                        .autocorrectionDisabled()
-                        .overlay {
-                            RoundedRectangle(cornerRadius: 10)
-                                .stroke(description.count > 1000 ? .red : .gray, lineWidth: 2)
-                        }
-                        .padding(.horizontal)
-                        .padding(.vertical)
-                    TextField("Description", text: $description, prompt: Text("Description").foregroundColor(.gray), axis: .vertical)
-                        .autocorrectionDisabled()
-                        .padding()
-                        .overlay {
-                            RoundedRectangle(cornerRadius: 10)
-                                .stroke(description.count > 1000 ? .red : .gray, lineWidth: 2)
-                        }
-                        .padding(.horizontal)
-                    HStack {
-                        Spacer()
-                        Text("\(description.count)/1000")
-                            .foregroundColor(.gray)
-                            .padding(.horizontal, 30)
-                            .padding(.top, -7)
+                    .padding(.bottom, 15)
+                }
+                    VStack(alignment: .leading) {
+                    Section(header: Text("Title").bold().padding(.horizontal)) {
+                        TextField("Title", text: $title, prompt: Text("Motorcycle 4-cylinder"), axis: .vertical)
+                            .padding(10)
+                            .autocorrectionDisabled()
+                            .overlay {
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(titleError ? .red : .gray, lineWidth: 2)
+                            }
+                            .padding(.horizontal)
                     }
+                    Section(header: Text("Description").bold().padding(.horizontal)) {
+                        TextField("Description", text: $description, prompt: Text("year 2013, 120 HP, 800cc, 25.000 Km"), axis: .vertical)
+                            .autocorrectionDisabled()
+                            .padding(15)
+                            .overlay {
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(description.count > 1000 ? .red : .gray, lineWidth: 2)
+                            }
+                            .padding(.horizontal)
+                            .onChange(of: title) {
+                                nextTapped = false
+                            }
+                        HStack {
+                            Spacer()
+                            Text("\(description.count)/1000")
+                                .font(.caption)
+                                .foregroundColor(.gray)
+                                .padding(.horizontal, 30)
+                                .padding(.vertical, -25)
+                        }
+                    }
+                        Section(header: Text("Maximum Price").bold().padding(.horizontal)) {
+                            TextField("Maximum Price", value: $maximumPrice, format: .currency(code: Locale.current.currency?.identifier ?? "€"), prompt: Text("850,00 €"))
+                                .keyboardType(.decimalPad)
+                                .autocorrectionDisabled()
+                                .padding(10)
+                                .overlay {
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .stroke(priceError ? .red : .gray, lineWidth: 2)
+                                }
+                                .padding(.horizontal)
+                                .onChange(of: maximumPrice) {
+                                    nextTapped = false
+                                }
+                        }
+                    }
+                    .padding(.bottom)
                     Divider()
                     HStack {
                         Text("Category: ")
                             .padding()
-                            .padding(.horizontal, 10)
+                        Spacer()
                         Picker("Category", selection: $category) {
                             ForEach(Category.allCases, id: \.self) { category in
                                 Text(category.description).tag(category)
                             }
                         }
                         .pickerStyle(.automatic)
-                        Spacer()
-                        
                     }
+                    .padding(.horizontal)
                     Divider()
                     
                     HStack {
@@ -103,28 +149,25 @@ struct CreateNewInverseAuctionView: View {
                             .padding(.horizontal)
                     }
                     Divider()
-                    TextField("Maximum Price", value: $maximumPrice, format: .currency(code: Locale.current.currency?.identifier ?? "€"), prompt: Text("Maximum Price*"))
-                        .keyboardType(.decimalPad)
-                        .autocorrectionDisabled()
-                        .padding()
-                        .overlay {
-                            RoundedRectangle(cornerRadius: 10)
-                                .stroke(.gray, lineWidth: 2)
-                        }
-                        .padding(.horizontal)
                     Spacer()
-                    NavigationLink(destination: FixedAuctionRecapView(image: uiImage, title: title, description: description.isEmpty ? nil : description, category: category, selectedDate: selectedDate, minimumPrice: maximumPrice ?? 1, popToRoot: self.$rootIsActive)) {
+                    NavigationLink(destination: InverseAuctionRecapView(image: uiImage, title: title, description: description.isEmpty ? nil : description, category: category, selectedDate: selectedDate, maximumPrice: maximumPrice ?? 1, popToRoot: self.$rootIsActive)) {
                         HStack {
                             Text("Next")
                                 .frame(width: 360, height: 45)
-                                .background(Color.blue)
+                                .background(disableNextButton ? Color.gray : Color.blue)
                                 .foregroundColor(.white)
                                 .cornerRadius(15)
+                                .padding()
                         }
                     }
                     .isDetailLink(false)
                     .id(UUID())
-                    .disabled(title == "" || maximumPrice == nil)
+                    .disabled(disableNextButton)
+                    .onTapGesture {
+                        if disableNextButton {
+                            nextTapped = true
+                        }
+                    }
                 }
                 
                 .navigationTitle("Inverse Auction")

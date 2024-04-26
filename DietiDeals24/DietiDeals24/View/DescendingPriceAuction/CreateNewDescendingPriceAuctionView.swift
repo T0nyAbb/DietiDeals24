@@ -22,6 +22,7 @@ struct CreateNewDescendingPriceAuctionView: View {
     @State var sourceType: UIImagePickerController.SourceType = .photoLibrary
     @Environment(\.dismiss) private var dismiss
     var descendingPriceChecker = DescendingPriceChecker()
+    @State var nextTapped: Bool = false
     @State var next: Bool = false
     
     
@@ -32,11 +33,29 @@ struct CreateNewDescendingPriceAuctionView: View {
         return formatter.string(from: selectedDate)
     }
     
+    private var disableNextButton: Bool {
+        return title == "" || startingPrice == nil || minimumPrice == nil
+    }
+    
+    private var titleError: Bool {
+        return title == "" && nextTapped
+    }
+    
+    private var startingPriceError: Bool {
+        return startingPrice == nil && nextTapped
+    }
+    
+    private var minimumPriceError: Bool {
+        return minimumPrice == nil && nextTapped
+    }
+    
+    private var reductionError: Bool {
+        return reductionAmount == nil && nextTapped
+    }
+    
     var body: some View {
         if rootIsActive {
             ScrollView(.vertical, showsIndicators: false) {
-                
-                
                 VStack {
                     if let image = uiImage {
                         Image(uiImage: image)
@@ -44,170 +63,206 @@ struct CreateNewDescendingPriceAuctionView: View {
                             .scaledToFit()
                             .clipShape(RoundedRectangle(cornerRadius: 10))
                             .frame(width: 125, height: 125)
-                            .padding(.top, 30)
+                            .padding(.top, 10)
                     } else {
                         Image(systemName: "photo")
                             .font(.system(size: 100))
                             .frame(width: 100, height: 100)
-                            .padding(.top, 30)
+                            .padding(.top, 10)
                     }
-                    Button {
-                        isPresented = true
-                    } label: {
-                        Text("Add picture")
+                    if uiImage != nil {
+                        Button {
+                            uiImage = nil
+                        } label: {
+                            Text("Remove")
+                                .foregroundStyle(.red)
+                        }
+                        .padding(.bottom, 15)
+                    } else {
+                        Button {
+                            isPresented = true
+                        } label: {
+                            Text("Add picture")
+                        }
+                        .padding(.bottom, 15)
                     }
-                    .padding(.vertical, 25)
-                    TextField("Title", text: $title, prompt: Text("Title*"), axis: .vertical)
-                        .padding(10)
-                        .autocorrectionDisabled()
-                        .overlay {
-                            RoundedRectangle(cornerRadius: 10)
-                                .stroke(description.count > 1000 ? .red : .gray, lineWidth: 2)
+                    VStack(alignment: .leading) {
+                        Section(header: Text("Title").bold().padding(.horizontal)) {
+                            TextField("Title", text: $title, prompt: Text("Motorcycle 4-cylinder"), axis: .vertical)
+                                .padding(10)
+                                .autocorrectionDisabled()
+                                .overlay {
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .stroke(titleError ? .red : .gray, lineWidth: 2)
+                                }
+                                .padding(.horizontal)
                         }
-                        .padding(.horizontal)
-                        .padding(.vertical)
-                    TextField("Description", text: $description, prompt: Text("Description"), axis: .vertical)
-                        .autocorrectionDisabled()
-                        .padding()
-                        .overlay {
-                            RoundedRectangle(cornerRadius: 10)
-                                .stroke(description.count > 1000 ? .red : .gray, lineWidth: 2)
+                        Section(header: Text("Description").bold().padding(.horizontal)) {
+                            TextField("Description", text: $description, prompt: Text("year 2013, 120 HP, 800cc, 25.000 Km"), axis: .vertical)
+                                .autocorrectionDisabled()
+                                .padding(15)
+                                .overlay {
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .stroke(description.count > 1000 ? .red : .gray, lineWidth: 2)
+                                }
+                                .padding(.horizontal)
+                                .onChange(of: title) {
+                                    nextTapped = false
+                                }
+                            HStack {
+                                Spacer()
+                                Text("\(description.count)/1000")
+                                    .font(.caption)
+                                    .foregroundColor(.gray)
+                                    .padding(.horizontal, 30)
+                                    .padding(.vertical, -25)
+                            }
                         }
-                        .padding(.horizontal)
-                    HStack {
-                        Spacer()
-                        Text("\(description.count)/1000")
-                            .foregroundColor(.gray)
-                            .padding(.horizontal, 30)
-                            .padding(.top, -7)
+                        Section(header: Text("Starting Price").bold().padding(.horizontal)) {
+                            TextField("Starting Price", value: $startingPrice, format: .currency(code: Locale.current.currency?.identifier ?? "€"), prompt: Text("550,00 €"))
+                                .keyboardType(.decimalPad)
+                                .autocorrectionDisabled()
+                                .padding()
+                                .overlay {
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .stroke(startingPriceError ? .red : .gray, lineWidth: 2)
+                                }
+                                .padding(.horizontal)
+                                .onChange(of: startingPrice) {
+                                    nextTapped = false
+                                    do {
+                                        next = try descendingPriceChecker.checkAuctionFields(startingPrice: startingPrice, minimumPrice: minimumPrice, decrementAmount: reductionAmount, startingDate: selectedDate)
+                                    } catch {
+                                        
+                                    }
+                                }
+                        }
+                        Section(header: Text("Minimum Price").bold().padding(.horizontal)) {
+                            TextField("Minimum Price", value: $minimumPrice, format: .currency(code: Locale.current.currency?.identifier ?? "€"), prompt: Text("350,00 €"))
+                                .keyboardType(.decimalPad)
+                                .autocorrectionDisabled()
+                                .padding()
+                                .overlay {
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .stroke(minimumPriceError ? .red : .gray, lineWidth: 2)
+                                }
+                                .padding(.horizontal)
+                                .onChange(of: minimumPrice) {
+                                    nextTapped = false
+                                    do {
+                                        next = try descendingPriceChecker.checkAuctionFields(startingPrice: startingPrice, minimumPrice: minimumPrice, decrementAmount: reductionAmount ?? 1, startingDate: selectedDate)
+                                    } catch {
+                                        
+                                    }
+                                }
+                        }
+                        Section(header: Text("Decrement Amount").bold().padding(.horizontal)) {
+                            TextField("Decrement Amount", value: $reductionAmount, format: .currency(code: Locale.current.currency?.identifier ?? "€"), prompt: Text("1,00 €"))
+                                .keyboardType(.decimalPad)
+                                .autocorrectionDisabled()
+                                .padding()
+                                .overlay {
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .stroke(.gray, lineWidth: 2)
+                                }
+                                .padding(.horizontal)
+                                .onChange(of: reductionAmount) {
+                                    nextTapped = false
+                                    do {
+                                        next = try descendingPriceChecker.checkAuctionFields(startingPrice: startingPrice, minimumPrice: minimumPrice, decrementAmount: reductionAmount ?? 1, startingDate: selectedDate)
+                                    } catch {
+                                        
+                                    }
+                                }
+                        }
                     }
                     Divider()
                     HStack {
                         Text("Category: ")
                             .padding()
-                            .padding(.horizontal, 10)
+                        Spacer()
                         Picker("Category", selection: $category) {
                             ForEach(Category.allCases, id: \.self) { category in
                                 Text(category.description).tag(category)
                             }
                         }
                         .pickerStyle(.automatic)
-                        Spacer()
                     }
-                    TextField("Starting Price", value: $startingPrice, format: .currency(code: Locale.current.currency?.identifier ?? "€"), prompt: Text("Starting price*"))
-                        .keyboardType(.decimalPad)
-                        .autocorrectionDisabled()
-                        .padding()
-                        .overlay {
-                            RoundedRectangle(cornerRadius: 10)
-                                .stroke(.gray, lineWidth: 2)
+                    .padding(.horizontal)
+                    Divider()
+                        HStack {
+                            Text("Starting Date:")
+                                .padding()
+                            Spacer()
+                            DatePicker("Select Date", selection: $selectedDate, displayedComponents: .date)
+                                .datePickerStyle(CompactDatePickerStyle())
+                                .labelsHidden()
+                            DatePicker("", selection: $selectedDate, displayedComponents: .hourAndMinute)
+                                .datePickerStyle(CompactDatePickerStyle())
+                                .labelsHidden()
+                                .padding(.horizontal)
+                                .onChange(of: selectedDate) {
+                                    do {
+                                        next = try descendingPriceChecker.checkAuctionFields(startingPrice: startingPrice ?? 1, minimumPrice: minimumPrice, decrementAmount: reductionAmount ?? 1, startingDate: selectedDate)
+                                    } catch {
+                                        
+                                    }
+                                }
                         }
-                        .padding(.horizontal)
-                        .onChange(of: startingPrice) {
-                            do {
-                                next = try descendingPriceChecker.checkAuctionFields(startingPrice: startingPrice, minimumPrice: minimumPrice, decrementAmount: reductionAmount, startingDate: selectedDate)
-                            } catch {
-                                
-                            }
-                        }
-                    HStack {
-                        Text("Starting Date:")
-                            .padding()
-                        
-                        DatePicker("Select Date", selection: $selectedDate, displayedComponents: .date)
-                            .datePickerStyle(CompactDatePickerStyle())
-                            .labelsHidden()
-                        DatePicker("", selection: $selectedDate, displayedComponents: .hourAndMinute)
-                            .datePickerStyle(CompactDatePickerStyle())
-                            .labelsHidden()
-                            .padding(.horizontal)
-                            .onChange(of: selectedDate) {
-                                do {
-                                    next = try descendingPriceChecker.checkAuctionFields(startingPrice: startingPrice ?? 1, minimumPrice: minimumPrice, decrementAmount: reductionAmount ?? 1, startingDate: selectedDate)
-                                } catch {
-                                    
+
+                        Divider()
+                        HStack {
+                            Text("Timer: ")
+                                .padding()
+                                .padding(.horizontal, 10)
+                            Picker("Timer", selection: $timerAmount) {
+                                ForEach(1...120, id: \.self) {
+                                    Text("^[\($0) Minute](inflect: true)")
                                 }
                             }
-                    }
-                    TextField("Starting Price", value: $minimumPrice, format: .currency(code: Locale.current.currency?.identifier ?? "€"), prompt: Text("Minimum selling price*"))
-                        .keyboardType(.decimalPad)
-                        .autocorrectionDisabled()
-                        .padding()
-                        .overlay {
-                            RoundedRectangle(cornerRadius: 10)
-                                .stroke(.gray, lineWidth: 2)
+                            .pickerStyle(.wheel)
+                            .frame(height: 100)
+                            Spacer()
+                            
                         }
-                        .padding(.horizontal)
-                        .onChange(of: minimumPrice) {
-                            do {
-                                next = try descendingPriceChecker.checkAuctionFields(startingPrice: startingPrice, minimumPrice: minimumPrice, decrementAmount: reductionAmount ?? 1, startingDate: selectedDate)
-                            } catch {
-                                
-                            }
-                        }
-                    Divider()
-                    HStack {
-                        Text("Timer: ")
-                            .padding()
-                            .padding(.horizontal, 10)
-                        Picker("Timer", selection: $timerAmount) {
-                            ForEach(1...120, id: \.self) {
-                                Text("^[\($0) Minute](inflect: true)")
-                            }
-                        }
-                        .pickerStyle(.wheel)
-                        .frame(height: 100)
+                        Divider()
                         Spacer()
-                        
-                    }
-                    Divider()
-                    TextField("Decrement Amount", value: $reductionAmount, format: .currency(code: Locale.current.currency?.identifier ?? "€"), prompt: Text("Decrement Amount (Default 1€)"))
-                        .keyboardType(.decimalPad)
-                        .autocorrectionDisabled()
-                        .padding()
-                        .overlay {
-                            RoundedRectangle(cornerRadius: 10)
-                                .stroke(.gray, lineWidth: 2)
+                        NavigationLink(destination: DescendingPriceAuctionRecapView(image: uiImage, title: title, description: description.isEmpty ? nil : description, category: category,startingPrice: startingPrice ?? 0, selectedDate: selectedDate, minimumPrice: minimumPrice ?? 0, timerAmount: timerAmount, reductionAmount: reductionAmount ?? 1, popToRoot: self.$rootIsActive)) {
+                            HStack {
+                                Text("Next")
+                                    .frame(width: 360, height: 45)
+                                    .background(next ? Color.blue : Color.gray)
+                                    .foregroundColor(.white)
+                                    .cornerRadius(15)
+                            }.padding(.top, 100)
                         }
-                        .padding(.horizontal)
-                        .onChange(of: reductionAmount) {
-                            do {
-                                next = try descendingPriceChecker.checkAuctionFields(startingPrice: startingPrice, minimumPrice: minimumPrice, decrementAmount: reductionAmount ?? 1, startingDate: selectedDate)
-                            } catch {
-                                
+                        .isDetailLink(false)
+                        .id(UUID())
+                        .disabled(!next || disableNextButton)
+                        .onTapGesture {
+                            if disableNextButton {
+                                nextTapped = true
                             }
                         }
-                    Spacer()
-                    NavigationLink(destination: DescendingPriceAuctionRecapView(image: uiImage, title: title, description: description.isEmpty ? nil : description, category: category,startingPrice: startingPrice ?? 0, selectedDate: selectedDate, minimumPrice: minimumPrice ?? 0, timerAmount: timerAmount, reductionAmount: reductionAmount ?? 1, popToRoot: self.$rootIsActive)) {
-                        HStack {
-                            Text("Next")
-                                .frame(width: 360, height: 45)
-                                .background(next ? Color.blue : Color.gray)
-                                .foregroundColor(.white)
-                                .cornerRadius(15)
-                        }.padding(.top, 100)
                     }
-                    .isDetailLink(false)
-                    .id(UUID())
-                    .disabled(!next || title == "")
+                    .navigationTitle("Descending Price Auction")
+                    .navigationBarTitleDisplayMode(.inline)
+                    .sheet(isPresented: $isPresented, content: {
+                        ImagePicker(uiImage: $uiImage, isPresenting: $isPresented, sourceType: $sourceType)
+                    })
                 }
-                .navigationTitle("Descending Price Auction")
-                .sheet(isPresented: $isPresented, content: {
-                    ImagePicker(uiImage: $uiImage, isPresenting: $isPresented, sourceType: $sourceType)
-                })
+                .scrollDismissesKeyboard(.immediately)
             }
-            .scrollDismissesKeyboard(.immediately)
-        }
-        else {
-            Text("")
-                .navigationBarBackButtonHidden()
-                .onAppear {
-                    dismiss()
-                }
+            else {
+                Text("")
+                    .navigationBarBackButtonHidden()
+                    .onAppear {
+                        dismiss()
+                    }
+            }
         }
     }
-}
-
-#Preview {
-    CreateNewDescendingPriceAuctionView(rootIsActive: .constant(true))
-}
+    
+    #Preview {
+        CreateNewDescendingPriceAuctionView(rootIsActive: .constant(true))
+    }

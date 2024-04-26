@@ -40,7 +40,7 @@ struct DescendingPriceAuctionDetailView: View {
         if !showWin {
             ScrollView(.vertical, showsIndicators: false) {
                 ImageView(pictureUrl: descendingPriceAuction.urlPicture)
-                    .frame(width: 300, height: 300)
+                    .frame(width: UIScreen.main.bounds.width*0.95, height: 300)
             VStack(alignment: .leading) {
                 Text(descendingPriceAuction.title)
                     .font(.largeTitle)
