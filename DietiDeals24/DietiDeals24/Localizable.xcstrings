@@ -39,10 +39,28 @@
     "^[%lld Minute](inflect: true)" : {
 
     },
-    "2 letters at the beginning then only digits\n Length between 15 and 30 characters" : {
+    "1,00 €" : {
 
     },
     "2 letters at the beginning then only digits.\n Length between 15 and 30 characters." : {
+
+    },
+    "2 letters at the beginning then only digits.\n Length must be between 15 and 30 characters" : {
+
+    },
+    "10 €" : {
+
+    },
+    "350,00 €" : {
+
+    },
+    "500,00 €" : {
+
+    },
+    "550,00 €" : {
+
+    },
+    "850,00 €" : {
 
     },
     "Account successfully registered!" : {
@@ -63,28 +81,28 @@
     "Are you sure you want to delete this auction?" : {
 
     },
-    "As bidder: You can see the current price for the product/service and the expiry date (after that date the auction ends). The highest offer when the auction expires wins" : {
+    "As a bidder: You can see the current price for the product/service and the expiry date (after that date the auction ends). The highest offer when the auction expires wins" : {
 
     },
-    "As bidder: You can see the current price of the product/service and the timer decreasing, every time the timer reaches 0 the price decreases and the timer resets. The auction ends when someone decides to buy the product/service at the current price or the secret minimum price is reached." : {
+    "As a bidder: You can see the current price of the product/service and the timer decreasing, every time the timer reaches 0 the price decreases and the timer resets. The auction ends when someone decides to buy the product/service at the current price or the secret minimum price is reached." : {
 
     },
-    "As bidder: You can see the current price of the product/service and the timer going down, if someone bids the timer resets, the auction is won by who made the highest bid when the timer reach 0." : {
+    "As a bidder: You can see the current price of the product/service and the timer going down, if someone bids the timer resets, the auction is won by who made the highest bid when the timer reach 0." : {
 
     },
-    "As bidder: You can set a maximum price that you want to pay, then the sellers will compete with each other by offering the product/service to you at a lower price, the seller that offers the product/service at the lowest price" : {
+    "As a bidder: You can set a maximum price that you want to pay, then the sellers will compete with each other by offering the product/service to you at a lower price, the seller that offers the product/service at the lowest price will offer it to you at that price" : {
 
     },
-    "As seller: You can offer the product/service to the buyer at your own price, the provision of the product/service is won by the lowest price offer when the auction expires." : {
+    "As a seller: You can offer the product/service to the buyer at your own price, the provision of the product/service is won by the lowest price offer when the auction expires." : {
 
     },
-    "As seller: You can set a high price starting price, a price decrease, a timer and a secret minimum price visible only to you. When the timer reaches 0 the price decreases and the timer resets, the auction ends when the current price reaches the minimum price or someone buys the product/service at the current price." : {
+    "As a seller: You can set a high starting price, a price decrease amount, a timer and a secret minimum price visible only to you. When the timer reaches 0 the price decreases and the timer resets, the auction ends when the current price reaches the minimum price or someone buys the product/service at the current price." : {
 
     },
-    "As seller: You can set a initial price, a timer and a rise price, when someone offer on the rise the timer reset. The auction ends when the timer reaches 0." : {
+    "As a seller: You can set a initial price, a timer and a rise price, when someone offer on the rise the timer reset. The auction ends when the timer reaches 0." : {
 
     },
-    "As seller: You can set a secret minimum price visible only to you and a expiry date (after that date the auction ends)." : {
+    "As a seller: You can set a secret minimum price visible only to you and a expiry date (after that date the auction ends)." : {
 
     },
     "At least 5 characters and one number" : {
@@ -111,16 +129,7 @@
     "Bid interval: " : {
 
     },
-    "Bid interval: ^[%lld Minute](inflect: true)" : {
-
-    },
     "Bid raise threshold" : {
-
-    },
-    "Bid raise threshold (Default 10 €)" : {
-
-    },
-    "Bid raise threshold: %lld €" : {
 
     },
     "Bid successfuly made!" : {
@@ -147,9 +156,6 @@
     "Category: " : {
 
     },
-    "Category: %@" : {
-
-    },
     "Changes successfully saved!" : {
 
     },
@@ -168,16 +174,10 @@
     "Current price*" : {
 
     },
-    "Decreasing by %lld €" : {
-
-    },
-    "Decreasing starting price every: ^[%lld Minute](inflect: true)" : {
+    "Decreasing by:" : {
 
     },
     "Decrement Amount" : {
-
-    },
-    "Decrement Amount (Default 1€)" : {
 
     },
     "Delete" : {
@@ -222,13 +222,16 @@
     "Error uploading auction!" : {
 
     },
+    "Every" : {
+
+    },
     "Expires on:" : {
 
     },
     "Expiry Date:" : {
 
     },
-    "Expiry Date: %@" : {
+    "Expiry Time:" : {
 
     },
     "First Name" : {
@@ -244,6 +247,9 @@
 
     },
     "General info" : {
+
+    },
+    "Geographic Area" : {
 
     },
     "Geographic Area: " : {
@@ -282,28 +288,22 @@
     "Make Offer" : {
 
     },
+    "Maximum price" : {
+
+    },
     "Maximum Price" : {
-
-    },
-    "Maximum Price: %lld €" : {
-
-    },
-    "Maximum Price*" : {
 
     },
     "Minimum Price" : {
 
     },
-    "Minimum Price: %lld €" : {
+    "Minimum selling price" : {
 
     },
-    "Minimum Price*" : {
+    "Minimum selling price:" : {
 
     },
-    "Minimum Selling Price: %lld €" : {
-
-    },
-    "Minimum selling price*" : {
+    "Motorcycle 4-cylinder" : {
 
     },
     "My Auctions" : {
@@ -319,9 +319,6 @@
 
     },
     "No Active Auctions" : {
-
-    },
-    "No Image" : {
 
     },
     "No New Notifications" : {
@@ -354,7 +351,13 @@
     "Publish" : {
 
     },
+    "Raise Amount:" : {
+
+    },
     "Raise:" : {
+
+    },
+    "Remove" : {
 
     },
     "Save Changes" : {
@@ -387,19 +390,16 @@
     "Starting Date:" : {
 
     },
-    "Starting Date: %@" : {
-
-    },
     "Starting price" : {
 
     },
     "Starting Price" : {
 
     },
-    "Starting Price: %lld €" : {
+    "Starting Price:" : {
 
     },
-    "Starting price*" : {
+    "Starting Time:" : {
 
     },
     "Success" : {
@@ -417,13 +417,13 @@
     "Timer" : {
 
     },
+    "Timer amount" : {
+
+    },
     "Timer: " : {
 
     },
     "Title" : {
-
-    },
-    "Title*" : {
 
     },
     "VAT Number" : {
@@ -433,6 +433,9 @@
 
     },
     "Website" : {
+
+    },
+    "year 2013, 120 HP, 800cc, 25.000 Km" : {
 
     },
     "You Won!" : {

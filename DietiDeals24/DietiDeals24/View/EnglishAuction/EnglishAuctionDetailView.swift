@@ -47,7 +47,7 @@ struct EnglishAuctionDetailView: View {
     var body: some View {
         ScrollView(.vertical, showsIndicators: false) {
             ImageView(pictureUrl: englishAuction.urlPicture)
-                .frame(width: 300, height: 300)
+                .frame(width: UIScreen.main.bounds.width*0.95, height: 300)
             VStack(alignment: .leading) {
                 Text(englishAuction.title)
                     .font(.largeTitle)

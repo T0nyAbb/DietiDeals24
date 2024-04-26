@@ -46,7 +46,7 @@ struct InverseAuctionDetailView: View {
     var body: some View {
         ScrollView(.vertical, showsIndicators: false) {
             ImageView(pictureUrl: inverseAuction.urlPicture)
-                .frame(width: 300, height: 300)
+                .frame(width: UIScreen.main.bounds.width*0.95, height: 300)
             VStack(alignment: .leading) {
                 Text(inverseAuction.title)
                     .font(.largeTitle)

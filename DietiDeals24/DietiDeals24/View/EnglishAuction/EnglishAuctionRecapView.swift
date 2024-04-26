@@ -10,7 +10,7 @@ import SwiftUI
 struct EnglishAuctionRecapView: View {
     @State var image: UIImage?
     @State var title: String
-    @State var description: String
+    @State var description: String?
     @State var category: Category
     @State var startingPrice: Int
     @State var timerAmount: Int
@@ -26,34 +26,73 @@ struct EnglishAuctionRecapView: View {
     
     
     var body: some View {
-        VStack {
+        ScrollView(.vertical, showsIndicators: false) {
             if let uiImage = image {
                 Image(uiImage: uiImage)
                     .resizable()
                     .scaledToFit()
                     .clipShape(RoundedRectangle(cornerRadius: 10))
-                    .frame(width: 125, height: 125)
-                    .padding()
+                    .frame(width: UIScreen.main.bounds.width*0.95, height: 300)
             } else {
-                Text("No Image")
-                    .font(.title2)
+                Image(systemName: "photo")
+                    .resizable()
+                    .scaledToFit()
+                    .clipShape(RoundedRectangle(cornerRadius: 15))
+                    .shadow(radius: /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/)
+                    .frame(width: UIScreen.main.bounds.width*0.95, height: 300)
             }
-            Text(title)
-                .font(.title)
-                .bold()
-                .padding()
+            
+            VStack(alignment: .leading) {
+                Text(title)
+                    .font(.largeTitle)
+                    .bold()
+                HStack {
+                    Text(category.description)
+                    Spacer()
+                    HStack {
+                        Image(systemName: "person")
+                        Text("\(user.firstName ?? "") \(user.lastName ?? "")")
+                            .bold()
+                    }
+                }
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+                Divider()
+                VStack {
+                    Text(description ?? "No description")
+                        .frame(maxWidth: .infinity)
+                } .padding(.top)
+            }
+            .padding()
             Divider()
-            Text(description)
-                .padding()
-            Divider()
-            Text("Category: \(category.description)")
-                .padding()
-            Text("Starting Price: \(startingPrice) €")
-                .padding()
-            Text("Bid interval: ^[\(timerAmount) Minute](inflect: true)")
-                .padding()
-            Text("Bid raise threshold: \(raiseAmount) €")
-                .padding()
+            VStack {
+                HStack {
+                    Text("Starting Price:")
+                        .font(.caption)
+                        .padding(.leading)
+                    Text("\(startingPrice) €")
+                        .font(.title3)
+                        .bold()
+                    Spacer()
+                        Text("Timer amount")
+                            .font(.caption)
+                            .padding(.trailing)
+                }
+                HStack {
+                    Text("Raise Amount:")
+                        .font(.caption)
+                        .padding(.leading)
+                    Text("\(raiseAmount) €")
+                        .font(.title3)
+                        .bold()
+                    Spacer()
+                    Text("^[\(timerAmount) Minute](inflect: true)")
+                        .font(.title3)
+                        .bold()
+                        .padding(.trailing)
+                }
+
+            }.padding(.vertical)
             VStack {
                 Spacer()
                 Button {
@@ -107,8 +146,7 @@ struct EnglishAuctionRecapView: View {
 
         .navigationBarBackButtonHidden(!popToRoot)
         .navigationTitle("Summary")
-
-
+        .navigationBarTitleDisplayMode(.inline)
         }
         .alert(isPresented: $isPresented, content: {
             if !showError {

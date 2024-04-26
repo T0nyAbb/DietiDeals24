@@ -28,23 +28,31 @@ struct MainView: View {
     
     @State var myAuctionSelection = 0
     
-    @State var notificationsCount: Int?
+    @State private var opened: Bool = false
+    
+    private var notificationsCount: Int {
+        return notificationViewModel.currentUserNotifications.count
+    }
 
     var body: some View {
         TabView(selection:$selection) {
             AuctionsView(selectedAuction: $auctionSelection, auctionViewModel: auctionsViewModel, userViewModel: userViewModel, notificationViewModel: notificationViewModel)
+                .id(UUID())
                   .tabItem {
                       Image(systemName: "tag.fill")
                       Text("Auctions")
                   }
                   .tag(1)
             NotificationsView(notificationViewModel: notificationViewModel, loginViewModel: LoginViewModel.shared)
+                .id(UUID())
                   .tabItem {
                       Image(systemName: "bell.fill")
                       Text("Notifications")
+
                   }
+                  .badge(notificationsCount)
                   .tag(2)
-                  .badge(notificationViewModel.currentUserNotifications.count)
+                  
             MyAuctionsView(userVm: userViewModel, loginVm: LoginViewModel.shared, auctionVm: auctionsViewModel, notificationViewModel: notificationViewModel, selectedAuction: $myAuctionSelection)
                 .id(UUID())
                   .tabItem {
@@ -60,19 +68,19 @@ struct MainView: View {
                 .tag(4)
         }
         .onAppear {
-            Task {
-                print(UserDefaults.standard.string(forKey: "Token"))
-                try await auctionsViewModel.getAllFixedTimeAuction()
-                await loginVm.updateCurrentUser()
-                try await notificationViewModel.updateCurrentUserNotifications(user: loginVm.user!)
-                try await auctionsViewModel.getAllDescendingPriceAuctions()
-                try await auctionsViewModel.getAllEnglishAuctions()
-                try await auctionsViewModel.getAllInverseAuctions()
-                try await userViewModel.getAllUsers()
-                self.notificationsCount = notificationViewModel.currentUserNotifications.count
-                if loginVm.user == nil {
-                    dismiss()
+            if !opened {
+                Task {
+                    print(UserDefaults.standard.string(forKey: "Token"))
+                    await loginVm.updateCurrentUser()
+                    if loginVm.user == nil {
+                        dismiss()
+                    } else {
+                        try await notificationViewModel.updateCurrentUserNotifications(user: loginVm.user!)
+                        try await userViewModel.getAllUsers()
+                    }
+
                 }
+                opened = true
             }
         }
         .navigationBarBackButtonHidden()

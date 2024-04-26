@@ -12,6 +12,7 @@ struct NotificationsView: View {
     var notificationViewModel: NotificationViewModel
     
     @StateObject var loginViewModel: LoginViewModel
+    @Environment(\.dismiss) var dismiss
     
     var body: some View {
         NavigationView {
@@ -47,10 +48,16 @@ struct NotificationsView: View {
                 .navigationTitle("Notifications")
                 .onAppear {
                     Task {
+                        if loginViewModel.user == nil {
+                            dismiss()
+                        }
+                        else {
                         do {
-                            try await notificationViewModel.updateCurrentUserNotifications(user: loginViewModel.user!)
+
+                                try await notificationViewModel.updateCurrentUserNotifications(user: loginViewModel.user!)
                         } catch {
                             print(error.localizedDescription)
+                        }
                         }
                     }
                 }

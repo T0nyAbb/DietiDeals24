@@ -28,38 +28,81 @@ struct DescendingPriceAuctionRecapView: View {
     
     
     var body: some View {
-        VStack {
+        ScrollView(.vertical, showsIndicators: false) {
             if let uiImage = image {
                 Image(uiImage: uiImage)
                     .resizable()
                     .scaledToFit()
                     .clipShape(RoundedRectangle(cornerRadius: 10))
-                    .frame(width: 125, height: 125)
-                    .padding()
+                    .shadow(radius: 10)
+                    .frame(width: UIScreen.main.bounds.width * 0.95, height: 300)
             } else {
-                Text("No Image")
-                    .font(.title2)
+                Image(systemName: "photo")
+                    .resizable()
+                    .scaledToFit()
+                    .clipShape(RoundedRectangle(cornerRadius: 15))
+                    .shadow(radius: /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/)
+                    .frame(width: UIScreen.main.bounds.width*0.95, height: 300)
             }
-            Text(title)
-                .font(.title)
-                .bold()
-                .padding()
+            VStack(alignment: .leading) {
+                Text(title)
+                    .font(.largeTitle)
+                    .bold()
+                HStack {
+                    Text(category.description)
+                    Spacer()
+                    HStack {
+                        Image(systemName: "person")
+                        Text("\(user.firstName ?? "") \(user.lastName ?? "")")
+                            .bold()
+                    }
+                }
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+                Divider()
+                VStack {
+                    Text(description ?? "No description")
+                        .frame(maxWidth: .infinity)
+                } .padding(.top)
+            }
+            .padding()
             Divider()
-            Text(description ?? "No Description")
-                .padding()
-            Divider()
-            Text("Category: \(category.description)")
-                .padding()
-            Text("Starting Date: \(selectedDate.formatted(date: .numeric, time: .standard))")
-                .padding()
-            Text("Starting Price: \(startingPrice) €")
-                .padding()
-            Text("Minimum Selling Price: \(minimumPrice) €")
-                .padding()
-            Text("Decreasing starting price every: ^[\(timerAmount) Minute](inflect: true)")
-                .padding()
-            Text("Decreasing by \(reductionAmount) €")
-                .padding()
+            VStack {
+                HStack {
+                    Text("Starting Price:")
+                        .font(.caption)
+                        .padding(.leading)
+                    Text("\(startingPrice) €")
+                        .font(.title3)
+                        .bold()
+                    Spacer()
+                }
+                HStack {
+                    Text("Decreasing by:")
+                        .font(.caption)
+                        .padding(.leading)
+                    Text("\(reductionAmount) €")
+                        .font(.title3)
+                        .bold()
+                    Text("Every")
+                        .font(.caption)
+                    Text("^[\(timerAmount) Minute](inflect: true)")
+                        .font(.title3)
+                        .bold()
+                        .padding(.trailing)
+                    Spacer()
+                }
+                HStack {
+                    Text("Minimum selling price:")
+                        .font(.caption)
+                        .padding(.leading)
+                    Text("\(minimumPrice) €")
+                        .font(.title3)
+                        .bold()
+                    Spacer()
+                }
+
+            }.padding(.vertical)
             VStack {
                 Spacer()
                 Button {
@@ -67,35 +110,35 @@ struct DescendingPriceAuctionRecapView: View {
                         self.auction = try await auctionViewModel.createDescendingPriceAuction(auction: .init(id: nil, title: title, description: description, category: category.description, sellerId: user.id!, urlPicture: nil, active: nil, failed: nil, currentPrice: Double(startingPrice), startingPrice: startingPrice, startingDate: selectedDate, timer: nil, timerAmount: timerAmount*60, reduction: reductionAmount, minimumPrice: minimumPrice))
                         if self.auction != nil {
                             if self.image != nil {
+                                do {
+                                    imageViewModel.uiImage = self.image
+                                    let image = try await imageViewModel.uploadAuctionPicture(auction: self.auction!)
+                                    print("auction image uploaded: \(image)")
+                                    let imageUrl = try await imageViewModel.getAuctionPictureUrl(auction: self.auction!)
+                                    print("image url saved: \(imageUrl)")
+                                    self.auction?.urlPicture = imageUrl
+                                    print("updated auction picture")
                                     do {
-                                        imageViewModel.uiImage = self.image
-                                        let image = try await imageViewModel.uploadAuctionPicture(auction: self.auction!)
-                                        print("auction image uploaded: \(image)")
-                                        let imageUrl = try await imageViewModel.getAuctionPictureUrl(auction: self.auction!)
-                                        print("image url saved: \(imageUrl)")
-                                        self.auction?.urlPicture = imageUrl
-                                        print("updated auction picture")
-                                        do {
-                                            self.auction = try await auctionViewModel.updateDescendingPriceAuction(auction: self.auction!)
-                                            print("updated auction in db!")
-                                            DispatchQueue.main.asyncAfter(deadline: .now()+0.3) {
-                                                self.isPresented = true
-
-                                            }
-                                        } catch {
-                                            print("failed updating auction")
-                                            print(error)
-                                            self.showError = true
+                                        self.auction = try await auctionViewModel.updateDescendingPriceAuction(auction: self.auction!)
+                                        print("updated auction in db!")
+                                        DispatchQueue.main.asyncAfter(deadline: .now()+0.3) {
+                                            self.isPresented = true
+                                            
                                         }
                                     } catch {
-                                        print("image upload failed")
+                                        print("failed updating auction")
                                         print(error)
                                         self.showError = true
                                     }
+                                } catch {
+                                    print("image upload failed")
+                                    print(error)
+                                    self.showError = true
+                                }
                             } else {
                                 self.isPresented = true
                             }
-
+                            
                         }
                     }
                 } label: {
@@ -108,13 +151,13 @@ struct DescendingPriceAuctionRecapView: View {
                             self.auction = .init(id: nil, title: title, description: description, category: category.description, sellerId: user.id!, urlPicture: nil, active: nil, failed: nil, currentPrice: 0, startingPrice: startingPrice, startingDate: selectedDate, timer: nil, timerAmount: timerAmount*60, reduction: reductionAmount, minimumPrice: minimumPrice)
                         }
                 }
-
+                
             }
-
-        .navigationBarBackButtonHidden(!popToRoot)
-        .navigationTitle("Summary")
-
-
+            
+            .navigationBarBackButtonHidden(!popToRoot)
+            .navigationTitle("Summary")
+            
+            
         }
         .alert(isPresented: $isPresented, content: {
             if !showError {
@@ -126,10 +169,10 @@ struct DescendingPriceAuctionRecapView: View {
                 Alert(title: Text("Error uploading auction!"), dismissButton: .default(Text("Ok"), action: {
                     self.showError = false
                 }))
-
+                
             }
         })
-
+        
     }
 }
 
