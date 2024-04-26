@@ -33,6 +33,7 @@ struct FixedAuctionRecapView: View {
                     .resizable()
                     .scaledToFit()
                     .clipShape(RoundedRectangle(cornerRadius: 10))
+                    .shadow(radius: 10)
                     .frame(width: UIScreen.main.bounds.width*0.95, height: 300)
             } else {
                 Image(systemName: "photo")

@@ -33,14 +33,15 @@ struct InverseAuctionRecapView: View {
                     .resizable()
                     .scaledToFit()
                     .clipShape(RoundedRectangle(cornerRadius: 10))
-                    .frame(width: UIScreen.main.bounds.width, height: 300)
+                    .shadow(radius: 10)
+                    .frame(width: UIScreen.main.bounds.width*0.95, height: 300)
             } else {
                 Image(systemName: "photo")
                     .resizable()
                     .scaledToFit()
                     .clipShape(RoundedRectangle(cornerRadius: 15))
                     .shadow(radius: /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/)
-                    .frame(width: UIScreen.main.bounds.width, height: 300)
+                    .frame(width: UIScreen.main.bounds.width*0.95, height: 300)
             }
             
             VStack(alignment: .leading) {
