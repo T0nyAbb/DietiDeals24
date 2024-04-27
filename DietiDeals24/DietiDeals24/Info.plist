@@ -2,26 +2,26 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>CFBundleURLTypes</key>
-    <array>
-      <dict>
-      <key>CFBundleURLSchemes</key>
-      <array>
-        <string>fb1115488646542398</string>
-       <string>com.googleusercontent.apps.662769863779-v5244p6f58j2835l67rj7em8d1upav27</string>
-      </array>
-      </dict>
-    </array>
-    <key>FacebookAppID</key>
-    <string>1115488646542398</string>
-    <key>FacebookClientToken</key>
-    <string>c413de21709460d2e25a0f254e3a73db</string>
-    <key>FacebookDisplayName</key>
-    <string>DietiDeals24</string>
-    <key>LSApplicationQueriesSchemes</key>
-    <array>
-      <string>fbapi</string>
-      <string>fb-messenger-share-api</string>
-    </array>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>fb1115488646542398</string>
+				<string>com.googleusercontent.apps.662769863779-v5244p6f58j2835l67rj7em8d1upav27</string>
+			</array>
+		</dict>
+	</array>
+	<key>FacebookAppID</key>
+	<string>1115488646542398</string>
+	<key>FacebookClientToken</key>
+	<string>c413de21709460d2e25a0f254e3a73db</string>
+	<key>FacebookDisplayName</key>
+	<string>DietiDeals24</string>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
 </dict>
 </plist>

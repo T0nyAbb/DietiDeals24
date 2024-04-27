@@ -9,8 +9,11 @@ import Foundation
 
 enum Constants {
 //    static let BASE_URL = "http://192.168.1.124:8080"
-    static let BASE_URL = "http://localhost:8080"
+//    static let BASE_URL = "http://localhost:8080"
 //    static let BASE_URL = "http://10.20.56.207:8080"
+    static let BASE_URL = "http://ec2-16-171-118-237.eu-north-1.compute.amazonaws.com:8080"
+    
+    static let CLOUDFRONT_URL = "https://d3qjtqctuorn0o.cloudfront.net/public/"
     
     static func getEndpoint(endpoint: Endpoint) -> String {
         switch endpoint {

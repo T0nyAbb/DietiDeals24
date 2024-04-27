@@ -106,7 +106,7 @@ struct FixedAuctionRecapView: View {
                                         imageViewModel.uiImage = self.image
                                         let image = try await imageViewModel.uploadAuctionPicture(auction: self.auction!)
                                         print("auction image uploaded: \(image)")
-                                        let imageUrl = try await imageViewModel.getAuctionPictureUrl(auction: self.auction!)
+                                        let imageUrl = imageViewModel.getAuctionPictureUrl(auction: self.auction!)
                                         print("image url saved: \(imageUrl)")
                                         self.auction?.urlPicture = imageUrl
                                         print("updated auction picture")

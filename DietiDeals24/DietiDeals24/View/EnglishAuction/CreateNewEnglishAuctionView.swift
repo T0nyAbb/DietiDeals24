@@ -76,7 +76,7 @@ struct CreateNewEnglishAuctionView: View {
                 }
                     VStack(alignment: .leading) {
                     Section(header: Text("Title").bold().padding(.horizontal)) {
-                        TextField("Title", text: $title, prompt: Text("Motorcycle 4-cylinder").foregroundColor(.gray), axis: .vertical)
+                        TextField("Title", text: $title, prompt: Text("Motorcycle 4-cylinder"), axis: .vertical)
                             .padding(10)
                             .autocorrectionDisabled()
                             .overlay {
@@ -86,7 +86,7 @@ struct CreateNewEnglishAuctionView: View {
                             .padding(.horizontal)
                     }
                     Section(header: Text("Description").bold().padding(.horizontal)) {
-                        TextField("Description", text: $description, prompt: Text("year 2013, 120 HP, 800cc, 25.000 Km").foregroundColor(.gray), axis: .vertical)
+                        TextField("Description", text: $description, prompt: Text("year 2013, 120 HP, 800cc, 25.000 Km"), axis: .vertical)
                             .autocorrectionDisabled()
                             .padding(15)
                             .overlay {
@@ -107,7 +107,7 @@ struct CreateNewEnglishAuctionView: View {
                         }
                     }
                         Section(header: Text("Starting Price").bold().padding(.horizontal)) {
-                            TextField("Starting Price", value: $startingPrice, format: .currency(code: Locale.current.currency?.identifier ?? "€"), prompt: Text("500,00 €").foregroundColor(.gray))
+                            TextField("Starting Price", value: $startingPrice, format: .currency(code: Locale.current.currency?.identifier ?? "€"), prompt: Text("500,00 €"))
                                 .keyboardType(.decimalPad)
                                 .autocorrectionDisabled()
                                 .padding(10)

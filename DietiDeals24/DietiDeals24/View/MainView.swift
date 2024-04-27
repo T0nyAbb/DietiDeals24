@@ -28,7 +28,6 @@ struct MainView: View {
     
     @State var myAuctionSelection = 0
     
-    @State private var opened: Bool = false
     
     private var notificationsCount: Int {
         return notificationViewModel.currentUserNotifications.count
@@ -68,19 +67,25 @@ struct MainView: View {
                 .tag(4)
         }
         .onAppear {
-            if !opened {
-                Task {
+                let task = Task {
                     print(UserDefaults.standard.string(forKey: "Token"))
-                    await loginVm.updateCurrentUser()
-                    if loginVm.user == nil {
-                        dismiss()
-                    } else {
-                        try await notificationViewModel.updateCurrentUserNotifications(user: loginVm.user!)
-                        try await userViewModel.getAllUsers()
+                        await loginVm.updateCurrentUser()
+                }
+                Task {
+                    _ = await task.value
+                    DispatchQueue.main.asyncAfter(deadline: .now()+1.0) {
+                        Task {
+                            if loginVm.user == nil && !loginVm.checkLogin() {
+                                print("Dismissing, \(loginVm.user), checklog: \(loginVm.checkLogin())")
+                                dismiss()
+                            } else {
+                                try await notificationViewModel.updateCurrentUserNotifications(user: loginVm.user!)
+                                try await userViewModel.getAllUsers()
+                                
+                            }
+                        }
                     }
 
-                }
-                opened = true
             }
         }
         .navigationBarBackButtonHidden()

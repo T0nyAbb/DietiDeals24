@@ -140,8 +140,11 @@ struct ProfileView: View {
                                 Button(action: {
                                     if googleLogged {
                                         authViewModel.signOut()
+                                        loginVm.signOut()
                                     }
-                                    loginVm.signOut()
+                                    if appleLogged {
+                                        loginVm.appleSignOut()
+                                    }
                                     loggedOut = true
                                     dismiss()
                                 }) {

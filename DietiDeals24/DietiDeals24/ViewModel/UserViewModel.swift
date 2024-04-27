@@ -49,6 +49,9 @@ class UserViewModel {
                 print("user successfully retrieved!")
                 return user
             } else {
+                if let httpResponse = response as? HTTPURLResponse {
+                    print(httpResponse.statusCode)
+                }
                 // Handle unsuccessful login (non-200 status code)
                 print("unsuccesful login")
                 throw NSError(domain: "Login Failed", code: 0, userInfo: nil)
@@ -57,7 +60,7 @@ class UserViewModel {
         } catch {
             // Handle any errors that occurred during the request
             print("generic error")
-            print(error.localizedDescription)
+            print(error)
             throw error
             
         }

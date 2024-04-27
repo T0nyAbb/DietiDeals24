@@ -46,7 +46,7 @@ struct FixedTimeAuctionListView: View {
                         do {
                             try await auctionViewModel.getAllFixedTimeAuction()
                         } catch {
-                            print("Error")
+                            print(error)
                         }
                     }
                 }
@@ -65,7 +65,7 @@ struct FixedTimeAuctionListView: View {
                         do {
                             try await auctionViewModel.getAllFixedTimeAuction()
                         } catch {
-                            print("Error")
+                            print(error)
                         }
                     }
                 }

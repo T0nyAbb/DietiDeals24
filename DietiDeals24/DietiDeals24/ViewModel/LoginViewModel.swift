@@ -92,10 +92,16 @@ class LoginViewModel: ObservableObject {
             let surname = UserDefaults.standard.string(forKey: "AppleSurname")
         else { return }
         print("Checking apple login")
+        UserDefaults.standard.setValue(email, forKey: "Username")
+        UserDefaults.standard.setValue(true, forKey: "isLogged")
         self.appleEmail = email
+        self.email = email
         self.appleName = name.appending(" ").appending(surname)
         self.appleIsLogged = true
         self.logged = true
+        Task {
+            await updateCurrentUser()
+        }
     }
     
     func appleSignOut() {
@@ -105,40 +111,6 @@ class LoginViewModel: ObservableObject {
         self.appleEmail = ""
         self.signOut()
     }
-    
-//    func userDetails() -> some View {
-//            AsyncImage(url: URL(string: profilePicUrl))
-//                .frame(width: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/, height: 100)
-//    }
-//    
-//    func getGoogleUserName() -> Text {
-//        return Text(self.googleName)
-//    }
-//    
-//    func getGoogleEmail() -> Text {
-//        return Text(self.googleEmail)
-//    }
-//    
-//    func getfbProfilePic() -> String {
-//        return self.fbProfilePicUrl
-//    }
-//    
-//    func getfbImage() -> some View {
-//        AsyncImage(url: URL(string: fbProfilePicUrl))
-//            .frame(width: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/, height: 100)
-//    }
-//    
-//    func getfbName() -> String {
-//        return self.fbName
-//    }
-//    
-//    func getFbEmail() -> String {
-//        return self.fbEmail
-//    }
-//    
-//    func setFbEmail(email: String) {
-//        self.fbEmail = email
-//    }
     
     func setFbIsLogged(isLogged: Bool) {
         self.fbIsLogged = isLogged
@@ -150,31 +122,6 @@ class LoginViewModel: ObservableObject {
         }
     }
     
-//    func setFbName(name: String) {
-//        self.fbName = name
-//    }
-//    
-//    func setFbPic(pic: String) {
-//        self.fbProfilePicUrl = pic
-//    }
-//    
-//    func getAppleEmail() -> Text {
-//        return Text(self.appleEmail)
-//    }
-//    
-//    func getAppleName() -> Text {
-//        return Text(self.appleName)
-//    }
-//    
-//    func getEmail() -> Text {
-//        return Text(self.user?.username ?? "" )
-//    }
-//    
-//    func getName() -> Text {
-//        return Text(self.name)
-//    }
-    
-
     func login(username: String, password: String) async throws -> Token {
         // Construct the URL for your login endpoint
         guard let url = URL(string: Constants.BASE_URL + Constants.getEndpoint(endpoint: .LOGIN)) else {
@@ -215,6 +162,9 @@ class LoginViewModel: ObservableObject {
                 UserDefaults.standard.setValue(username, forKey: "Username")
                 return token
             } else {
+                if let httpResponse = response as? HTTPURLResponse {
+                    print(httpResponse.statusCode)
+                }
                 // Handle unsuccessful login (non-200 status code)
                 print("unsuccesful login")
                 throw NSError(domain: "Login Failed", code: 0, userInfo: nil)
@@ -222,7 +172,7 @@ class LoginViewModel: ObservableObject {
             }
         } catch {
             // Handle any errors that occurred during the request
-            print("generic error")
+            print(error)
             throw error
             
         }
@@ -265,7 +215,7 @@ class LoginViewModel: ObservableObject {
                 print("Received token: \(token)")
                 return token
             } else {
-                // Handle unsuccessful login (non-200 status code)
+                // Handle unsuccessful signup (non-200 status code)
                 print("unsuccesful registration")
                 throw NSError(domain: "Login Failed", code: 0, userInfo: nil)
                 
@@ -284,7 +234,7 @@ class LoginViewModel: ObservableObject {
         guard let url = URL(string: Constants.BASE_URL + Constants.getEndpoint(endpoint: .REGISTER)) else {
             throw NSError(domain: "Invalid URL", code: 0, userInfo: nil)
         }
-        print("called signupWithSocialProvider func with username: \(user.username) passw: \(user.password)")
+        print("called signupWithSocialProvider func with username: \(user.username)")
 
         // Create the signup request body
         let requestBody = user
@@ -294,7 +244,7 @@ class LoginViewModel: ObservableObject {
             print("encoding error")
             throw NSError(domain: "JSON Encoding Error", code: 0, userInfo: nil)
         }
-        print(jsonData)
+        print(jsonData.description.utf8)
         // Create the URLRequest
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
@@ -313,23 +263,25 @@ class LoginViewModel: ObservableObject {
                 UserDefaults.standard.setValue(user.username, forKey: "Username")
                 print("Received token: \(token)")
                 return token
-            } else if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 400 {
+            } 
+            //If the user already exists in the db just do the login
+            else if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 400 {
                 print("User already registered, trying login...")
-                UserDefaults.standard.setValue(user.username, forKey: "Username")
                 let token = try await login(username: user.username, password: user.password!)
+                UserDefaults.standard.setValue(user.username, forKey: "Username")
                 UserDefaults.standard.setValue(token.token, forKey: "Token")
                 print("User login successful!")
-                print("Token received: \(token)")
+                print("Token received: \(token.token)")
                 return token
             } else {
-                // Handle unsuccessful login (non-200 status code)
+                // Handle unsuccessful signup (non-200 status code)
                 print("unsuccesful registration")
                 throw NSError(domain: "Login Failed", code: 0, userInfo: nil)
                 
             }
         } catch {
             // Handle any errors that occurred during the request
-            print("generic error")
+            print(error)
             throw error
             
         }
@@ -351,10 +303,14 @@ class LoginViewModel: ObservableObject {
     func updateCurrentUser() async {
         if checkLogin() {
             do {
+                print("updating current user...")
                 user = try await userVm.getUserByEmail(username: UserDefaults.standard.string(forKey: "Username")!)
-                
+                if let usr = user {
+                    UserDefaults.standard.setValue(true, forKey: "isLogged")
+                }
+                print("updated current user")
             } catch {
-                print(error.localizedDescription)
+                print(error)
                 signOut()
             }
         }

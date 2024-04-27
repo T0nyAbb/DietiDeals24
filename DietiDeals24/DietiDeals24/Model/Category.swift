@@ -18,6 +18,17 @@ enum Category: String, CaseIterable {
     case toys
     case automotive
     case homeAppliances
+    case jewelry
+    case petSupplies
+    case musicalInstruments
+    case healthAndWellness
+    case officeSupplies
+    case gardening
+    case kitchenware
+    case outdoor
+    case tools
+    case stationery
+    case services
     
     var description: String {
         switch self {
@@ -41,6 +52,28 @@ enum Category: String, CaseIterable {
             return "Automotive"
         case .homeAppliances:
             return "Home Appliances"
+        case .jewelry:
+            return "Jewelry"
+        case .petSupplies:
+            return "Pet Supplies"
+        case .musicalInstruments:
+            return "Musical Instruments"
+        case .healthAndWellness:
+            return "Health and Wellness"
+        case .officeSupplies:
+            return "Office Supplies"
+        case .gardening:
+            return "Gardening"
+        case .kitchenware:
+            return "Kitchenware"
+        case .outdoor:
+            return "Outdoor"
+        case .tools:
+            return "Tools"
+        case .stationery:
+            return "Stationery"
+        case .services:
+            return "Services"
         }
     }
 }

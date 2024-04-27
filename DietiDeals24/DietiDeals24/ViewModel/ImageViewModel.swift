@@ -79,16 +79,16 @@ class ImageViewModel {
         return image!
     }
     
-    func getProfilePictureUrl(username: String) async throws -> String {
-        let url = try await Amplify.Storage.getURL(key: username, options: .init(expires: 604_800)) //expiration set to 7 days in seconds)
+    func getProfilePictureUrl(username: String) -> String {
+        let url = Constants.CLOUDFRONT_URL.appendingPathComponent(username)
         print("Completed: \(url)")
-        return url.absoluteString
+        return url
     }
     
-    func getAuctionPictureUrl(auction: Auction) async throws -> String {
-        let url = try await Amplify.Storage.getURL(key: auction.id!.description, options: .init(expires: 604_800)) //expiration set to 7 days in seconds
+    func getAuctionPictureUrl(auction: Auction) -> String {
+        let url = Constants.CLOUDFRONT_URL.appending(auction.id!.description)
         print("Completed: \(url)")
-        return url.absoluteString
+        return url
     }
     
     

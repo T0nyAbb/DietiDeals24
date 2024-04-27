@@ -87,7 +87,7 @@ struct SignupView: View {
     
     
     var body: some View {
-            ScrollView(.vertical, showsIndicators: false) {
+        ScrollView(.vertical, showsIndicators: false) {
             VStack(alignment: .leading, spacing: 15) {
                 Spacer()
                 Section(header: Text("General info").bold().padding(.horizontal)) {
@@ -102,7 +102,7 @@ struct SignupView: View {
                         RoundedRectangle(cornerRadius: 10)
                             .stroke(.gray, lineWidth: 2)
                     }
-                .padding(.horizontal)
+                    .padding(.horizontal)
                 }
                 TextField("Last Name",
                           text: $lastName ,
@@ -192,11 +192,11 @@ struct SignupView: View {
                 }
                 TextField("Bio", text: $bio, prompt: Text("Bio").foregroundColor(.gray), axis: .vertical)
                     .padding(20)
-                .overlay {
-                    RoundedRectangle(cornerRadius: 10)
-                        .stroke(bio.count > 1000 ? .red : .gray, lineWidth: 2)
-                }
-                .padding(.horizontal)
+                    .overlay {
+                        RoundedRectangle(cornerRadius: 10)
+                            .stroke(bio.count > 1000 ? .red : .gray, lineWidth: 2)
+                    }
+                    .padding(.horizontal)
                 HStack {
                     Spacer()
                     Text("\(bio.count)/1000")
@@ -207,19 +207,19 @@ struct SignupView: View {
                 }
                 TextField("Website", text: $webSite, prompt: Text("Your Website").foregroundColor(.gray))
                     .padding(10)
-                .overlay {
-                    RoundedRectangle(cornerRadius: 10)
-                        .stroke(.gray, lineWidth: 2)
-                }
-                .padding(.horizontal)
+                    .overlay {
+                        RoundedRectangle(cornerRadius: 10)
+                            .stroke(.gray, lineWidth: 2)
+                    }
+                    .padding(.horizontal)
                 
                 TextField("Social", text: $social, prompt: Text("Your Social Network").foregroundColor(.gray))
                     .padding(10)
-                .overlay {
-                    RoundedRectangle(cornerRadius: 10)
-                        .stroke(.gray, lineWidth: 2)
-                }
-                .padding(.horizontal)
+                    .overlay {
+                        RoundedRectangle(cornerRadius: 10)
+                            .stroke(.gray, lineWidth: 2)
+                    }
+                    .padding(.horizontal)
                 Divider()
                 HStack {
                     Text("Geographic Area: ")
@@ -237,11 +237,11 @@ struct SignupView: View {
                 Section(header: Text("Billing info").bold().padding(.horizontal)) {
                     TextField("Iban", text: $iban, prompt: Text("IBAN*").foregroundColor(.gray))
                         .padding(10)
-                    .overlay {
-                        RoundedRectangle(cornerRadius: 10)
-                            .stroke(checkIbanField ? .gray : .red, lineWidth: 2)
-                    }
-                .padding(.horizontal)
+                        .overlay {
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke(checkIbanField ? .gray : .red, lineWidth: 2)
+                        }
+                        .padding(.horizontal)
                     HStack {
                         Text("2 letters at the beginning then only digits.\n Length must be between 15 and 30 characters")
                             .bold()
@@ -255,19 +255,19 @@ struct SignupView: View {
                 Section(header: Text("Selling info").bold().padding(.horizontal)) {
                     TextField("VAT Number", text: $vatNumber, prompt: Text("VAT Number**").foregroundColor(.gray))
                         .padding(10)
+                        .overlay {
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke(.gray, lineWidth: 2)
+                        }
+                        .padding(.horizontal)
+                }
+                TextField("National Insurance Number", text: $nationalInsuranceNumber, prompt: Text("National Insurance Number**").foregroundColor(.gray))
+                    .padding(10)
                     .overlay {
                         RoundedRectangle(cornerRadius: 10)
                             .stroke(.gray, lineWidth: 2)
                     }
-                .padding(.horizontal)
-                }
-                TextField("National Insurance Number", text: $nationalInsuranceNumber, prompt: Text("National Insurance Number**").foregroundColor(.gray))
-                    .padding(10)
-                .overlay {
-                    RoundedRectangle(cornerRadius: 10)
-                        .stroke(.gray, lineWidth: 2)
-                }
-                .padding(.horizontal)
+                    .padding(.horizontal)
                 Divider()
                 Text("(* Required | ** Required for selling)")
                     .foregroundStyle(.gray)
@@ -276,7 +276,7 @@ struct SignupView: View {
                 Spacer()
                 
                 Button {
-                    do { 
+                    do {
                         self.showError = try !fieldChecker.checkFields(username: username, password: password, confirmPassword: confirmPassword, iban: iban)
                     } catch {
                         self.showError = true
@@ -300,25 +300,25 @@ struct SignupView: View {
                         .font(.title2)
                         .bold()
                         .foregroundColor(.white)
+                        .frame(height: 50)
+                        .frame(maxWidth: .infinity)
+                        .background(
+                            isSignInButtonDisabled ?
+                            LinearGradient(colors: [.gray], startPoint: .topLeading, endPoint: .bottomTrailing)
+                                .hueRotation(Angle(degrees: 0)):
+                                LinearGradient(colors: [.blue, .red], startPoint: .topLeading, endPoint: .bottomTrailing)
+                                .hueRotation(.degrees(animateButton ? 45 : -45))
+                            
+                        )
+                        .onAppear {
+                            withAnimation(.easeInOut(duration: 3).repeatForever(autoreverses: true)) {
+                                animateButton.toggle()
+                            }
+                        }
+                        .cornerRadius(20)
+                        .disabled(isSignInButtonDisabled)
+                        .padding()
                 }
-                .frame(height: 50)
-                .frame(maxWidth: .infinity)
-                .background(
-                    isSignInButtonDisabled ?
-                    LinearGradient(colors: [.gray], startPoint: .topLeading, endPoint: .bottomTrailing)
-                        .hueRotation(Angle(degrees: 0)):
-                        LinearGradient(colors: [.blue, .red], startPoint: .topLeading, endPoint: .bottomTrailing)
-                        .hueRotation(.degrees(animateButton ? 45 : -45))
-                    
-                )
-                .onAppear {
-                    withAnimation(.easeInOut(duration: 3).repeatForever(autoreverses: true)) {
-                        animateButton.toggle()
-                    }
-                }
-                .cornerRadius(20)
-                .disabled(isSignInButtonDisabled)
-                .padding()
             }
             .navigationTitle("Sign Up")
             .alert(isPresented: $showAlert) {
@@ -328,7 +328,7 @@ struct SignupView: View {
                         showAlert = false
                     }))
                 } else  {
-                    Alert(title: Text("Success"), message: Text("Account successfully registered!"), dismissButton: .default(Text("Ok"), action: {
+                    Alert(title: Text("Success"), message: Text("Account successfully created!"), dismissButton: .default(Text("Ok"), action: {
                         showConfirmation = false
                         showAlert = false
                         dismiss()
@@ -349,7 +349,9 @@ struct SignupView: View {
                 vatNumber = ""
                 nationalInsuranceNumber = ""
             }
+
         }
+        .scrollDismissesKeyboard(.immediately)
     }
 }
 

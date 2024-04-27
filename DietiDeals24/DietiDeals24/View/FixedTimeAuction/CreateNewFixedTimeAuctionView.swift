@@ -106,7 +106,7 @@ struct CreateNewFixedTimeAuctionView: View {
                         }
                     }
                         Section(header: Text("Minimum Price").bold().padding(.horizontal)) {
-                            TextField("Minimum Price", value: $minimumPrice, format: .currency(code: Locale.current.currency?.identifier ?? "€"), prompt: Text("850,00 €").foregroundColor(.gray))
+                            TextField("Minimum Price", value: $minimumPrice, format: .currency(code: Locale.current.currency?.identifier ?? "€"), prompt: Text("850,00 €"))
                                 .keyboardType(.decimalPad)
                                 .autocorrectionDisabled()
                                 .padding(10)

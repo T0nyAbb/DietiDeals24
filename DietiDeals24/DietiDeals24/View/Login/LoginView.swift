@@ -30,9 +30,9 @@ struct LoginView: View {
     
     var body: some View {
         NavigationStack {
-                ScrollView(.vertical, showsIndicators: false) {
-                    ZStack {
-                        Spacer().containerRelativeFrame([.horizontal, .vertical])
+            ScrollView(.vertical, showsIndicators: false) {
+                ZStack {
+                    Spacer().containerRelativeFrame([.horizontal, .vertical])
                     VStack {
                         VStack {
                             TextField("Email",
@@ -75,9 +75,8 @@ struct LoginView: View {
                                     showPassword.toggle()
                                 } label: {
                                     Image(systemName: showPassword ? "eye" : "eye.slash")
-                                        .foregroundColor(.blue) // how to change image based in a State variable
+                                        .foregroundColor(.blue)
                                 }
-                                
                             }
                             .padding(.vertical)
                             
@@ -98,7 +97,6 @@ struct LoginView: View {
                                     .background(Color.blue)
                                     .foregroundColor(.white)
                                     .cornerRadius(10)
-                                
                             }
                             Divider()
                                 .padding()
@@ -109,39 +107,51 @@ struct LoginView: View {
                                     switch result {
                                     case .success(let authResults):
                                         print("Authorisation successful")
-                                        if let appleEmail = UserDefaults.standard.string(forKey: "AppleEmail") {
+                                        if UserDefaults.standard.string(forKey: "AppleEmail") != nil {
                                             self.appleLogged = true
                                         }
                                         switch authResults.credential {
                                         case let appleIdCredentials as ASAuthorizationAppleIDCredential:
                                             if appleIdCredentials.email != nil {
+                                                print(appleIdCredentials.email as Any)
                                                 UserDefaults.standard.setValue(appleIdCredentials.email, forKey: "AppleEmail")
+                                                UserDefaults.standard.setValue(appleIdCredentials.email, forKey: "Username")
+                                            }
+                                            let username: String = UserDefaults.standard.string(forKey: "AppleEmail")!
+                                            if appleIdCredentials.fullName != nil {
+                                                print(appleIdCredentials.fullName as Any)
                                                 UserDefaults.standard.setValue(appleIdCredentials.fullName?.givenName, forKey: "AppleName")
                                                 UserDefaults.standard.setValue(appleIdCredentials.fullName?.familyName, forKey: "AppleSurname")
-                                                UserDefaults.standard.setValue(appleIdCredentials.user, forKey: "AppleUser")
                                             }
-                                            let firstName: String = (appleIdCredentials.fullName?.givenName)!
-                                            let lastName: String = (appleIdCredentials.fullName?.familyName)!
-                                            let username: String = appleIdCredentials.email!
-                                            print(appleIdCredentials.email)
-                                            print(appleIdCredentials.fullName?.givenName)
-                                            print(appleIdCredentials.fullName?.familyName)
+                                            let firstName: String? = UserDefaults.standard.string(forKey: "AppleName")
+                                            let lastName: String? = UserDefaults.standard.string(forKey: "AppleSurname")
+                                            UserDefaults.standard.setValue(appleIdCredentials.user, forKey: "AppleUser")
+                                            
+                                            print(appleIdCredentials.email as Any)
+                                            print(appleIdCredentials.fullName?.givenName as Any)
+                                            print(appleIdCredentials.fullName?.familyName as Any)
                                             Task {
                                                 do {
                                                     token = try await loginVm.signUpWithSocialProvider(user: .init(id: nil, firstName: firstName, lastName: lastName, username: username, password: "", bio: nil, website: nil, social: nil, geographicArea: nil, google: nil, facebook: nil, apple: username, profilePicture: nil, iban: nil, vatNumber: nil, nationalInsuranceNumber: nil))
+                                                    DispatchQueue.main.asyncAfter(deadline: .now()+1.0) {
+                                                        self.appleLogged = true
+                                                    }
+                                                    if token != nil {
+                                                        print("token not null")
+                                                        loginVm.checkAppleLogin()
+                                                    }
+                                                    print("appl logged: \(appleLogged), token: \(token)")
                                                 } catch {
-                                                    print(error.localizedDescription)
+                                                    print(error)
                                                 }
                                             }
                                             print(appleIdCredentials.user)
-                                            loginVm.checkAppleLogin()
-                                            self.appleLogged = true
                                         default:
                                             print(authResults)
                                         }
                                         
                                     case .failure(let error):
-                                        print("Authorisation failed: \(error.localizedDescription)")
+                                        print("Authorisation failed: \(error)")
                                     }
                                 }
                                 .signInWithAppleButtonStyle(colorScheme == .dark ? .white : .black)
@@ -170,9 +180,9 @@ struct LoginView: View {
                                         .frame(maxWidth: .infinity)
                                         .background(
                                             LinearGradient(colors: [.blue, .teal], startPoint: .topLeading, endPoint: .bottomTrailing)
-                                                .hueRotation(.degrees(animateButton ? 45 : 0))
+                                                .hueRotation(.degrees(animateButton ? 60 : -30))
                                                 .onAppear {
-                                                    withAnimation(.easeInOut(duration: 2).repeatForever(autoreverses: true)) {
+                                                    withAnimation(.easeInOut(duration: 3).repeatForever(autoreverses: true)) {
                                                         animateButton.toggle()
                                                     }
                                                 }
@@ -183,8 +193,6 @@ struct LoginView: View {
                             }
                         }
                         .padding()
-                        .navigationTitle("Login")
-                        .navigationBarTitleDisplayMode(.large)
                         .alert(isPresented: $showError, content: {
                             Alert(title: Text("Invalid credentials!"), dismissButton: .default(Text("Ok"), action: {
                                 showError = false
@@ -204,10 +212,15 @@ struct LoginView: View {
                                         self.log = true
                                     }
                             }
-                            else if appleLogged {
+                            else if appleLogged && token != nil  {
                                 Text("")
                                     .onAppear {
                                         self.log = true
+                                    }
+                                    .onDisappear {
+                                        DispatchQueue.main.asyncAfter(deadline: .now()+1.0) {
+                                            self.appleLogged = false
+                                        }
                                     }
                                 
                             }
@@ -223,21 +236,21 @@ struct LoginView: View {
                         Spacer()
                         
                     }
-                    
                     .navigationDestination(isPresented: $log) {
                         MainView(loginVm: loginVm)
                             .environmentObject(authViewModel)
                             .onDisappear {
-                                self.appleLogged = loginVm.appleIsLogged
                                 self.email = ""
                                 self.password = ""
                             }
                     }
-                .scrollDismissesKeyboard(.immediately)
-                .scrollBounceBehavior(.basedOnSize)
 
-                    }
+                }
             }
+            .scrollDismissesKeyboard(.immediately)
+            .scrollBounceBehavior(.automatic)
+            .navigationTitle("Login")
+            .navigationBarTitleDisplayMode(.large)
         }
     }
 }
