@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import CachedAsyncImage
 
 struct ImageView: View {
     
@@ -15,7 +16,7 @@ struct ImageView: View {
     var body: some View {
         VStack {
             if let auctionImage = pictureUrl {
-                AsyncImage(url: URL(string: auctionImage)) { phase in
+                CachedAsyncImage(url: URL(string: auctionImage)) { phase in
                     if let image = phase.image {
                         // Display the loaded image
                         image
@@ -34,6 +35,8 @@ struct ImageView: View {
             } else {
                 if isProfilePicture {
                     Image(systemName: "person.circle")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
                 } else {
                     Image(systemName: "photo")
                         .resizable()

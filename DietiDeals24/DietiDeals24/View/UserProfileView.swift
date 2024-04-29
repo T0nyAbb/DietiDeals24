@@ -33,8 +33,11 @@ struct UserProfileView: View {
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
                 Divider()
+
+            }
+            .padding()
+            HStack(alignment: .center) {
                 Text(user?.bio ?? "No description")
-                    .padding()
             }
             .padding()
         }

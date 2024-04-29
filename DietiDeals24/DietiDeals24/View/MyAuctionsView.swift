@@ -50,22 +50,13 @@ struct MyAuctionsView: View {
                     }
                     
                 }
-                .onAppear {
-                    Task {
-                        do {
-                            try await auctionVm.getAllFixedTimeAuction()
-                        } catch {
-                            print("Error")
-                        }
-                    }
-                }
                 .searchable(text: $search, prompt: Text("Search by Title or Category"))
             }
             .scrollDismissesKeyboard(.immediately)
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
                     NavigationLink(destination: CreateNewAuctionView(rootIsActive: self.$isActive, user: loginVm.user!)) {
-                        Image(systemName: "plus")
+                        Image(systemName: "plus.circle.fill")
                     }
                 }
             }
@@ -82,7 +73,20 @@ struct MyAuctionsView: View {
             }
             .navigationTitle("My Auctions")
         }
+        .task {
+            do {
+                try await auctionVm.getAllFixedTimeAuction()
+                try await auctionVm.getAllDescendingPriceAuctions()
+                try await auctionVm.getAllEnglishAuctions()
+                try await auctionVm.getAllInverseAuctions()
+                try await notificationViewModel.updateCurrentUserNotifications(user: loginVm.user!)
+            } catch {
+                print(error)
+            }
+        }
     }
+
+        
 }
 
 #Preview {

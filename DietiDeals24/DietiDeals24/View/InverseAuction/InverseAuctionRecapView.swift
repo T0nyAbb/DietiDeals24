@@ -101,6 +101,7 @@ struct InverseAuctionRecapView: View {
                     Task {
                         self.auction = try await auctionViewModel.createInverseAuction(auction: .init(id: nil, title: title, description: description, category: category.description, sellerId: user.id!, urlPicture: nil, active: nil, failed: nil, currentPrice: 0, startingPrice: maximumPrice, expiryDate: selectedDate))
                         if self.auction != nil {
+                            NotificationViewModel().scheduleNotification(self.auction!)
                             if self.image != nil {
                                     do {
                                         imageViewModel.uiImage = self.image

@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Notification: Codable, Identifiable {
+struct Notification: Codable, Identifiable, Equatable {
     let id: UUID = UUID()
     let notificationId: Int
     let auctionId: Int
@@ -22,4 +22,11 @@ struct Notification: Codable, Identifiable {
         self.body = body
     }
     
+    static func ==(lhs: Notification, rhs: Notification) -> Bool {
+        return lhs.notificationId == rhs.notificationId
+    }
+    
+    static func !=(lhs: Notification, rhs: Notification) -> Bool {
+        return lhs.notificationId != rhs.notificationId
+    }
 }

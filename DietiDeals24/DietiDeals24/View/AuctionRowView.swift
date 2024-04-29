@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import CachedAsyncImage
 
 struct AuctionRowView: View {
     
@@ -14,7 +15,7 @@ struct AuctionRowView: View {
     var body: some View {
         HStack {
             if let imageURL = auction.urlPicture {
-                AsyncImage(url: URL(string: imageURL)) { phase in
+                CachedAsyncImage(url: URL(string: imageURL)) { phase in
                     if let image = phase.image {
                         // Display the loaded image
                         image
@@ -25,6 +26,7 @@ struct AuctionRowView: View {
                         // Display a placeholder when loading failed
                         Image(systemName: "questionmark.diamond")
                             .imageScale(.large)
+                            .aspectRatio(contentMode: .fit)
                     } else {
                         // Display a placeholder while loading
                         ProgressView()

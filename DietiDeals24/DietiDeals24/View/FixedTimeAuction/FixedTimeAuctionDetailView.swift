@@ -17,6 +17,8 @@ struct FixedTimeAuctionDetailView: View {
     
     var offerChecker: OfferChecker = OfferChecker()
     
+    var userViewModel: UserViewModel = UserViewModel()
+    
     var auctionViewModel: AuctionViewModel
     
     @State var offer: Offer?
@@ -56,10 +58,12 @@ struct FixedTimeAuctionDetailView: View {
                     Spacer()
                     if loginVm.user?.id != fixedTimeAuction.sellerId {
                         NavigationLink(destination: UserProfileView(user: seller)) {
-                            HStack {
+                            HStack(spacing: 5) {
                                 Image(systemName: "person")
-                                Text("\(seller?.firstName ?? "") \(seller?.lastName ?? "")")
+                                    .foregroundStyle(.blue)
                                     .bold()
+                                Text("\(seller?.firstName ?? "") \(seller?.lastName ?? "")")
+                                    .foregroundStyle(.blue)
                             }
                         }
                         .isDetailLink(false)
@@ -75,17 +79,51 @@ struct FixedTimeAuctionDetailView: View {
                 } .padding(.top)
             }
             .padding()
-            HStack {
-                VStack {
+            Divider()
+            VStack {
+                HStack {
+                    Text("Highest offer:")
+                        .font(.caption)
                     Text("\(fixedTimeAuction.currentPrice, specifier: "%.2f") €")
                         .font(.title)
                         .bold()
-                    Text("Highest offer")
-                        .font(.callout)
+
+                    Spacer()
                 }
-                .padding()
-                Spacer()
-            }
+                    .padding(.horizontal, 10)
+                    if loginVm.user?.id == fixedTimeAuction.sellerId {
+                        VStack {
+                            Divider()
+                            HStack {
+                                Text("Exipry Date:")
+                                    .font(.caption)
+                                    .padding(.leading)
+                                Text(fixedTimeAuction.expiryDate.formatted(date: .numeric, time: .omitted))
+                                    .font(.title3)
+                                    .bold()
+                                Spacer()
+                                Text("Minimum selling price")
+                                    .font(.caption)
+                                    .padding(.trailing)
+                            }
+                            HStack {
+                                Text("Expiry Time:")
+                                    .font(.caption)
+                                    .padding(.leading)
+                                Text(fixedTimeAuction.expiryDate.formatted(date: .omitted, time: .standard))
+                                    .font(.title3)
+                                    .bold()
+                                Spacer()
+                                Text("\(fixedTimeAuction.minimumPrice) €")
+                                    .font(.title)
+                                    .bold()
+                                    .padding(.trailing)
+                            }
+                            
+                        }.padding(.bottom)
+                    }
+                    Spacer()
+                }
             VStack {
                 
                 Button {
@@ -117,7 +155,7 @@ struct FixedTimeAuctionDetailView: View {
                                 Task {
                                     if offerChecker.checkFixedTimeOffer(currentPrice: fixedTimeAuction.currentPrice, offerAmount: offerAmount) {
                                         do {
-                                        self.offer = try await offerViewModel.createOffer(offer: .init(offerId: nil, bidderId: loginVm.user!.id!, bidAmount: offerAmount, auctionId: fixedTimeAuction.id!))
+                                            self.offer = try await offerViewModel.createOffer(offer: .init(offerId: nil, bidderId: loginVm.user!.id!, bidAmount: offerAmount, auctionId: fixedTimeAuction.id!))
                                         } catch UserError.auctionNotActive {
                                             print("Auction not active")
                                             self.offerError = true
@@ -143,7 +181,7 @@ struct FixedTimeAuctionDetailView: View {
                                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
                                             self.showAlert = true
                                         }
-
+                                        
                                     }
                                     if self.offer != nil {
                                         isPresented = false
@@ -172,14 +210,14 @@ struct FixedTimeAuctionDetailView: View {
                 if showConfirmation {
                     Alert(title: Text("Are you sure you want to delete this auction?"),
                           message: Text("This action is permanent."),
-                          primaryButton: .destructive(Text("Delete"), action: {
+                          primaryButton: .default(Text("Cancel")),
+                          secondaryButton: .destructive(Text("Delete"), action: {
                         Task {
                             if try await auctionViewModel.deleteAuction(auction: fixedTimeAuction) {
                                 dismiss()
                             }
                         }
-                    }),
-                          secondaryButton: .default(Text("Cancel"))
+                    })
                     )
                 } else {
                     if offerError {
@@ -209,6 +247,14 @@ struct FixedTimeAuctionDetailView: View {
                 }
             })
         }
+        .task {
+            do {
+                self.seller = try await userViewModel.getUserById(id: fixedTimeAuction.sellerId)
+            } catch {
+                print(error)
+            }
+        }
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 

@@ -64,6 +64,19 @@ struct AuctionsView: View {
                 }
             }
         }
+        .task {
+            do {
+                if let user = LoginViewModel.shared.user {
+                    try await auctionViewModel.getAllFixedTimeAuction()
+                    try await auctionViewModel.getAllDescendingPriceAuctions()
+                    try await auctionViewModel.getAllEnglishAuctions()
+                    try await auctionViewModel.getAllInverseAuctions()
+                    try await notificationViewModel.updateCurrentUserNotifications(user: LoginViewModel.shared.user!)
+                } 
+            } catch {
+                print(error)
+            }
+        }
         
         
         

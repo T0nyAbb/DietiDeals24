@@ -66,7 +66,7 @@ struct MainView: View {
                 }
                 .tag(4)
         }
-        .onAppear {
+        .task {
                 let task = Task {
                     print(UserDefaults.standard.string(forKey: "Token"))
                         await loginVm.updateCurrentUser()
@@ -81,7 +81,6 @@ struct MainView: View {
                             } else {
                                 try await notificationViewModel.updateCurrentUserNotifications(user: loginVm.user!)
                                 try await userViewModel.getAllUsers()
-                                
                             }
                         }
                     }

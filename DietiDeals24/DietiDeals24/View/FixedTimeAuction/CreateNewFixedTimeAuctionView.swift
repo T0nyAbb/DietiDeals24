@@ -143,11 +143,13 @@ struct CreateNewFixedTimeAuctionView: View {
                         DatePicker("Select Date", selection: $selectedDate, displayedComponents: .date)
                             .datePickerStyle(CompactDatePickerStyle())
                             .labelsHidden()
+                            .environment(\.timeZone, TimeZone(abbreviation: "CET")!)
                         
                         DatePicker("", selection: $selectedDate, displayedComponents: .hourAndMinute)
                             .datePickerStyle(CompactDatePickerStyle())
                             .labelsHidden()
                             .padding(.horizontal)
+                            .environment(\.timeZone, TimeZone(abbreviation: "CET")!)
                     }
                     Divider()
 

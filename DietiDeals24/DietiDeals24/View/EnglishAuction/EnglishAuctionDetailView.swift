@@ -64,7 +64,9 @@ struct EnglishAuctionDetailView: View {
                         NavigationLink(destination: UserProfileView(user: seller)) {
                             HStack {
                                 Image(systemName: "person")
+                                    .foregroundStyle(.blue)
                                 Text("\(seller?.firstName ?? "") \(seller?.lastName ?? "")")
+                                    .foregroundStyle(.blue)
                                     .bold()
                             }
                         }
@@ -81,26 +83,72 @@ struct EnglishAuctionDetailView: View {
                 } .padding(.top)
             }
             .padding()
-            HStack {
-                VStack {
-                    Text("\(englishAuction.currentPrice, specifier: "%.2f") €")
-                        .font(.title)
-                        .bold()
-                    Text("Current offer")
+            Divider()
+            VStack {
+                HStack {
+                    Text("Current offer:")
                         .font(.callout)
                         .onAppear {
                             offerAmount = Int(englishAuction.currentPrice)
                         }
-                }
-                .padding()
-                Spacer()
-                VStack {
-                    Text("\(englishAuction.startingPrice, specifier: "%.2f") €")
-                        .font(.title2)
+                    Text("\(englishAuction.currentPrice, specifier: "%.2f") €")
+                        .font(.title)
                         .bold()
-                    Text("Starting price")
-                        .font(.callout)
+                    Spacer()
+
                 }
+                .padding(.horizontal, 10)
+                if loginVm.user?.id == englishAuction.sellerId {
+                    VStack {
+                        Divider()
+                        HStack {
+                            Text("Starting Date:")
+                                .font(.caption)
+                                .padding(.leading)
+                            Text(englishAuction.startingDate.formatted(date: .numeric, time: .omitted))
+                                .font(.title3)
+                                .bold()
+                            Spacer()
+                            Text("Minimum selling price")
+                                .font(.caption)
+                                .padding(.trailing)
+                        }
+                        HStack {
+                            Text("Starting Time:")
+                                .font(.caption)
+                                .padding(.leading)
+                            Text(englishAuction.startingDate.formatted(date: .omitted, time: .standard))
+                                .font(.title3)
+                                .bold()
+                            Spacer()
+                            Text("\(englishAuction.startingPrice) €")
+                                .font(.title)
+                                .bold()
+                                .padding(.trailing)
+                        }
+                        HStack {
+                            Text("Raise amount:")
+                                .font(.caption)
+                                .padding(.leading)
+                            Text("\(englishAuction.rise) €")
+                                .font(.title3)
+                                .bold()
+                            Spacer()
+                        }
+                        HStack {
+                            Text("Ends in:")
+                                .font(.caption)
+                                .padding(.leading)
+                            Text("^[\(Int(englishAuction.timerAmount/60)) Minute](inflect: true)")
+                                .font(.title3)
+                                .bold()
+                            Spacer()
+                        }
+                        
+                    }.padding(.bottom)
+                }
+                Spacer()
+
             }
             VStack {
                 
@@ -197,14 +245,14 @@ struct EnglishAuctionDetailView: View {
                 if showConfirmation {
                     Alert(title: Text("Are you sure you want to delete this auction?"),
                           message: Text("This action is permanent."),
-                          primaryButton: .destructive(Text("Delete"), action: {
-                        Task {
-                            if try await auctionViewModel.deleteAuction(auction: englishAuction) {
-                                dismiss()
-                            }
-                        }
-                    }),
-                          secondaryButton: .default(Text("Cancel"))
+                          primaryButton: .default(Text("Cancel")),
+                          secondaryButton: .destructive(Text("Delete"), action: {
+                      Task {
+                          if try await auctionViewModel.deleteAuction(auction: englishAuction) {
+                              dismiss()
+                          }
+                      }
+                  })
                     )
                 } else {
                     if offerError {
@@ -234,6 +282,7 @@ struct EnglishAuctionDetailView: View {
                 }
             })
         }
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 

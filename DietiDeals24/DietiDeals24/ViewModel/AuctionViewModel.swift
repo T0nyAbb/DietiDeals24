@@ -6,9 +6,10 @@
 //
 
 import Foundation
+import SwiftUI
 
 @Observable
-class AuctionViewModel {
+final class AuctionViewModel {
     
     var fixedTimeAuctions: [FixedTimeAuction] = [FixedTimeAuction]()
     
@@ -25,6 +26,9 @@ class AuctionViewModel {
     var currentUserEnglishAuctions: [EnglishAuction] = [EnglishAuction]()
     
     var currentUserInverseAuctions: [InverseAuction] = [InverseAuction]()
+    
+    var currentUser: User? = LoginViewModel.shared.user
+    
      
     
     func createFixedTimeAuction(auction: FixedTimeAuction) async throws -> FixedTimeAuction {
@@ -34,13 +38,10 @@ class AuctionViewModel {
         }
         print("called create fixed time auction")
 
-        // Create the signup request body
-
         // Serialize the request body to JSON
         let encoder = JSONEncoder()
         
         encoder.dateEncodingStrategy = .iso8601
-        
         
         guard let jsonData = try? encoder.encode(auction) else {
             print("encoding error")
@@ -62,7 +63,7 @@ class AuctionViewModel {
         request.setValue(auth, forHTTPHeaderField: "Authorization")
 
         do {
-            // Perform the signup request asynchronously
+            // Perform the request asynchronously
             let (data, response) = try await URLSession.shared.data(for: request)
 
             // Handle the response
@@ -142,14 +143,19 @@ class AuctionViewModel {
             throw error
         }
     }
-     
+    
     func getAllFixedTimeAuction() async throws {
         guard let url = URL(string: Constants.BASE_URL + Constants.getEndpoint(endpoint: .FIXED_TIME_AUCTION) + "s") else {
             throw NSError(domain: "Invalid URL", code: 0, userInfo: nil)
         }
         print("called getAllFixedTimeAuction")
         
-        var user = try await UserViewModel().getUserByEmail(username: UserDefaults.standard.string(forKey: "Username")!)
+        if currentUser == nil {
+            currentUser = try await UserViewModel().getUserByEmail(username: UserDefaults.standard.string(forKey: "Username")!)
+        }
+        
+        let user = currentUser!
+        
 
 
         // Create the URLRequest
@@ -171,20 +177,21 @@ class AuctionViewModel {
                 let decoder = JSONDecoder()
                 decoder.dateDecodingStrategy = .iso8601
 
-                self.fixedTimeAuctions  = try decoder.decode([FixedTimeAuction].self, from: data)
+                var temp = try decoder.decode([FixedTimeAuction].self, from: data)
+            
+                temp.reverse()
                 
+                var temp2 = temp.filter { $0.sellerId == user.id}
                 
-                self.currentUserFixedTimeAuctions = self.fixedTimeAuctions.filter { $0.sellerId == user.id}
-
+                if self.currentUserFixedTimeAuctions != temp2 {
+                    self.currentUserFixedTimeAuctions = temp2
+                }
                 
-                self.fixedTimeAuctions.removeAll { $0.sellerId == user.id}
-
+                temp.removeAll { $0.sellerId == user.id || $0.failed == true || $0.active == false}
                 
-                self.fixedTimeAuctions.removeAll { $0.failed == true}
-                
-                
-                self.fixedTimeAuctions.removeAll { $0.active == false}
-                                
+                if self.fixedTimeAuctions != temp {
+                    self.fixedTimeAuctions = temp
+                }
                 print("auctions successfully retrieved!")
             } else {
             
@@ -315,7 +322,11 @@ class AuctionViewModel {
             throw NSError(domain: "Invalid URL", code: 0, userInfo: nil)
         }
         
-        var user = try await UserViewModel().getUserByEmail(username: UserDefaults.standard.string(forKey: "Username")!)
+        if currentUser == nil {
+            currentUser = try await UserViewModel().getUserByEmail(username: UserDefaults.standard.string(forKey: "Username")!)
+        }
+        
+        let user = currentUser!
 
 
         // Create the URLRequest
@@ -337,15 +348,21 @@ class AuctionViewModel {
                 let decoder = JSONDecoder()
                 decoder.dateDecodingStrategy = .iso8601
 
-                self.descendingPriceAuctions = try decoder.decode([DescendingPriceAuction].self, from: data)
+                var temp = try decoder.decode([DescendingPriceAuction].self, from: data)
                 
-                self.currentUserDescendingPriceAuctions = self.descendingPriceAuctions.filter { $0.sellerId == user.id}
+                temp.reverse()
                 
-                self.descendingPriceAuctions = self.descendingPriceAuctions.filter { $0.sellerId != user.id}
+                var temp2 = temp.filter { $0.sellerId == user.id}
                 
-                self.descendingPriceAuctions.removeAll { $0.failed == true}
+                if self.currentUserDescendingPriceAuctions != temp2 {
+                    self.currentUserDescendingPriceAuctions = temp2
+                }
                 
-                self.descendingPriceAuctions.removeAll { $0.active == false}
+                temp.removeAll { $0.sellerId == user.id || $0.failed == true || $0.active == false}
+                
+                if self.descendingPriceAuctions != temp {
+                    self.descendingPriceAuctions = temp
+                }
                 
                 
                 
@@ -477,7 +494,11 @@ class AuctionViewModel {
             throw NSError(domain: "Invalid URL", code: 0, userInfo: nil)
         }
         
-        var user = try await UserViewModel().getUserByEmail(username: UserDefaults.standard.string(forKey: "Username")!)
+        if currentUser == nil {
+            currentUser = try await UserViewModel().getUserByEmail(username: UserDefaults.standard.string(forKey: "Username")!)
+        }
+        
+        let user = currentUser!
 
 
         // Create the URLRequest
@@ -499,17 +520,22 @@ class AuctionViewModel {
                 let decoder = JSONDecoder()
                 decoder.dateDecodingStrategy = .iso8601
 
-                self.englishAuctions = try decoder.decode([EnglishAuction].self, from: data)
+                var temp = try decoder.decode([EnglishAuction].self, from: data)
                 
-                self.currentUserEnglishAuctions = self.englishAuctions.filter { $0.sellerId == user.id}
+                temp.reverse()
                 
-                self.englishAuctions = self.englishAuctions.filter { $0.sellerId != user.id}
+                var temp2 = temp.filter { $0.sellerId == user.id}
                 
-                self.englishAuctions.removeAll { $0.failed == true}
+                if self.currentUserEnglishAuctions != temp2 {
+                    self.currentUserEnglishAuctions = temp2
+                }
                 
-                self.englishAuctions.removeAll { $0.active == false}
+                temp.removeAll { $0.sellerId == user.id || $0.failed == true || $0.active == false}
                 
-                
+                if self.englishAuctions != temp {
+                    self.englishAuctions = temp
+                }
+                                
                 print("auctions successfully retrieved!")
             } else {
                 throw NSError(domain: "Descending price auctions retrieval failed", code: 0, userInfo: nil)
@@ -638,7 +664,11 @@ class AuctionViewModel {
             throw NSError(domain: "Invalid URL", code: 0, userInfo: nil)
         }
         
-        var user = try await UserViewModel().getUserByEmail(username: UserDefaults.standard.string(forKey: "Username")!)
+        if currentUser == nil {
+            currentUser = try await UserViewModel().getUserByEmail(username: UserDefaults.standard.string(forKey: "Username")!)
+        }
+        
+        let user = currentUser!
 
 
         // Create the URLRequest
@@ -660,15 +690,21 @@ class AuctionViewModel {
                 let decoder = JSONDecoder()
                 decoder.dateDecodingStrategy = .iso8601
 
-                self.inverseAuctions = try decoder.decode([InverseAuction].self, from: data)
+                var temp = try decoder.decode([InverseAuction].self, from: data)
                 
-                self.currentUserInverseAuctions = self.inverseAuctions.filter { $0.sellerId == user.id}
+                temp.reverse()
                 
-                self.inverseAuctions = self.inverseAuctions.filter { $0.sellerId != user.id}
+                var temp2 = temp.filter { $0.sellerId == user.id}
                 
-                self.inverseAuctions.removeAll { $0.failed == true}
+                if self.currentUserInverseAuctions != temp2 {
+                    self.currentUserInverseAuctions = temp2
+                }
                 
-                self.inverseAuctions.removeAll { $0.active == false}
+                temp.removeAll { $0.sellerId == user.id || $0.failed == true || $0.active == false}
+                
+                if self.inverseAuctions != temp {
+                    self.inverseAuctions = temp
+                }
                 
                 print("auctions successfully retrieved!")
             } else {
@@ -703,10 +739,11 @@ class AuctionViewModel {
 
         do {
             // Perform the request asynchronously
-            let (data, response) = try await URLSession.shared.data(for: request)
+            let (_, response) = try await URLSession.shared.data(for: request)
 
             // Handle the response
             if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 {
+                print("deleted")
                 return true
             } else {
                 // Handle unsuccessful upload (non-200 status code)

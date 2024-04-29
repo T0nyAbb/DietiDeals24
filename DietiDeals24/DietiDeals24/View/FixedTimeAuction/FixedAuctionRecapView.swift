@@ -69,7 +69,7 @@ struct FixedAuctionRecapView: View {
             Divider()
             VStack {
                 HStack {
-                    Text("Starting Date:")
+                    Text("Exipry Date:")
                         .font(.caption)
                         .padding(.leading)
                     Text(selectedDate.formatted(date: .numeric, time: .omitted))
@@ -81,7 +81,7 @@ struct FixedAuctionRecapView: View {
                             .padding(.trailing)
                 }
                 HStack {
-                    Text("Starting Time:")
+                    Text("Expiry Time:")
                         .font(.caption)
                         .padding(.leading)
                     Text(selectedDate.formatted(date: .omitted, time: .standard))
@@ -101,6 +101,7 @@ struct FixedAuctionRecapView: View {
                         Task {
                             self.auction = try await auctionViewModel.createFixedTimeAuction(auction: .init(id: nil, title: title, description: description, category: category.description, sellerId: user.id!, urlPicture: nil, active: nil, failed: nil, currentPrice: 0, minimumPrice: minimumPrice, expiryDate: selectedDate))
                             if self.auction != nil {
+                                NotificationViewModel().scheduleNotification(self.auction!)
                                 if self.image != nil {
                                     do {
                                         imageViewModel.uiImage = self.image

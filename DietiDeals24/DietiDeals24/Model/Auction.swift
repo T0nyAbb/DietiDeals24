@@ -7,7 +7,7 @@
 
 import Foundation
 
-class Auction: Codable {
+class Auction: Codable, Equatable {
     let id: Int?
     var title: String
     var description: String?
@@ -67,4 +67,13 @@ class Auction: Codable {
         self.failed = try container.decodeIfPresent(Bool.self, forKey: .failed)
         self.currentPrice = try container.decode(Double.self, forKey: .currentPrice)
     }
+    
+    static func == (lhs: Auction, rhs: Auction) -> Bool {
+        return lhs.id == rhs.id
+    }
+    
+    static func != (lhs: Auction, rhs: Auction) -> Bool {
+        return lhs.id != rhs.id
+    }
+    
 }

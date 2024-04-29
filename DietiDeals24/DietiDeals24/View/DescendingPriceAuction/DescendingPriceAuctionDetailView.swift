@@ -52,7 +52,9 @@ struct DescendingPriceAuctionDetailView: View {
                         NavigationLink(destination: UserProfileView(user: seller)) {
                             HStack {
                                 Image(systemName: "person")
+                                    .foregroundStyle(.blue)
                                 Text("\(seller?.firstName ?? "") \(seller?.lastName ?? "")")
+                                    .foregroundStyle(.blue)
                                     .bold()
                             }
                         }
@@ -69,20 +71,58 @@ struct DescendingPriceAuctionDetailView: View {
                 } .padding(.top)
             }
             .padding()
-            HStack {
-                VStack {
-                    Text("\(descendingPriceAuction.currentPrice, specifier: "%.2f") €")
+            Divider()
+            VStack {
+                HStack {
+                    Text("Current price:")
+                        .font(.callout)
+                    Text("\(descendingPriceAuction.currentPrice, specifier: "%.2f") €*")
                         .font(.title)
                         .bold()
-                    Text("Current price*")
-                        .font(.callout)
+                    Spacer()
                 }
-                .padding()
+                .padding(.horizontal, 10)
+                .padding(.bottom)
+                HStack {
+                    Text("*Price will lower by \(descendingPriceAuction.reduction) € every ^[\(Int(descendingPriceAuction.timerAmount/60)) Minute](inflect: true)")
+                        .font(.caption)
+                        .bold()
+                    Spacer()
+                }.padding(.horizontal, 10)
+                if loginVm.user?.id == descendingPriceAuction.sellerId {
+                    VStack {
+                        Divider()
+                        HStack {
+                            Text("Starting Date:")
+                                .font(.caption)
+                                .padding(.leading)
+                            Text(descendingPriceAuction.startingDate.formatted(date: .numeric, time: .omitted))
+                                .font(.title3)
+                                .bold()
+                            Spacer()
+                            Text("Minimum selling price")
+                                .font(.caption)
+                                .padding(.trailing)
+                        }
+                        HStack {
+                            Text("Starting Time:")
+                                .font(.caption)
+                                .padding(.leading)
+                            Text(descendingPriceAuction.startingDate.formatted(date: .omitted, time: .standard))
+                                .font(.title3)
+                                .bold()
+                            Spacer()
+                            Text("\(descendingPriceAuction.startingPrice) €")
+                                .font(.title)
+                                .bold()
+                                .padding(.trailing)
+                        }
+                        
+                    }.padding(.bottom)
+                }
                 Spacer()
             }
-                Text("*Price will lower by \(descendingPriceAuction.reduction) € every ^[\(Int(descendingPriceAuction.timerAmount/60)) Minute](inflect: true)")
-                .bold()
-                .padding()
+
             VStack {
                 Button {
                     if loginVm.user?.id == descendingPriceAuction.sellerId {
@@ -109,21 +149,21 @@ struct DescendingPriceAuctionDetailView: View {
                             $0.id == self.descendingPriceAuction.id!
                         }!
                     } catch {
-                        print("Error")
+                        print(error)
                     }
                 }
                 .alert(isPresented: $showAlert, content: {
                     if showConfirmation {
                         Alert(title: Text("Are you sure you want to delete this auction?"),
                               message: Text("This action is permanent."),
-                              primaryButton: .destructive(Text("Delete"), action: {
-                            Task {
-                                if try await auctionViewModel.deleteAuction(auction: descendingPriceAuction) {
-                                    dismiss()
-                                }
-                            }
-                        }),
-                              secondaryButton: .default(Text("Cancel"))
+                              primaryButton: .default(Text("Cancel")),
+                              secondaryButton: .destructive(Text("Delete"), action: {
+                          Task {
+                              if try await auctionViewModel.deleteAuction(auction: descendingPriceAuction) {
+                                  dismiss()
+                              }
+                          }
+                      })
                         )
                     } else {
                         Alert(title: Text("Are you sure you want to buy this item?"),
@@ -142,6 +182,7 @@ struct DescendingPriceAuctionDetailView: View {
                     }
                 })
         }
+            .navigationBarTitleDisplayMode(.inline)
         } else {
             ZStack {
                 FireworksView(config: .init(intensity: .high))
@@ -150,7 +191,6 @@ struct DescendingPriceAuctionDetailView: View {
                     .bold()
                     .fontDesign(.monospaced)
                     .scaleEffect(2)
-                    
             }
                 .navigationBarBackButtonHidden()
                 .onTapGesture {

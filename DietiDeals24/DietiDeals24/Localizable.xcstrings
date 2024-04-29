@@ -225,6 +225,9 @@
     "Every" : {
 
     },
+    "Exipry Date:" : {
+
+    },
     "Expires on:" : {
 
     },
@@ -255,7 +258,7 @@
     "Geographic Area: " : {
 
     },
-    "Highest offer" : {
+    "Highest offer:" : {
 
     },
     "Iban" : {
@@ -285,7 +288,13 @@
     "Login" : {
 
     },
+    "Lowest offer:" : {
+
+    },
     "Make Offer" : {
+
+    },
+    "Maximum budget" : {
 
     },
     "Maximum price" : {
@@ -322,6 +331,9 @@
 
     },
     "No New Notifications" : {
+
+    },
+    "No offers" : {
 
     },
     "No Results" : {
@@ -397,9 +409,6 @@
 
     },
     "Starting Price:" : {
-
-    },
-    "Starting Time:" : {
 
     },
     "Success" : {

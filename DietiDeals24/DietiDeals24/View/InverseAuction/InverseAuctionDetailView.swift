@@ -58,7 +58,9 @@ struct InverseAuctionDetailView: View {
                         NavigationLink(destination: UserProfileView(user: seller)) {
                             HStack {
                                 Image(systemName: "person")
+                                    .foregroundStyle(.blue)
                                 Text("\(seller?.firstName ?? "") \(seller?.lastName ?? "")")
+                                    .foregroundStyle(.blue)
                                     .bold()
                             }
                         }
@@ -75,16 +77,49 @@ struct InverseAuctionDetailView: View {
                 } .padding(.top)
             }
             .padding()
-            HStack {
-                VStack {
-                    Text("\(inverseAuction.currentPrice, specifier: "%.2f") €")
+            Divider()
+            VStack {
+                HStack {
+                    Text("Lowest offer:")
+                        .font(.caption)
+                    Text(inverseAuction.currentPrice > 0 ? "\(inverseAuction.currentPrice, specifier: "%.2f") €" : "No offers")
                         .font(.title)
                         .bold()
-                    Text("Highest offer")
-                        .font(.callout)
+                    Spacer()
+                    
                 }
-                .padding()
-                Spacer()
+                .padding(.horizontal, 10)
+                if loginVm.user?.id == inverseAuction.sellerId {
+                    VStack {
+                        Divider()
+                        HStack {
+                            Text("Exipry Date:")
+                                .font(.caption)
+                                .padding(.leading)
+                            Text(inverseAuction.expiryDate.formatted(date: .numeric, time: .omitted))
+                                .font(.title3)
+                                .bold()
+                            Spacer()
+                            Text("Maximum budget")
+                                .font(.caption)
+                                .padding(.trailing)
+                        }
+                        HStack {
+                            Text("Expiry Time:")
+                                .font(.caption)
+                                .padding(.leading)
+                            Text(inverseAuction.expiryDate.formatted(date: .omitted, time: .standard))
+                                .font(.title3)
+                                .bold()
+                            Spacer()
+                            Text("\(inverseAuction.startingPrice) €")
+                                .font(.title)
+                                .bold()
+                                .padding(.trailing)
+                        }
+                        
+                    }.padding(.bottom)
+                }
             }
             VStack {
                 
@@ -172,14 +207,14 @@ struct InverseAuctionDetailView: View {
                 if showConfirmation {
                     Alert(title: Text("Are you sure you want to delete this auction?"),
                           message: Text("This action is permanent."),
-                          primaryButton: .destructive(Text("Delete"), action: {
-                        Task {
-                            if try await auctionViewModel.deleteAuction(auction: inverseAuction) {
-                                dismiss()
-                            }
-                        }
-                    }),
-                          secondaryButton: .default(Text("Cancel"))
+                          primaryButton: .default(Text("Cancel")),
+                          secondaryButton: .destructive(Text("Delete"), action: {
+                      Task {
+                          if try await auctionViewModel.deleteAuction(auction: inverseAuction) {
+                              dismiss()
+                          }
+                      }
+                  })
                     )
                 } else {
                     if offerError {
@@ -209,6 +244,7 @@ struct InverseAuctionDetailView: View {
                 }
             })
         }
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 

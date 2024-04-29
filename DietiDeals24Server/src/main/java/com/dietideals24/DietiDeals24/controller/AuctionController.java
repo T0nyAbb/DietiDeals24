@@ -1,7 +1,6 @@
 package com.dietideals24.DietiDeals24.controller;
 
 import com.dietideals24.DietiDeals24.entity.Auction;
-import com.dietideals24.DietiDeals24.entity.Notification;
 import com.dietideals24.DietiDeals24.service.AuctionService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1D1DBE262BDE9BF20030B314 /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = 1D1DBE252BDE9BF20030B314 /* Collections */; };
+		1D1DBE282BDE9BF20030B314 /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = 1D1DBE272BDE9BF20030B314 /* OrderedCollections */; };
 		1D2A0DE02BB5F0C700F2F86E /* FixedTimeAuctionDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D2A0DDF2BB5F0C700F2F86E /* FixedTimeAuctionDetailView.swift */; };
 		1D4A35072B51D10F00012205 /* DietiDeals24App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D4A35062B51D10F00012205 /* DietiDeals24App.swift */; };
 		1D4A35092B51D10F00012205 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D4A35082B51D10F00012205 /* LoginView.swift */; };
@@ -185,12 +187,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1D1DBE282BDE9BF20030B314 /* OrderedCollections in Frameworks */,
 				1D4A353C2B51D86500012205 /* GoogleSignIn in Frameworks */,
 				1DBDBC202BA0546100CFB68E /* Amplify in Frameworks */,
 				1D4A353E2B51D86500012205 /* GoogleSignInSwift in Frameworks */,
 				1DAC561F2BB88ED1002AECC3 /* EffectsLibrary in Frameworks */,
 				1D4A35452B5433FD00012205 /* FacebookLogin in Frameworks */,
 				1D79C1762BB6293C0017F1DF /* CachedAsyncImage in Frameworks */,
+				1D1DBE262BDE9BF20030B314 /* Collections in Frameworks */,
 				1DBDBC1E2BA0545B00CFB68E /* AWSCognitoAuthPlugin in Frameworks */,
 				1DBDBC222BA0546B00CFB68E /* AWSS3StoragePlugin in Frameworks */,
 			);
@@ -454,6 +458,8 @@
 				1DBDBC212BA0546B00CFB68E /* AWSS3StoragePlugin */,
 				1D79C1752BB6293C0017F1DF /* CachedAsyncImage */,
 				1DAC561E2BB88ED1002AECC3 /* EffectsLibrary */,
+				1D1DBE252BDE9BF20030B314 /* Collections */,
+				1D1DBE272BDE9BF20030B314 /* OrderedCollections */,
 			);
 			productName = DietiDeals24;
 			productReference = 1D4A35032B51D10F00012205 /* DietiDeals24.app */;
@@ -534,6 +540,7 @@
 				1DBDBC1B2BA053E500CFB68E /* XCRemoteSwiftPackageReference "amplify-ios" */,
 				1D2A0DE12BB6286200F2F86E /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */,
 				1DAC561D2BB88ED1002AECC3 /* XCRemoteSwiftPackageReference "effects-library" */,
+				1D1DBE242BDE9BF20030B314 /* XCRemoteSwiftPackageReference "swift-collections" */,
 			);
 			productRefGroup = 1D4A35042B51D10F00012205 /* Products */;
 			projectDirPath = "";
@@ -978,6 +985,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		1D1DBE242BDE9BF20030B314 /* XCRemoteSwiftPackageReference "swift-collections" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-collections.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.1.0;
+			};
+		};
 		1D2A0DE12BB6286200F2F86E /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/lorenzofiamingo/swiftui-cached-async-image";
@@ -1021,6 +1036,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		1D1DBE252BDE9BF20030B314 /* Collections */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1D1DBE242BDE9BF20030B314 /* XCRemoteSwiftPackageReference "swift-collections" */;
+			productName = Collections;
+		};
+		1D1DBE272BDE9BF20030B314 /* OrderedCollections */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1D1DBE242BDE9BF20030B314 /* XCRemoteSwiftPackageReference "swift-collections" */;
+			productName = OrderedCollections;
+		};
 		1D4A353B2B51D86500012205 /* GoogleSignIn */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 1D4A35332B51D2B400012205 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;

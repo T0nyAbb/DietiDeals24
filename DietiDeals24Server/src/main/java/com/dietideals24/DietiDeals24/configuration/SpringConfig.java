@@ -3,14 +3,12 @@ package com.dietideals24.DietiDeals24.configuration;
 import com.dietideals24.DietiDeals24.entity.*;
 import com.dietideals24.DietiDeals24.repository.*;
 import com.dietideals24.DietiDeals24.service.NotificationService;
-import com.dietideals24.DietiDeals24.service.OfferService;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,13 +29,12 @@ public class SpringConfig {
     @Autowired
     private OfferRepository offerRepository;
 
-    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy'T'HH:mm:ss[.SSS][.SS][.S]")
-    private LocalDateTime currentTime;
+    private Instant currentTime;
 
     @Scheduled(fixedDelay = 1000)
     public void updateTimer(){
 
-        currentTime = LocalDateTime.now();
+        currentTime = Instant.now();
 
         List<DescendingPriceAuction> descendingPriceAuctions = descendingPriceAuctionRepository.findAll();
         for (DescendingPriceAuction iterator : descendingPriceAuctions)
@@ -63,7 +60,7 @@ public class SpringConfig {
     public void descendingPriceAuctionValidity(){
         List<DescendingPriceAuction> descendingPriceAuctions = new ArrayList<>(descendingPriceAuctionRepository.findAll());
         List<Offer> offers = new ArrayList<>(offerRepository.findAll());
-        currentTime = LocalDateTime.now();
+        currentTime = Instant.now();
         for (DescendingPriceAuction iterator : descendingPriceAuctions){
             //Attiva l'asta quando la data di inizio è passata e non ci sono offerte per l'asta
             if(!iterator.isActive() && !iterator.isFailed() && iterator.getCurrentPrice() == iterator.getStartingPrice() && iterator.getStartingDate().isBefore(currentTime) && offers.stream().noneMatch(offer -> offer.getAuctionId() == iterator.getId())) {
@@ -84,7 +81,7 @@ public class SpringConfig {
     @Scheduled(fixedDelay = 1000)
     public void englishAuctionValidity(){
         List<EnglishAuction> englishAuctions = new ArrayList<>(englishAuctionRepository.findAll());
-        currentTime = LocalDateTime.now();
+        currentTime = Instant.now();
         for (EnglishAuction iterator : englishAuctions){
             //Attiva l'asta quando la data di inizio è passata e non ci sono offerte per l'asta (current price = 0)
             if(!iterator.isActive() && !iterator.isFailed() && iterator.getCurrentPrice() == 0 && iterator.getStartingDate().isBefore(currentTime)) {
@@ -106,7 +103,7 @@ public class SpringConfig {
     @Scheduled(fixedDelay = 1000)
     public void fixedTimeAuctionValidity(){
         List<FixedTimeAuction> fixedTimeAuctions = new ArrayList<>(fixedTimeAuctionRepository.findAll());
-        currentTime = LocalDateTime.now();
+        currentTime = Instant.now();
         for (FixedTimeAuction iterator : fixedTimeAuctions) {
             if ((((iterator.getExpiryDate()).isBefore(currentTime)) && iterator.isActive())) {
                 iterator.setActive(false);
@@ -123,7 +120,7 @@ public class SpringConfig {
     @Scheduled(fixedDelay = 1000)
     public void inverseAuctionValidity(){
         List<InverseAuction> inverseAuctions = new ArrayList<>(inverseAuctionRepository.findAll());
-        currentTime = LocalDateTime.now();
+        currentTime = Instant.now();
         for (InverseAuction iterator : inverseAuctions) {
             if ((iterator.getExpiryDate()).isBefore(currentTime) && iterator.isActive()) {
                 iterator.setActive(false);

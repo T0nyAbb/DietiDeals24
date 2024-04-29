@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import CachedAsyncImage
+
 
 
 struct FixedTimeAuctionListView: View {
@@ -41,15 +41,6 @@ struct FixedTimeAuctionListView: View {
                     .id(UUID())
                     .buttonStyle(PlainButtonStyle())
                 }
-                .onAppear {
-                    Task {
-                        do {
-                            try await auctionViewModel.getAllFixedTimeAuction()
-                        } catch {
-                            print(error)
-                        }
-                    }
-                }
             } else {
                 ContentUnavailableView {
                     if search.isEmpty {
@@ -60,18 +51,11 @@ struct FixedTimeAuctionListView: View {
                             .padding(.top, 140)
                     }
                 }
-                .onAppear {
-                    Task {
-                        do {
-                            try await auctionViewModel.getAllFixedTimeAuction()
-                        } catch {
-                            print(error)
-                        }
-                    }
-                }
+
             }
 
         }
+
     }
 }
 

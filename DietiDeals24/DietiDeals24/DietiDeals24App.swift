@@ -11,6 +11,7 @@ import AWSCognitoAuthPlugin
 import AWSS3StoragePlugin
 import SwiftUI
 import FBSDKCoreKit
+import UserNotifications
 
 @main
 struct DietiDeals24App: App {
@@ -19,6 +20,7 @@ struct DietiDeals24App: App {
     
     init() {
         configureAmplify()
+        requestNotificationsPermission()
     }
     
     var body: some Scene {
@@ -43,6 +45,15 @@ struct DietiDeals24App: App {
             print("Amplify configured successfully!")
         } catch {
             print("Failed to configure Amplify", error)
+        }
+    }
+    private func requestNotificationsPermission() {
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { success, error in
+            if success {
+                print("Notifications permission granted!")
+            } else if let error {
+                print(error)
+            }
         }
     }
 }

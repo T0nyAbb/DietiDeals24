@@ -10,13 +10,13 @@ import Foundation
 extension Formatter {
    static var customISO8601DateFormatter: ISO8601DateFormatter = {
       let formatter = ISO8601DateFormatter()
-      formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+       formatter.timeZone = TimeZone.current
       return formatter
    }()
 }
 
 extension JSONDecoder.DateDecodingStrategy {
-   static var iso8601WithFractionalSeconds = custom { decoder in
+   static var iso8601local = custom { decoder in
       let dateStr = try decoder.singleValueContainer().decode(String.self)
       let customIsoFormatter = Formatter.customISO8601DateFormatter
       if let date = customIsoFormatter.date(from: dateStr) {
@@ -28,6 +28,15 @@ extension JSONDecoder.DateDecodingStrategy {
    }
 }
 
+extension JSONEncoder.DateEncodingStrategy {
+    static var iso8601local = custom { date, encoder in
+        let isoFormatter = DateFormatter.customISO8601DateFormatter
+        let dateString = isoFormatter.string(from: date)
+        var container = encoder.singleValueContainer()
+        try container.encode(dateString)
+    }
+}
+
 extension Date {
     func timeDifference(date: Date) -> String {
         let form = DateComponentsFormatter()
@@ -37,5 +46,14 @@ extension Date {
         let difference = form.string(from: date, to: self)
         let result = difference!
         return result
+    }
+}
+
+extension Date {
+    func localDate(_ date: Date) -> Date {
+        let nowUTC = date
+        let timeZoneOffset = Double(TimeZone.current.secondsFromGMT(for: nowUTC))
+        guard let localDate = Calendar.current.date(byAdding: .second, value: Int(timeZoneOffset), to: nowUTC) else {return Date()}
+        return localDate
     }
 }

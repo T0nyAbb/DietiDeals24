@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UserNotifications
 
 @Observable
 class NotificationViewModel {
@@ -37,10 +38,11 @@ class NotificationViewModel {
             if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 {
                 let decoder = JSONDecoder()
 
-                self.currentUserNotifications = try decoder.decode([Notification].self, from: data)
-                
-                self.currentUserNotifications = self.currentUserNotifications.sorted { $0.notificationId > $1.notificationId }
-                
+                var temp = try decoder.decode([Notification].self, from: data)
+                temp.reverse()
+                if self.currentUserNotifications != temp {
+                    self.currentUserNotifications = temp
+                }                
                 print("notifications successfully retrieved!")
             } else if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 404 {
                 print("No notifications for the selected user")
@@ -81,11 +83,11 @@ class NotificationViewModel {
             // Handle the response
             if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 {
                 print("notifications successfully deleted!")
+                UserDefaults.standard.setValue(self.currentUserNotifications.count-1, forKey: "Notifications")
             } else if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 404 {
                 print("No notification found for selected id: \(notification.notificationId)")
             } else {
                 throw NSError(domain: "Notification retrieval failed", code: 0, userInfo: nil)
-                
             }
         } catch {
             // Handle any errors that occurred during the request
@@ -94,6 +96,37 @@ class NotificationViewModel {
             throw error
             
         }
+    }
+    
+    func sendNotification(body: String, date: Date) {
+        let content = UNMutableNotificationContent()
+        content.title = "DietiDeals24"
+        content.subtitle = body
+        content.sound = UNNotificationSound.default
+        
+        print("sending notification")
+        // show this notification
+
+        let nextTriggerDate = Calendar.current.date(byAdding: .second, value: 1, to: date)!
+        let comps = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: nextTriggerDate)
+
+        let trigger = UNCalendarNotificationTrigger(dateMatching: comps, repeats: false)
+        
+        // choose a random identifier
+        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
+        
+        // add our notification request
+        UNUserNotificationCenter.current().add(request)
+    }
+    
+    func scheduleNotification(_ auction: Auction) {
+        if let inverseAuction = auction as? InverseAuction {
+            sendNotification(body: "Your auction \(inverseAuction.title) just ended, check the result in the app!", date: inverseAuction.expiryDate)
+        } else if let fixedTimeAuction = auction as? FixedTimeAuction {
+            sendNotification(body: "Your auction \(fixedTimeAuction.title) just ended, check the result in the app!", date: fixedTimeAuction.expiryDate)
+        }
+        
+        
     }
     
 }
