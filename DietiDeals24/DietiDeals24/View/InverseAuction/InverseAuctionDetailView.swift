@@ -19,6 +19,8 @@ struct InverseAuctionDetailView: View {
     
     var auctionViewModel: AuctionViewModel
     
+    var userViewModel: UserViewModel = UserViewModel()
+    
     @State var offer: Offer?
     
     @State var user: User?
@@ -243,6 +245,13 @@ struct InverseAuctionDetailView: View {
                     }
                 }
             })
+        }
+        .task {
+            do {
+                self.seller = try await userViewModel.getUserById(id: inverseAuction.sellerId)
+            } catch {
+                print(error)
+            }
         }
         .navigationBarTitleDisplayMode(.inline)
     }

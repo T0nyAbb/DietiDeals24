@@ -282,6 +282,13 @@ struct EnglishAuctionDetailView: View {
                 }
             })
         }
+        .task {
+            do {
+                self.seller = try await userViewModel.getUserById(id: englishAuction.sellerId)
+            } catch {
+                print(error)
+            }
+        }
         .navigationBarTitleDisplayMode(.inline)
     }
 }

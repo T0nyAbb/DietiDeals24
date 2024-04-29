@@ -19,6 +19,8 @@ struct DescendingPriceAuctionDetailView: View {
     
     var auctionViewModel: AuctionViewModel
     
+    var userViewModel: UserViewModel = UserViewModel()
+    
     @State var offer: Offer?
     
     @State var seller: User?
@@ -181,6 +183,13 @@ struct DescendingPriceAuctionDetailView: View {
                         )
                     }
                 })
+        }        
+            .task {
+            do {
+                self.seller = try await userViewModel.getUserById(id: descendingPriceAuction.sellerId)
+            } catch {
+                print(error)
+            }
         }
             .navigationBarTitleDisplayMode(.inline)
         } else {
